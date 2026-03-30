@@ -30,15 +30,16 @@ You are a Senior Full-Stack Engineer. Your primary responsibility is to autonomo
 
 ## Project Context
 
-<!--
-TEMPLATE: Fill in project-specific context here when using this template.
-
-Example fields to populate:
-- **Platform(s)**: [Web, Mobile, Desktop, etc.]
-- **Tech Stack**: [Languages, frameworks, and tools used]
-- **Architecture**: [Monolith, microservices, serverless, etc.]
-- **Key Quality Standards**: [Performance, accessibility, security requirements]
--->
+- **Product**: Allergy Madness — The Digital Allergy Test by Champ Health
+- **Platform(s)**: Mobile-first web application (responsive Next.js, native app planned for Phase 2-3)
+- **Tech Stack**: Next.js 15, React 19, TypeScript 5, Tailwind CSS, shadcn/ui, Supabase, Vitest
+- **Architecture**: Monolith on Render — UI + API routes + tournament engine in one Next.js deployment
+- **Key Quality Standards**:
+  - FDA disclaimer on all consumer-facing surfaces showing ranked allergens
+  - Tournament engine server-side only (never imported by client components)
+  - Supabase RLS on all tables — users can only access their own data
+  - Census income_tier never exposed in API responses or UI
+  - No hardcoded URLs — use `window.location.origin` client-side, request headers server-side
 
 ## Tools and Capabilities
 
@@ -47,8 +48,8 @@ Example fields to populate:
 This agent MUST operate as the designated worker bot account. Before ANY GitHub operations:
 
 ```bash
-# Switch to worker bot account (replace {worker-bot} with your org's worker account)
-gh auth switch --user {worker-bot}
+# Switch to worker bot account
+gh auth switch --user ChampHealth-Workshop-worker
 
 # Verify correct account is active
 gh auth status
@@ -59,11 +60,7 @@ gh auth status
 - Separation of duties: worker bot creates PRs, reviewer bot reviews, human merges
 - Human can distinguish between worker and reviewer actions in the audit trail
 
-<!--
-TEMPLATE: Replace {worker-bot} with your organization's worker bot username.
-Example: va-worker, myorg-worker, etc.
-See .claude/README.md for bot account setup instructions.
--->
+<!-- Worker bot: ChampHealth-Workshop-worker -->
 
 **GitHub MCP Server**: You have access to the GitHub MCP server with native tools for interacting with issues, pull requests, and the project board. This is your **primary method** for all GitHub operations.
 
@@ -127,26 +124,26 @@ See .claude/README.md for bot account setup instructions.
 
 You must strictly adhere to the project's architecture and coding standards defined in `CLAUDE.md`.
 
-<!--
-TEMPLATE: Fill in project-specific implementation standards here.
-
-Example sections:
 **Technology Stack:**
-- [Language and version]
-- [Framework]
-- [Build tooling]
-- [Testing framework]
+- TypeScript 5.x (strict mode)
+- Next.js 15 (App Router, `app/` directory)
+- React 19
+- Tailwind CSS + shadcn/ui for components
+- Supabase client via `@supabase/ssr` (server) and `@supabase/supabase-js` (browser)
 
 **Code Quality:**
-- [Type safety requirements]
-- [Code style guidelines]
-- [Documentation standards]
+- All code must pass `npm run typecheck` (tsc --noEmit) with zero errors
+- ESLint with `next/core-web-vitals` — zero warnings
+- Absolute imports via `@/` alias
+- kebab-case file names, PascalCase components, camelCase functions
+- Tournament engine code (`lib/engine/`) is server-side only — never import in client components
 
 **Testing Requirements:**
-- [Test types required]
-- [Coverage thresholds]
-- [Pre-commit checks]
--->
+- Unit tests for all tournament engine modules (`lib/engine/`) — 80% coverage
+- Integration tests for API routes — at least one happy-path test per endpoint
+- Component tests for key UI (leaderboard, check-in, onboarding)
+- Run `npm test` before creating PRs
+- Pre-push hook runs lint + tests (configured via `scripts/hooks`)
 
 ### 4. Pull Request Creation
 

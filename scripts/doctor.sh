@@ -100,7 +100,11 @@ resolve_cmd() {
         /usr/local/bin \
         "$HOME/.local/bin" \
         "$HOME/.cargo/bin" \
-        "$HOME/.claude/local"; do
+        "$HOME/.claude/local" \
+        /c/ProgramData/chocolatey/bin \
+        "$HOME/scoop/shims" \
+        "$HOME/AppData/Local/Microsoft/WinGet/Links" \
+        "$HOME/AppData/Local/Microsoft/WinGet/Packages/"*jq*; do
         if [ -x "$dir/$cmd" ]; then
             echo "$dir/$cmd"
             return 0

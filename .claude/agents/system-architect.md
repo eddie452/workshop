@@ -413,28 +413,92 @@ Use the **ATAM (Architecture Tradeoff Analysis Method)**:
 
 ## Project-Specific Domain Analysis
 
-<!--
-TEMPLATE: Fill in project-specific domain analysis here when using this template.
-
-Example structure:
 ### Bounded Contexts
 
-#### 1. [Context Name]
+#### 1. User Identity and Onboarding
 **Aggregates:**
-- `Entity` (root) → `ChildEntity1`, `ChildEntity2`
+- `UserProfile` (root) → `ChildProfile`, `UserSubscription`
 
 **Value Objects:**
-- `ValueObject1`, `ValueObject2`
+- `HomeLocation` (address, lat/lng, region, CCRS)
+- `PropertyData` (year_built, home_type, sqft, construction)
+- `IncomeTier` (1-4, silent — never exposed)
 
 **Domain Events:**
-- `Event1`, `Event2`
+- `UserOnboarded`, `ChildProfileCreated`, `SubscriptionChanged`
 
-**Ubiquitous Language:**
-- Term1, Term2, Term3
+#### 2. Tournament Engine (Core Domain)
+**Aggregates:**
+- `UserAllergenElo` (root) — per-user, per-allergen, per-location Elo score
+
+**Value Objects:**
+- `EloScore` (100-3000 scale), `ConfidenceTier` (Low/Moderate/High/Very High)
+- `SeasonalMultiplier` (0.0x/1.2x/2.0x/3.0x), `SymptomMultiplier`, `MonteCarloConfidence`
+- `CCRS` (0-3), `IndoorSymptomGate` (boolean)
+
+**Domain Events:**
+- `TournamentRun`, `EloUpdated`, `TriggerChampionChanged`, `LeaderboardSnapshot`
+
+#### 3. Symptom Tracking
+**Aggregates:**
+- `SymptomCheckin` (root) — includes symptoms, timing, environmental snapshot, tournament output
+
+**Value Objects:**
+- `SymptomZone` (upper_resp, ocular, lower_resp, dermal, ear, systemic)
+- `EnvironmentalSnapshot` (pollen UPI, AQI, humidity, wind, rain, thunderstorm)
+
+**Domain Events:**
+- `CheckinSubmitted`, `SymptomGateOpened`, `SymptomGateClosed`
+
+#### 4. Location and Travel
+**Aggregates:**
+- `UserLocation` (root) — home + saved places with independent indoor profiles
+
+**Domain Events:**
+- `TravelModeActivated`, `TravelModeDeactivated`, `SavedPlaceCreated`
+
+#### 5. Trigger Scout
+**Aggregates:**
+- `TriggerScoutScan` (root) — photo scan with Vision AI match and Elo multiplier gating
+
+**Domain Events:**
+- `PlantScanned`, `AllergenMatched`, `MultiplierActivated`, `DormantScanBadged`
+
+#### 6. Monetization and Referrals
+**Aggregates:**
+- `UserSubscription` (root), `ReferralEvent`
+
+**Domain Events:**
+- `ReferralSent`, `ReferralConverted`, `UnlockEarned`, `SubscriptionPurchased`
+
+### Ubiquitous Language
+
+- **Trigger Champion**: #1 ranked allergen on the leaderboard
+- **Final Four**: Top 4 allergens after pairwise tournament sort
+- **Elo Score**: Rating representing allergen trigger likelihood (100-3000, centered at 1000)
+- **Symptom Gate**: Global rule — no symptoms = no scoring (all Elo suppressed to 0)
+- **Environmental Forecast**: Display mode when symptom gate is closed
+- **CCRS**: Cockroach Climate Risk Score (0-3) — geographic gating for cockroach allergen
+- **SPP**: Sub-Pollen Particle — fragments <2.5um that penetrate lower airways
+- **LRT**: Long-Range Transport — pollen traveling 100-1000+ miles from source
+- **PFAS**: Pollen-Food Allergy Syndrome — cross-reactivity between pollen and food proteins
+- **Madness+**: Premium subscription tier ($6.99/mo or $49.99/yr)
 
 ### Context Mapping
-[Diagram showing how contexts relate to each other]
--->
+
+```
+User Identity ──owns──▶ Tournament Engine ◀──triggers── Symptom Tracking
+     │                        │                              │
+     ├──owns──▶ Location ─────┘ (re-seeds on travel)        │
+     │                                                       │
+     ├──owns──▶ Trigger Scout ──multiplier──▶ Tournament     │
+     │                                                       │
+     └──owns──▶ Monetization (gates: Final Four visibility,  │
+                              check-in limits, features)     │
+                                                             │
+External APIs ──snapshot──▶ Symptom Tracking (environmental data)
+              ──seed data──▶ Tournament Engine (pollen, weather)
+```
 
 ## Communication Style
 

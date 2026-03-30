@@ -38,8 +38,8 @@ function createMockRequest(pathname: string): unknown {
   // Add clone method to mimic NextURL behavior
   const nextUrl = Object.assign(url, {
     clone() {
-      const cloned = new URL(this.href);
-      return Object.assign(cloned, { clone: this.clone });
+      const cloned = new URL(url.href);
+      return Object.assign(cloned, { clone: () => new URL(url.href) });
     },
   });
   return {

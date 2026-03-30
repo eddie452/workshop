@@ -145,6 +145,8 @@ export interface Database {
           /** Excluded from API responses. Server-only. */
           income_tier: number | null;
           neighborhood_ndvi: number | null;
+          /** Has user acknowledged the FDA disclaimer? */
+          fda_acknowledged: boolean;
         };
         Insert: {
           id: string;
@@ -172,6 +174,7 @@ export interface Database {
           seasonal_pattern?: SeasonalPattern | null;
           income_tier?: number | null;
           neighborhood_ndvi?: number | null;
+          fda_acknowledged?: boolean;
         };
         Update: {
           id?: string;
@@ -199,6 +202,7 @@ export interface Database {
           seasonal_pattern?: SeasonalPattern | null;
           income_tier?: number | null;
           neighborhood_ndvi?: number | null;
+          fda_acknowledged?: boolean;
         };
       };
 

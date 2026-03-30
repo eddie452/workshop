@@ -18,6 +18,15 @@ export type {
   SymptomMultiplierResult,
   ConfidenceTier,
   ConfidenceResult,
+  CCRSInput,
+  CCRSResult,
+  LRTAllergenInput,
+  LRTResult,
+  TournamentEntry,
+  TournamentResult,
+  AllergenSeedData,
+  RunInput,
+  RunOutput,
 } from "./types";
 
 export {
@@ -85,3 +94,30 @@ export {
   runMonteCarloForAllergen,
   runMonteCarloForAll,
 } from "./monte-carlo";
+
+// CCRS gate
+export {
+  COCKROACH_ALLERGEN_ID,
+  checkCCRSGate,
+  getCCRSMultiplier,
+  isCockroachAllergen,
+  applyCCRSGate,
+} from "./ccrs";
+
+// Long-Range Transport
+export {
+  isWindFromRegion,
+  detectLRT,
+  detectLRTForAll,
+} from "./lrt";
+
+// Tournament sort
+export {
+  createTournamentEntry,
+  pairwiseCompare,
+  pairwiseSort,
+  runTournament,
+} from "./tournament";
+
+// Run orchestrator
+export { runTournamentPipeline } from "./run";

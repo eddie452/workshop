@@ -13,7 +13,7 @@
 CREATE TABLE IF NOT EXISTS preview_test (
   id          UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   created_at  TIMESTAMPTZ DEFAULT NOW(),
-  branch_name TEXT NOT NULL DEFAULT current_setting('app.settings.branch_name', true),
+  branch_name TEXT DEFAULT 'unknown',
   message     TEXT NOT NULL DEFAULT 'Preview branch migration ran successfully',
   verified    BOOLEAN DEFAULT FALSE
 );

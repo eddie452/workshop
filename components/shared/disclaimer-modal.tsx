@@ -47,10 +47,10 @@ export function DisclaimerModal({
 
     try {
       const supabase = createClient();
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Supabase generic inference
-      const { error: updateError } = await (supabase as any)
+      const { error: updateError } = await supabase
         .from("user_profiles")
-        .update({ fda_acknowledged: true })
+        // Supabase generic inference needs explicit cast for new columns
+        .update({ fda_acknowledged: true } as never)
         .eq("id", userId);
 
       if (updateError) {

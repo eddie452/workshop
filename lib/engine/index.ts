@@ -58,3 +58,30 @@ export {
   getAllConfidenceTiers,
   getConfidenceLabel,
 } from "./confidence";
+
+// Monte Carlo exposure simulation
+export type {
+  MCAllergenInput,
+  MCResult,
+  MCEnvironment,
+} from "./monte-carlo";
+
+export {
+  MC_N_SIMULATIONS,
+  MC_EXPOSURE_THRESHOLD,
+  MC_WEATHER_DEFAULTS,
+  MC_POLLEN_DEFAULT_UPI,
+  MC_MAX_CONFIDENCE_BOOST,
+  MC_MIN_CONFIDENCE_BOOST,
+  createSeededRng,
+  windDispersionFactor,
+  settlingFactor,
+  humidityFactor,
+  rainWashoutFactor,
+  thunderstormFactor,
+  getPollenUpi,
+  upiToConcentration,
+  simulateExposure,
+  runMonteCarloForAllergen,
+  runMonteCarloForAll,
+} from "./monte-carlo";

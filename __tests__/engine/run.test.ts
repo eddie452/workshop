@@ -153,11 +153,11 @@ describe("runTournamentPipeline — full run", () => {
     expect(result.elo_updates).toHaveLength(5);
   });
 
-  it("step order matches expected 10-step trace", () => {
+  it("step order matches expected 11-step trace", () => {
     const result = runTournamentPipeline(makeRunInput());
 
-    // Verify all 10 steps were traced
-    expect(result.step_trace.length).toBe(10);
+    // Verify all 11 steps were traced
+    expect(result.step_trace.length).toBe(11);
     expect(result.step_trace[0]).toContain("Step 1");
     expect(result.step_trace[1]).toContain("Step 2");
     expect(result.step_trace[2]).toContain("Step 3");
@@ -168,6 +168,7 @@ describe("runTournamentPipeline — full run", () => {
     expect(result.step_trace[7]).toContain("Step 8");
     expect(result.step_trace[8]).toContain("Step 9");
     expect(result.step_trace[9]).toContain("Step 10");
+    expect(result.step_trace[10]).toContain("Step 11");
   });
 
   it("CCRS blocks cockroach when gate conditions not met", () => {
@@ -255,5 +256,72 @@ describe("runTournamentPipeline — full run", () => {
       expect(update.new_elo).toBeLessThanOrEqual(3000);
       expect(update.k_factor).toBeGreaterThan(0);
     }
+  });
+});
+
+/* ------------------------------------------------------------------ */
+/* LRT (Long-Range Transport) integration (Step 8)                     */
+/* ------------------------------------------------------------------ */
+
+describe("runTournamentPipeline — LRT integration", () => {
+  it("applies LRT boost to LRT-capable allergens when wind aligns", () => {
+    // Birch is LRT-capable, wind from South Central (180 deg), user in Southeast
+    // South Central bearing = 180, wind_direction_deg = 180 → match
+    const input = makeRunInput({
+      allergens: [
+        makeAllergenSeed({
+          id: "birch",
+          common_name: "Birch",
+          category: "tree",
+          base_elo: 1400,
+          lrt_capable: true,
+          lrt_max_miles: 500,
+          lrt_source_regions: ["South Central", "Midwest"],
+        }),
+        makeAllergenSeed({
+          id: "ragweed",
+          common_name: "Ragweed",
+          category: "weed",
+          base_elo: 1400,
+          lrt_capable: false,
+          lrt_max_miles: null,
+          lrt_source_regions: [],
+        }),
+      ],
+      allergen_elos: [
+        makeAllergenElo({ allergen_id: "birch", elo_score: 1000 }),
+        makeAllergenElo({ allergen_id: "ragweed", elo_score: 1000 }),
+      ],
+      region: "Southeast",
+      wind_direction_deg: 180,
+    });
+
+    const result = runTournamentPipeline(input);
+
+    const birch = result.tournament!.leaderboard.find(
+      (e) => e.allergen_id === "birch",
+    );
+    const ragweed = result.tournament!.leaderboard.find(
+      (e) => e.allergen_id === "ragweed",
+    );
+
+    // Birch should have a higher composite score due to LRT boost (1.5x)
+    expect(birch!.composite_score).toBeGreaterThan(ragweed!.composite_score);
+
+    // Step trace should mention LRT detected
+    const lrtStep = result.step_trace.find((s) => s.includes("Step 8"));
+    expect(lrtStep).toContain("LRT detected for 1 allergens");
+  });
+
+  it("does not apply LRT boost to non-LRT-capable allergens", () => {
+    // Run with no LRT-capable allergens
+    const inputNoLRT = makeRunInput({
+      wind_direction_deg: 180,
+    });
+    // Run with wind but no LRT allergens (default fixture has lrt_capable: false)
+    const result = runTournamentPipeline(inputNoLRT);
+
+    const lrtStep = result.step_trace.find((s) => s.includes("Step 8"));
+    expect(lrtStep).toContain("LRT detected for 0 allergens");
   });
 });

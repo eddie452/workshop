@@ -5,7 +5,7 @@
  * 10-step tournament pipeline. This is a pure function: no database
  * calls, no side effects. All DB I/O happens at the API layer.
  *
- * 10-Step Order of Operations:
+ * 11-Step Order of Operations:
  *   Step 1:  Global symptom gate check
  *   Step 2:  Get current Elo for each allergen (passed in as input)
  *   Step 3:  Apply seasonal multiplier
@@ -13,9 +13,10 @@
  *   Step 5:  Run Monte Carlo simulation
  *   Step 6:  Apply MC confidence boost
  *   Step 7:  Apply CCRS + indoor gate (cockroach only)
- *   Step 8:  Apply Trigger Scout proximity multiplier (if applicable)
- *   Step 9:  Pairwise tournament sort -> Final Four -> Trigger Champion
- *   Step 10: Map to confidence tiers, compute Elo updates with K-factor
+ *   Step 8:  Apply LRT (Long-Range Transport) multiplier
+ *   Step 9:  Apply Trigger Scout proximity multiplier (if applicable)
+ *   Step 10: Pairwise tournament sort -> Final Four -> Trigger Champion
+ *   Step 11: Map to confidence tiers, compute Elo updates with K-factor
  *
  * Server-side only — never import from client components.
  */
@@ -157,10 +158,30 @@ export function runTournamentPipeline(input: RunInput): RunOutput {
   step_trace.push(`Step 7: CCRS gate checked (ccrs=${ccrsInput.ccrs}, indoors=${ccrsInput.mostly_indoors})`);
 
   /* ----------------------------------------------------------------
-   * Step 8: Apply Trigger Scout proximity multiplier
+   * Step 8: Apply LRT (Long-Range Transport) multiplier
+   * ---------------------------------------------------------------- */
+  const lrtAllergens = input.allergens.map((a) => ({
+    allergen_id: a.id,
+    lrt_capable: a.lrt_capable,
+    lrt_max_miles: a.lrt_max_miles,
+    lrt_source_regions: a.lrt_source_regions,
+  }));
+  const lrtResults = detectLRTForAll(
+    lrtAllergens,
+    input.region,
+    input.wind_direction_deg,
+  );
+  const lrtMap = new Map(
+    lrtResults.map((r) => [r.allergen_id, r.multiplier]),
+  );
+  const lrtDetectedCount = lrtResults.filter((r) => r.lrt_detected).length;
+  step_trace.push(`Step 8: LRT detected for ${lrtDetectedCount} allergens`);
+
+  /* ----------------------------------------------------------------
+   * Step 9: Apply Trigger Scout proximity multiplier
    * ---------------------------------------------------------------- */
   const triggerScoutSet = new Set(input.trigger_scout_allergens);
-  step_trace.push(`Step 8: Trigger Scout active for ${triggerScoutSet.size} allergens`);
+  step_trace.push(`Step 9: Trigger Scout active for ${triggerScoutSet.size} allergens`);
 
   /* ----------------------------------------------------------------
    * Compute composite scores
@@ -175,13 +196,14 @@ export function runTournamentPipeline(input: RunInput): RunOutput {
     const mc = mcMap.get(allergen.id);
     const mcBoost = mc?.confidence_boost ?? 1.0;
     const ccrsMultiplier = applyCCRSGate(allergen.id, ccrsInput);
+    const lrtMultiplier = lrtMap.get(allergen.id) ?? 1.0;
     const triggerScout = triggerScoutSet.has(allergen.id)
       ? TRIGGER_SCOUT_MULTIPLIER
       : 1.0;
 
-    // Composite = baseElo * seasonal * symptom * mcBoost * ccrs * triggerScout
+    // Composite = baseElo * seasonal * symptom * mcBoost * ccrs * lrt * triggerScout
     const composite =
-      baseElo * seasonal * symptom * mcBoost * ccrsMultiplier * triggerScout;
+      baseElo * seasonal * symptom * mcBoost * ccrsMultiplier * lrtMultiplier * triggerScout;
 
     compositeScores.set(allergen.id, composite);
     entries.push(
@@ -195,15 +217,15 @@ export function runTournamentPipeline(input: RunInput): RunOutput {
   }
 
   /* ----------------------------------------------------------------
-   * Step 9: Pairwise tournament sort -> Final Four -> Trigger Champion
+   * Step 10: Pairwise tournament sort -> Final Four -> Trigger Champion
    * ---------------------------------------------------------------- */
   const tournament = runTournament(entries);
   step_trace.push(
-    `Step 9: Tournament sorted — Champion: ${tournament.trigger_champion?.allergen_id ?? "none"}`,
+    `Step 10: Tournament sorted — Champion: ${tournament.trigger_champion?.allergen_id ?? "none"}`,
   );
 
   /* ----------------------------------------------------------------
-   * Step 10: Map to confidence tiers, compute Elo updates with K-factor
+   * Step 11: Map to confidence tiers, compute Elo updates with K-factor
    * ---------------------------------------------------------------- */
   const eloUpdates: EloUpdate[] = [];
 
@@ -222,7 +244,7 @@ export function runTournamentPipeline(input: RunInput): RunOutput {
     eloUpdates.push(update);
   }
 
-  step_trace.push(`Step 10: Computed ${eloUpdates.length} Elo updates`);
+  step_trace.push(`Step 11: Computed ${eloUpdates.length} Elo updates`);
 
   return {
     symptom_gate_passed: true,

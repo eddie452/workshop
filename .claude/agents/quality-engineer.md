@@ -151,15 +151,20 @@ You are a master of:
 
 ## Project-Specific Context
 
-<!--
-TEMPLATE: Fill in project-specific testing context here when using this template.
-
-Example fields to populate:
-- **Architecture**: [Description of the application architecture]
-- **Testing Stack**: [Testing frameworks and tools used]
-- **Key Test Areas**: [Core areas requiring testing]
-- **Critical Quality Concerns**: [Project-specific quality priorities]
--->
+- **Architecture**: Next.js 15 monolith (App Router) on Render. Tournament engine runs server-side in `lib/engine/`. Supabase (PostgreSQL) with RLS on all tables. 7 external API integrations.
+- **Testing Stack**: Vitest + React Testing Library + jsdom. Run `npm test` (Vitest). Lint with `npm run lint` (ESLint). Type check with `npm run typecheck` (tsc --noEmit).
+- **Key Test Areas**:
+  - Tournament engine (`lib/engine/`): Elo initialization, seasonal multipliers, symptom-specificity weighting, Monte Carlo simulation, CCRS cockroach gate, LRT detection, pairwise tournament sort, K-factor Elo updates. This is the core product — 80% coverage required.
+  - API routes (`app/api/`): Onboarding, check-in, leaderboard, trigger-scout. Happy-path integration tests required for each.
+  - Onboarding flow: Auto-population from BatchData + Census, graceful fallback to manual entry, processing screen timing.
+  - Symptom gate: When severity = 0, ALL scoring must be suppressed. Environmental Forecast mode must activate correctly.
+  - CCRS gate: Cockroach scoring must respect the 3-layer gate (global symptom + indoor pattern + CCRS > 0).
+  - Referral tracking: 3-friend unlock logic, permanent unlock, no health data in referral links.
+- **Critical Quality Concerns**:
+  - **Regulatory**: FDA disclaimer ("Predicted Triggers — Not a Diagnosis") must appear on every consumer-facing surface showing ranked allergens. Mandatory acknowledgment step before first leaderboard.
+  - **Privacy**: Census income_tier must NEVER be exposed in any API response or UI. It is a silent model weight only.
+  - **Security**: All API keys must be server-side only. Tournament engine (`lib/engine/`) must never be imported by client components. Supabase RLS enforces data isolation.
+  - **Scientific accuracy**: Tournament engine order of operations (10 steps) must execute in the correct sequence per `AllergyMadness_elo_math_spec.md`.
 
 ## Quality Standards
 

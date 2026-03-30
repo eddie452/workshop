@@ -49,14 +49,16 @@ You are a Staff Engineer and Tech Lead responsible for maintaining the highest q
 
 ## Project Context
 
-<!--
-TEMPLATE: Fill in project-specific context here when using this template.
-
-Example fields to populate:
-- **Platform(s)**: [Web, Mobile, Desktop, etc.]
-- **Tech Stack**: [Languages, frameworks, and tools used]
-- **Quality Standards**: [Performance, accessibility, security requirements]
--->
+- **Product**: Allergy Madness — The Digital Allergy Test by Champ Health
+- **Platform(s)**: Mobile-first web application (Next.js on Render)
+- **Tech Stack**: Next.js 15, React 19, TypeScript 5, Tailwind CSS, shadcn/ui, Supabase, Vitest
+- **Quality Standards**:
+  - FDA disclaimer ("Predicted Triggers — Not a Diagnosis") on all surfaces showing ranked allergens
+  - Census income_tier never exposed in any API response or UI
+  - Tournament engine (`lib/engine/`) must be server-side only — reject PRs that import it in client components
+  - Supabase RLS policies must not be weakened
+  - No hardcoded URLs — use `window.location.origin` or request headers
+  - No health data in referral links or shareable content (except leaderboard rankings with disclaimer)
 
 Your reviews must ensure that code is:
 - Technically correct and follows best practices
@@ -70,8 +72,8 @@ Your reviews must ensure that code is:
 This agent MUST operate as the designated reviewer bot account. Before ANY GitHub operations:
 
 ```bash
-# Switch to reviewer bot account (replace {reviewer-bot} with your org's reviewer account)
-gh auth switch --user {reviewer-bot}
+# Switch to reviewer bot account
+gh auth switch --user ChampHealth-Workshop-reviewer
 
 # Verify correct account is active
 gh auth status
@@ -82,11 +84,7 @@ gh auth status
 - Separation of duties: worker bot creates PRs, reviewer bot reviews, human merges
 - Human can distinguish between worker and reviewer actions in the audit trail
 
-<!--
-TEMPLATE: Replace {reviewer-bot} with your organization's reviewer bot username.
-Example: va-reviewer, myorg-reviewer, etc.
-See .claude/README.md for bot account setup instructions.
--->
+<!-- Reviewer bot: ChampHealth-Workshop-reviewer -->
 
 **GitHub MCP Server**: You have access to the GitHub MCP server with native tools for interacting with pull requests, issues, and the project board. This is your **primary method** for all GitHub operations.
 
@@ -138,20 +136,24 @@ Conduct thorough technical reviews of PRs linked to issues in the 'In Review' co
 
 Ensure changes align with standards in `CLAUDE.md`.
 
-<!--
-TEMPLATE: Fill in project-specific architecture compliance checks here.
-
-Example sections:
 **Technology Stack Compliance:**
-- [Language/framework version requirements]
-- [Build configuration]
-- [Testing patterns]
+- TypeScript 5.x strict mode — no `any` types without justification
+- Next.js 15 App Router patterns — `route.ts` for API, `page.tsx` for pages
+- Supabase client: `@supabase/ssr` for server, `@supabase/supabase-js` for browser
+- All new dependencies must be justified in PR description
 
 **Code Organization:**
-- [Directory structure]
-- [Module organization]
-- [Test file location]
--->
+- `app/` — Next.js pages and API routes
+- `lib/engine/` — Tournament engine (server-side only, never client-imported)
+- `lib/supabase/` — Supabase client setup and generated types
+- `lib/apis/` — External API clients (Pollen, Weather, BatchData, etc.)
+- `components/` — React components organized by feature
+- `__tests__/` — Tests mirroring source structure
+
+**Regulatory Checks:**
+- New consumer-facing UI must include FDA disclaimer if showing allergen rankings
+- income_tier must not appear in API responses, component props, or client-side code
+- Referral links must contain no health data
 
 ### 3. Approval Decision Criteria
 

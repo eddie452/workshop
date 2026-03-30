@@ -144,12 +144,13 @@ TEMPLATE: Fill in project-specific details below when using this template.
 ### Project Information
 
 - **License**: BSL 1.1 (converts to Apache 2.0 after 3 years per release)
-- **Project Name**: [Your project name]
-- **Repository**: [GitHub repo URL]
-- **Project Board**: [GitHub project board URL]
-- **Tech Stack**: [Languages, frameworks, tools]
-- **Database**: [Supabase (recommended) — provides ephemeral PR databases via branching]
-- **Organization**: [GitHub org name]
+- **Project Name**: Allergy Madness — The Digital Allergy Test by Champ Health
+- **Repository**: https://github.com/eddie452/workshop
+- **Project Board**: https://github.com/users/eddie452/projects/1
+- **Tech Stack**: Next.js 15, React 19, TypeScript 5, Tailwind CSS, shadcn/ui, Supabase, Vitest
+- **Database**: Supabase (PostgreSQL, HIPAA-eligible with BAA, RLS on all tables)
+- **Hosting**: Render (web service, PR previews enabled)
+- **Organization**: eddie452
 
 ### Build & Test Commands
 
@@ -158,8 +159,22 @@ npm run dev          # Dev server (Next.js on port 3000)
 npm run lint         # ESLint
 npm run typecheck    # tsc --noEmit
 npm test             # Vitest
-npm run build        # Production build (standalone output)
+npm run build        # Production build
 ```
+
+### Tournament Engine
+
+The tournament engine lives in `lib/engine/` and runs server-side only.
+It must never be imported by client components (API keys would leak).
+The full order of operations (10 steps) is defined in
+`docs/TECHNICAL-ARCHITECTURE.md` and `AllergyMadness_elo_math_spec.md`.
+
+### Regulatory Requirement
+
+All consumer-facing surfaces must display the FDA disclaimer:
+"Predicted Triggers — Not a Diagnosis". The leaderboard, PDF reports,
+and any screen showing ranked allergens must include this label.
+See `docs/PRODUCT-REQUIREMENTS.md` Section: Regulatory Disclaimer.
 
 ### Definition of Ready
 

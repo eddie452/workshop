@@ -61,6 +61,7 @@ describe("Supabase database types", () => {
       known_allergens: null,
       seasonal_pattern: null,
       neighborhood_ndvi: null,
+      fda_acknowledged: false,
     };
     expect(safe).not.toHaveProperty("income_tier");
   });

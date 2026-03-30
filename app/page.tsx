@@ -1,7 +1,7 @@
 export default function Home() {
   return (
     <main>
-      <h1>Agile Flow</h1>
+      <h1>Allergy Madness</h1>
       <p>
         Your deployment pipeline is live. Configure your stack with{" "}
         <code>/bootstrap-architecture</code>.

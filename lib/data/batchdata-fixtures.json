@@ -1,0 +1,44 @@
+[
+  {
+    "address": "123 Main St, Nashville, TN 37203",
+    "year_built": 1965,
+    "home_type": "single_family",
+    "sqft": 1850
+  },
+  {
+    "address": "456 Peachtree St NE, Atlanta, GA 30308",
+    "year_built": 2005,
+    "home_type": "condo",
+    "sqft": 1200
+  },
+  {
+    "address": "789 Congress Ave, Austin, TX 78701",
+    "year_built": 2018,
+    "home_type": "apartment_low_rise",
+    "sqft": 950
+  },
+  {
+    "address": "321 Elm St, Dallas, TX 75201",
+    "year_built": 1978,
+    "home_type": "townhouse",
+    "sqft": 1600
+  },
+  {
+    "address": "555 Oak Dr, Charlotte, NC 28202",
+    "year_built": 1992,
+    "home_type": "single_family",
+    "sqft": 2200
+  },
+  {
+    "address": "100 Broadway, New York, NY 10005",
+    "year_built": 1930,
+    "home_type": "apartment_high_rise",
+    "sqft": 800
+  },
+  {
+    "address": "200 Lake Shore Dr, Chicago, IL 60611",
+    "year_built": 1972,
+    "home_type": "apartment_high_rise",
+    "sqft": 1100
+  }
+]

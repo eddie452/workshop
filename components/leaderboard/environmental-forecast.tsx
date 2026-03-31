@@ -98,25 +98,8 @@ function DataCard({
   children: React.ReactNode;
 }) {
   return (
-    <div
-      className="rounded-lg border border-gray-200 bg-white p-4"
-      style={{
-        borderRadius: "0.5rem",
-        border: "1px solid #e5e7eb",
-        backgroundColor: "#ffffff",
-        padding: "1rem",
-      }}
-    >
-      <h3
-        className="mb-3 text-sm font-semibold text-gray-700"
-        style={{
-          fontSize: "0.875rem",
-          fontWeight: 600,
-          color: "#374151",
-          marginBottom: "0.75rem",
-          margin: "0 0 0.75rem 0",
-        }}
-      >
+    <div className="rounded-lg border border-gray-200 bg-white p-4">
+      <h3 className="mb-3 text-sm font-semibold text-gray-700">
         {title}
       </h3>
       {children}
@@ -134,28 +117,13 @@ function DataRow({
   color?: string;
 }) {
   return (
-    <div
-      className="flex items-center justify-between py-1"
-      style={{
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "space-between",
-        padding: "0.25rem 0",
-      }}
-    >
-      <span
-        className="text-sm text-gray-600"
-        style={{ fontSize: "0.875rem", color: "#4b5563" }}
-      >
+    <div className="flex items-center justify-between py-1">
+      <span className="text-sm text-gray-600">
         {label}
       </span>
       <span
         className="text-sm font-medium"
-        style={{
-          fontSize: "0.875rem",
-          fontWeight: 500,
-          color: color ?? "#111827",
-        }}
+        style={{ color: color ?? "#111827" }}
       >
         {value}
       </span>
@@ -168,17 +136,11 @@ function LoadingSkeleton() {
     <div
       data-testid="forecast-loading"
       className="space-y-4"
-      style={{ display: "flex", flexDirection: "column", gap: "1rem" }}
     >
       {[1, 2, 3].map((i) => (
         <div
           key={i}
           className="h-24 animate-pulse rounded-lg bg-gray-100"
-          style={{
-            height: "6rem",
-            borderRadius: "0.5rem",
-            backgroundColor: "#f3f4f6",
-          }}
         />
       ))}
     </div>
@@ -190,18 +152,8 @@ function NoDataMessage() {
     <div
       data-testid="forecast-no-data"
       className="rounded-lg border border-gray-200 bg-gray-50 p-6 text-center"
-      style={{
-        borderRadius: "0.5rem",
-        border: "1px solid #e5e7eb",
-        backgroundColor: "#f9fafb",
-        padding: "1.5rem",
-        textAlign: "center",
-      }}
     >
-      <p
-        className="text-sm text-gray-600"
-        style={{ fontSize: "0.875rem", color: "#4b5563", margin: 0 }}
-      >
+      <p className="text-sm text-gray-600">
         Environmental data is not available. Please ensure your home location is
         set in your profile to receive local forecasts.
       </p>
@@ -229,49 +181,18 @@ export function EnvironmentalForecast({
     <div
       data-testid="environmental-forecast"
       className="space-y-4"
-      style={{ display: "flex", flexDirection: "column", gap: "1rem" }}
     >
       {/* Good news banner */}
-      <div
-        className="rounded-xl border border-green-200 bg-green-50 p-5"
-        style={{
-          borderRadius: "0.75rem",
-          border: "1px solid #bbf7d0",
-          backgroundColor: "#f0fdf4",
-          padding: "1.25rem",
-        }}
-      >
-        <div
-          className="flex items-center gap-3"
-          style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}
-        >
-          <span
-            className="text-2xl"
-            style={{ fontSize: "1.5rem" }}
-            aria-hidden="true"
-          >
+      <div className="rounded-xl border border-green-200 bg-green-50 p-5">
+        <div className="flex items-center gap-3">
+          <span className="text-2xl" aria-hidden="true">
             &#x2600;
           </span>
           <div>
-            <h2
-              className="text-base font-bold text-green-800"
-              style={{
-                fontSize: "1rem",
-                fontWeight: 700,
-                color: "#166534",
-                margin: 0,
-              }}
-            >
+            <h2 className="text-base font-bold text-green-800">
               No Symptoms Today
             </h2>
-            <p
-              className="mt-1 text-sm text-green-700"
-              style={{
-                fontSize: "0.875rem",
-                color: "#15803d",
-                margin: "0.25rem 0 0 0",
-              }}
-            >
+            <p className="mt-1 text-sm text-green-700">
               Great news! Here is what is currently in the air around you.
             </p>
           </div>
@@ -308,23 +229,8 @@ export function EnvironmentalForecast({
               color={upiColor(data.pollen.upi_weed)}
             />
             {data.pollen.species.length > 0 && (
-              <div
-                className="mt-2 border-t border-gray-100 pt-2"
-                style={{
-                  marginTop: "0.5rem",
-                  borderTop: "1px solid #f3f4f6",
-                  paddingTop: "0.5rem",
-                }}
-              >
-                <p
-                  className="mb-1 text-xs font-medium text-gray-500"
-                  style={{
-                    fontSize: "0.75rem",
-                    fontWeight: 500,
-                    color: "#6b7280",
-                    margin: "0 0 0.25rem 0",
-                  }}
-                >
+              <div className="mt-2 border-t border-gray-100 pt-2">
+                <p className="mb-1 text-xs font-medium text-gray-500">
                   Active Species
                 </p>
                 {data.pollen.species
@@ -346,32 +252,16 @@ export function EnvironmentalForecast({
           <DataCard title="Air Quality">
             {data.aqi.aqi !== null ? (
               <>
-                <div
-                  className="mb-2 flex items-baseline gap-2"
-                  style={{
-                    display: "flex",
-                    alignItems: "baseline",
-                    gap: "0.5rem",
-                    marginBottom: "0.5rem",
-                  }}
-                >
+                <div className="mb-2 flex items-baseline gap-2">
                   <span
                     className="text-2xl font-bold"
-                    style={{
-                      fontSize: "1.5rem",
-                      fontWeight: 700,
-                      color: aqiColor(data.aqi.aqi),
-                    }}
+                    style={{ color: aqiColor(data.aqi.aqi) }}
                   >
                     {data.aqi.aqi}
                   </span>
                   <span
                     className="text-sm font-medium"
-                    style={{
-                      fontSize: "0.875rem",
-                      fontWeight: 500,
-                      color: aqiColor(data.aqi.aqi),
-                    }}
+                    style={{ color: aqiColor(data.aqi.aqi) }}
                   >
                     {aqiLabel(data.aqi.aqi)}
                   </span>
@@ -395,24 +285,13 @@ export function EnvironmentalForecast({
                   />
                 )}
                 {data.aqi.station && (
-                  <p
-                    className="mt-2 text-xs text-gray-400"
-                    style={{
-                      fontSize: "0.75rem",
-                      color: "#9ca3af",
-                      marginTop: "0.5rem",
-                      margin: "0.5rem 0 0 0",
-                    }}
-                  >
+                  <p className="mt-2 text-xs text-gray-400">
                     Station: {data.aqi.station}
                   </p>
                 )}
               </>
             ) : (
-              <p
-                className="text-sm text-gray-500"
-                style={{ fontSize: "0.875rem", color: "#6b7280", margin: 0 }}
-              >
+              <p className="text-sm text-gray-500">
                 AQI data unavailable for your location.
               </p>
             )}
@@ -446,10 +325,7 @@ export function EnvironmentalForecast({
                 )}
               </>
             ) : (
-              <p
-                className="text-sm text-gray-500"
-                style={{ fontSize: "0.875rem", color: "#6b7280", margin: 0 }}
-              >
+              <p className="text-sm text-gray-500">
                 Weather data unavailable for your location.
               </p>
             )}
@@ -459,12 +335,6 @@ export function EnvironmentalForecast({
           {data.region && (
             <p
               className="text-center text-xs text-gray-400"
-              style={{
-                fontSize: "0.75rem",
-                color: "#9ca3af",
-                textAlign: "center",
-                margin: 0,
-              }}
               data-testid="forecast-region"
             >
               Region: {data.region}

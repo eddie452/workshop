@@ -14,89 +14,33 @@ export function TriggerChampionCard({ allergen }: TriggerChampionCardProps) {
     <div
       data-testid="trigger-champion-card"
       className="rounded-xl border-2 border-amber-400 bg-gradient-to-br from-amber-50 to-orange-50 p-6 shadow-lg"
-      style={{
-        borderRadius: "0.75rem",
-        border: "2px solid #fbbf24",
-        background: "linear-gradient(to bottom right, #fffbeb, #fff7ed)",
-        padding: "1.5rem",
-        boxShadow:
-          "0 10px 15px -3px rgba(0,0,0,.1), 0 4px 6px -4px rgba(0,0,0,.1)",
-      }}
     >
       {/* Crown / header */}
-      <div
-        className="mb-3 flex items-center gap-2"
-        style={{
-          marginBottom: "0.75rem",
-          display: "flex",
-          alignItems: "center",
-          gap: "0.5rem",
-        }}
-      >
-        <span
-          className="text-2xl"
-          style={{ fontSize: "1.5rem" }}
-          aria-hidden="true"
-        >
+      <div className="mb-3 flex items-center gap-2">
+        <span className="text-2xl" aria-hidden="true">
           &#x1F451;
         </span>
-        <h2
-          className="text-sm font-bold uppercase tracking-wider text-amber-700"
-          style={{
-            fontSize: "0.75rem",
-            fontWeight: 700,
-            textTransform: "uppercase",
-            letterSpacing: "0.05em",
-            color: "#b45309",
-            margin: 0,
-          }}
-        >
+        <h2 className="text-sm font-bold uppercase tracking-wider text-amber-700">
           Trigger Champion
         </h2>
       </div>
 
       {/* Allergen name + category */}
-      <div
-        className="mb-3 flex items-center gap-3"
-        style={{
-          marginBottom: "0.75rem",
-          display: "flex",
-          alignItems: "center",
-          gap: "0.75rem",
-        }}
-      >
+      <div className="mb-3 flex items-center gap-3">
         <CategoryIcon category={allergen.category} />
         <h3
           data-testid="champion-name"
           className="text-2xl font-bold text-gray-900"
-          style={{
-            fontSize: "1.5rem",
-            fontWeight: 700,
-            color: "#111827",
-            margin: 0,
-          }}
         >
           {allergen.common_name}
         </h3>
       </div>
 
       {/* Elo score + confidence */}
-      <div
-        className="flex items-center gap-3"
-        style={{
-          display: "flex",
-          alignItems: "center",
-          gap: "0.75rem",
-        }}
-      >
+      <div className="flex items-center gap-3">
         <span
           data-testid="champion-elo"
           className="text-lg font-semibold text-gray-700"
-          style={{
-            fontSize: "1.125rem",
-            fontWeight: 600,
-            color: "#374151",
-          }}
         >
           Elo {allergen.elo_score}
         </span>

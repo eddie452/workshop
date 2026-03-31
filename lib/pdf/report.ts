@@ -18,6 +18,7 @@ import {
   FDA_DISCLAIMER_LABEL,
   FDA_DISCLAIMER_FULL_TEXT,
 } from "@/components/shared/fda-disclaimer";
+import { PDF_COLORS } from "@/lib/theme";
 import type { PdfReportInput, PdfAllergenEntry } from "./types";
 
 /* ------------------------------------------------------------------ */
@@ -31,14 +32,14 @@ const MARGIN_RIGHT = 20;
 const CONTENT_WIDTH = PAGE_WIDTH - MARGIN_LEFT - MARGIN_RIGHT;
 const FOOTER_Y = PAGE_HEIGHT - 25;
 
-const COLOR_PRIMARY = [59, 130, 246] as const; // Blue-500
-const COLOR_GOLD = [234, 179, 8] as const; // Amber/Gold for champion
-const COLOR_TEXT = [31, 41, 55] as const; // Gray-800
-const COLOR_MUTED = [107, 114, 128] as const; // Gray-500
-const COLOR_BORDER = [209, 213, 219] as const; // Gray-300
-const COLOR_BG_LIGHT = [249, 250, 251] as const; // Gray-50
-const COLOR_AMBER_BG = [255, 251, 235] as const; // Amber-50
-const COLOR_AMBER_TEXT = [146, 64, 14] as const; // Amber-800
+const COLOR_PRIMARY = PDF_COLORS.primary;
+const COLOR_GOLD = PDF_COLORS.gold;
+const COLOR_TEXT = PDF_COLORS.textSecondary;
+const COLOR_MUTED = PDF_COLORS.textMuted;
+const COLOR_BORDER = PDF_COLORS.border;
+const COLOR_BG_LIGHT = PDF_COLORS.bgLight;
+const COLOR_AMBER_BG = PDF_COLORS.amberBg;
+const COLOR_AMBER_TEXT = PDF_COLORS.amberText;
 
 const TIER_LABELS: Record<string, string> = {
   very_high: "Very High",

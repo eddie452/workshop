@@ -3,8 +3,6 @@
  *
  * Client component that triggers PDF report generation and download.
  * Calls the /api/report/pdf endpoint and triggers a browser download.
- *
- * Dual styling: Tailwind utility classes + inline styles.
  */
 
 "use client";
@@ -61,24 +59,7 @@ export function DownloadReportButton({
         onClick={handleDownload}
         disabled={isLoading}
         data-testid="download-report-button"
-        className="inline-flex items-center gap-2 rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed"
-        style={{
-          display: "inline-flex",
-          alignItems: "center",
-          gap: "0.5rem",
-          borderRadius: "0.5rem",
-          backgroundColor: isLoading ? "#93c5fd" : "#2563eb",
-          paddingLeft: "1rem",
-          paddingRight: "1rem",
-          paddingTop: "0.5rem",
-          paddingBottom: "0.5rem",
-          fontSize: "0.875rem",
-          fontWeight: 500,
-          color: "#ffffff",
-          border: "none",
-          cursor: isLoading ? "not-allowed" : "pointer",
-          opacity: isLoading ? 0.5 : 1,
-        }}
+        className="inline-flex items-center gap-2 rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-50"
       >
         {/* Download icon (inline SVG to avoid dependency) */}
         <svg
@@ -88,7 +69,7 @@ export function DownloadReportButton({
           fill="none"
           xmlns="http://www.w3.org/2000/svg"
           aria-hidden="true"
-          style={{ width: "1rem", height: "1rem" }}
+          className="h-4 w-4"
         >
           <path
             d="M2 10v3a1 1 0 001 1h10a1 1 0 001-1v-3M8 2v8m0 0l3-3m-3 3L5 7"
@@ -106,11 +87,6 @@ export function DownloadReportButton({
           role="alert"
           data-testid="download-report-error"
           className="mt-2 text-sm text-red-600"
-          style={{
-            marginTop: "0.5rem",
-            fontSize: "0.875rem",
-            color: "#dc2626",
-          }}
         >
           {error}
         </p>

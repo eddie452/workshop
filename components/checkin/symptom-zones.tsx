@@ -45,26 +45,12 @@ export function SymptomZones({ symptoms, onChange }: SymptomZonesProps) {
   };
 
   return (
-    <fieldset
-      style={{ border: "none", padding: 0, margin: 0 }}
-    >
-      <legend
-        className="text-base font-semibold text-gray-900 mb-3"
-        style={{
-          fontSize: "1rem",
-          fontWeight: 600,
-          color: "#111827",
-          marginBottom: "0.75rem",
-          padding: 0,
-        }}
-      >
+    <fieldset className="border-none p-0 m-0">
+      <legend className="mb-3 text-base font-semibold text-gray-900">
         Which areas are affected?
       </legend>
 
-      <div
-        className="space-y-2"
-        style={{ display: "flex", flexDirection: "column", gap: "0.5rem" }}
-      >
+      <div className="space-y-2">
         {SYMPTOM_ZONES.map((zone) => {
           const isExpanded = expandedZones.has(zone.id);
           const activeCount = getZoneSymptomCount(zone.id);
@@ -72,12 +58,7 @@ export function SymptomZones({ symptoms, onChange }: SymptomZonesProps) {
           return (
             <div
               key={zone.id}
-              className="rounded-lg border border-gray-200 overflow-hidden"
-              style={{
-                borderRadius: "0.5rem",
-                border: "1px solid #e5e7eb",
-                overflow: "hidden",
-              }}
+              className="overflow-hidden rounded-lg border border-gray-200"
               data-testid={`zone-${zone.id}`}
             >
               {/* Zone header — toggle expand */}
@@ -86,87 +67,32 @@ export function SymptomZones({ symptoms, onChange }: SymptomZonesProps) {
                 aria-expanded={isExpanded}
                 aria-controls={`zone-panel-${zone.id}`}
                 onClick={() => toggleZone(zone.id)}
-                className="flex w-full items-center justify-between px-4 py-3 bg-gray-50 hover:bg-gray-100 transition-colors"
-                style={{
-                  display: "flex",
-                  width: "100%",
-                  alignItems: "center",
-                  justifyContent: "space-between",
-                  padding: "0.75rem 1rem",
-                  backgroundColor: "#f9fafb",
-                  border: "none",
-                  cursor: "pointer",
-                  transition: "background-color 0.15s",
-                }}
+                className="flex w-full cursor-pointer items-center justify-between border-none bg-gray-50 px-4 py-3 transition-colors hover:bg-gray-100"
               >
-                <div
-                  className="flex items-center gap-3"
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                    gap: "0.75rem",
-                  }}
-                >
+                <div className="flex items-center gap-3">
                   <span
                     className="flex h-8 w-8 items-center justify-center rounded-full bg-blue-100 text-sm font-bold text-blue-700"
-                    style={{
-                      display: "flex",
-                      height: "2rem",
-                      width: "2rem",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      borderRadius: "9999px",
-                      backgroundColor: "#dbeafe",
-                      fontSize: "0.875rem",
-                      fontWeight: 700,
-                      color: "#1d4ed8",
-                    }}
                     aria-hidden="true"
                   >
                     {zone.icon}
                   </span>
-                  <span
-                    className="text-sm font-medium text-gray-900"
-                    style={{
-                      fontSize: "0.875rem",
-                      fontWeight: 500,
-                      color: "#111827",
-                    }}
-                  >
+                  <span className="text-sm font-medium text-gray-900">
                     {zone.label}
                   </span>
                 </div>
 
-                <div
-                  className="flex items-center gap-2"
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                    gap: "0.5rem",
-                  }}
-                >
+                <div className="flex items-center gap-2">
                   {activeCount > 0 && (
                     <span
                       className="rounded-full bg-blue-600 px-2 py-0.5 text-xs font-bold text-white"
-                      style={{
-                        borderRadius: "9999px",
-                        backgroundColor: "#2563eb",
-                        padding: "0.125rem 0.5rem",
-                        fontSize: "0.75rem",
-                        fontWeight: 700,
-                        color: "#ffffff",
-                      }}
                       aria-label={`${activeCount} symptom${activeCount !== 1 ? "s" : ""} selected`}
                     >
                       {activeCount}
                     </span>
                   )}
                   <span
-                    className="text-gray-400 text-sm"
+                    className="text-sm text-gray-400 transition-transform"
                     style={{
-                      color: "#9ca3af",
-                      fontSize: "0.875rem",
-                      transition: "transform 0.15s",
                       transform: isExpanded ? "rotate(180deg)" : "rotate(0deg)",
                     }}
                     aria-hidden="true"
@@ -182,46 +108,23 @@ export function SymptomZones({ symptoms, onChange }: SymptomZonesProps) {
                   id={`zone-panel-${zone.id}`}
                   role="group"
                   aria-label={`${zone.label} symptoms`}
-                  className="px-4 py-3 space-y-2"
-                  style={{
-                    padding: "0.75rem 1rem",
-                    display: "flex",
-                    flexDirection: "column",
-                    gap: "0.5rem",
-                  }}
+                  className="space-y-2 px-4 py-3"
                 >
                   {zone.symptoms.map((symptom) => {
                     const isChecked = !!symptoms[symptom.key];
                     return (
                       <label
                         key={symptom.key}
-                        className="flex items-center gap-3 cursor-pointer"
-                        style={{
-                          display: "flex",
-                          alignItems: "center",
-                          gap: "0.75rem",
-                          cursor: "pointer",
-                        }}
+                        className="flex cursor-pointer items-center gap-3"
                       >
                         <input
                           type="checkbox"
                           checked={isChecked}
                           onChange={() => toggleSymptom(symptom.key)}
                           data-testid={`symptom-${symptom.key}`}
-                          className="h-5 w-5 rounded border-gray-300 text-blue-600"
-                          style={{
-                            height: "1.25rem",
-                            width: "1.25rem",
-                            accentColor: "#2563eb",
-                          }}
+                          className="h-5 w-5 rounded border-gray-300 accent-blue-600"
                         />
-                        <span
-                          className="text-sm text-gray-700"
-                          style={{
-                            fontSize: "0.875rem",
-                            color: "#374151",
-                          }}
-                        >
+                        <span className="text-sm text-gray-700">
                           {symptom.label}
                         </span>
                       </label>

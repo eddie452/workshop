@@ -53,4 +53,10 @@ export interface AllergenRankRowProps {
 /** Props for the blur overlay */
 export interface BlurOverlayProps {
   children: React.ReactNode;
+  /** Number of referrals still needed to unlock (passed to UpgradeCta) */
+  referralsNeeded?: number;
+  /** Feature name for contextual CTA messaging */
+  featureLabel?: string;
+  /** Whether to show the upgrade CTA below the lock icon */
+  showUpgradeCta?: boolean;
 }

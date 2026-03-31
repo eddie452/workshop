@@ -3,11 +3,18 @@
  *
  * Freemium gate overlay that blurs content for free-tier users.
  * Shows a lock icon with pulse animation and upgrade prompt.
+ * Optionally shows the UpgradeCta component for subscription/referral prompts.
  */
 
 import type { BlurOverlayProps } from "./types";
+import { UpgradeCta } from "@/components/subscription/upgrade-cta";
 
-export function BlurOverlay({ children }: BlurOverlayProps) {
+export function BlurOverlay({
+  children,
+  referralsNeeded,
+  featureLabel,
+  showUpgradeCta = false,
+}: BlurOverlayProps) {
   return (
     <div
       data-testid="blur-overlay"
@@ -54,16 +61,26 @@ export function BlurOverlay({ children }: BlurOverlayProps) {
         >
           &#x1F512;
         </span>
-        <p
-          className="text-sm font-medium text-gray-600"
-          style={{
-            fontSize: "0.875rem",
-            fontWeight: 500,
-            color: "#4b5563",
-          }}
-        >
-          Upgrade to Madness+ to reveal
-        </p>
+        {!showUpgradeCta && (
+          <p
+            className="text-sm font-medium text-gray-600"
+            style={{
+              fontSize: "0.875rem",
+              fontWeight: 500,
+              color: "#4b5563",
+            }}
+          >
+            Upgrade to Madness+ to reveal
+          </p>
+        )}
+        {showUpgradeCta && (
+          <div style={{ marginTop: "0.5rem" }}>
+            <UpgradeCta
+              feature={featureLabel}
+              referralsNeeded={referralsNeeded}
+            />
+          </div>
+        )}
       </div>
     </div>
   );

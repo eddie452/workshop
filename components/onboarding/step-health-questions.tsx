@@ -46,67 +46,23 @@ export function StepHealthQuestions({
 
   return (
     <form onSubmit={handleSubmit}>
-      <div
-        className="space-y-6"
-        style={{ display: "flex", flexDirection: "column", gap: "1.5rem" }}
-      >
+      <div className="space-y-6">
         <div>
-          <h2
-            className="text-xl font-bold text-gray-900"
-            style={{
-              fontSize: "1.25rem",
-              fontWeight: 700,
-              color: "#111827",
-              margin: 0,
-            }}
-          >
+          <h2 className="text-xl font-bold text-gray-900">
             A few quick questions
           </h2>
-          <p
-            className="mt-2 text-sm text-gray-600"
-            style={{
-              fontSize: "0.875rem",
-              color: "#4b5563",
-              marginTop: "0.5rem",
-            }}
-          >
+          <p className="mt-2 text-sm text-gray-600">
             These help us fine-tune your allergen predictions.
           </p>
         </div>
 
         {/* Pets */}
-        <fieldset
-          style={{
-            border: "none",
-            padding: 0,
-            margin: 0,
-          }}
-        >
-          <legend
-            className="text-sm font-medium text-gray-700"
-            style={{
-              fontSize: "0.875rem",
-              fontWeight: 500,
-              color: "#374151",
-              marginBottom: "0.5rem",
-            }}
-          >
+        <fieldset className="border-none p-0 m-0">
+          <legend className="mb-2 text-sm font-medium text-gray-700">
             Do you have pets at home?
           </legend>
-          <div
-            className="flex gap-4"
-            style={{ display: "flex", gap: "1rem", marginTop: "0.25rem" }}
-          >
-            <label
-              className="flex items-center gap-2 text-sm"
-              style={{
-                display: "flex",
-                alignItems: "center",
-                gap: "0.5rem",
-                fontSize: "0.875rem",
-                cursor: "pointer",
-              }}
-            >
+          <div className="flex gap-4">
+            <label className="flex cursor-pointer items-center gap-2 text-sm">
               <input
                 type="radio"
                 name="has_pets"
@@ -115,16 +71,7 @@ export function StepHealthQuestions({
               />
               Yes
             </label>
-            <label
-              className="flex items-center gap-2 text-sm"
-              style={{
-                display: "flex",
-                alignItems: "center",
-                gap: "0.5rem",
-                fontSize: "0.875rem",
-                cursor: "pointer",
-              }}
-            >
+            <label className="flex cursor-pointer items-center gap-2 text-sm">
               <input
                 type="radio"
                 name="has_pets"
@@ -137,15 +84,7 @@ export function StepHealthQuestions({
             </label>
           </div>
           {formData.has_pets && (
-            <div
-              className="mt-3 flex flex-wrap gap-2"
-              style={{
-                display: "flex",
-                flexWrap: "wrap",
-                gap: "0.5rem",
-                marginTop: "0.75rem",
-              }}
-            >
+            <div className="mt-3 flex flex-wrap gap-2">
               {PET_OPTIONS.map((pet) => {
                 const selected = formData.pet_types.includes(pet);
                 return (
@@ -153,22 +92,11 @@ export function StepHealthQuestions({
                     key={pet}
                     type="button"
                     onClick={() => togglePetType(pet)}
-                    className={`rounded-full border px-3 py-1 text-sm ${
+                    className={`rounded-full border px-3 py-1 text-sm cursor-pointer ${
                       selected
                         ? "border-blue-500 bg-blue-50 text-blue-700"
                         : "border-gray-300 bg-white text-gray-700"
                     }`}
-                    style={{
-                      borderRadius: "9999px",
-                      border: selected
-                        ? "1px solid #3b82f6"
-                        : "1px solid #d1d5db",
-                      backgroundColor: selected ? "#eff6ff" : "#ffffff",
-                      color: selected ? "#1d4ed8" : "#374151",
-                      padding: "0.25rem 0.75rem",
-                      fontSize: "0.875rem",
-                      cursor: "pointer",
-                    }}
                     aria-pressed={selected}
                   >
                     {pet}
@@ -180,32 +108,12 @@ export function StepHealthQuestions({
         </fieldset>
 
         {/* Prior diagnosis */}
-        <fieldset style={{ border: "none", padding: 0, margin: 0 }}>
-          <legend
-            className="text-sm font-medium text-gray-700"
-            style={{
-              fontSize: "0.875rem",
-              fontWeight: 500,
-              color: "#374151",
-              marginBottom: "0.5rem",
-            }}
-          >
+        <fieldset className="border-none p-0 m-0">
+          <legend className="mb-2 text-sm font-medium text-gray-700">
             Have you been diagnosed with allergies before?
           </legend>
-          <div
-            className="flex gap-4"
-            style={{ display: "flex", gap: "1rem", marginTop: "0.25rem" }}
-          >
-            <label
-              className="flex items-center gap-2 text-sm"
-              style={{
-                display: "flex",
-                alignItems: "center",
-                gap: "0.5rem",
-                fontSize: "0.875rem",
-                cursor: "pointer",
-              }}
-            >
+          <div className="flex gap-4">
+            <label className="flex cursor-pointer items-center gap-2 text-sm">
               <input
                 type="radio"
                 name="prior_diagnosis"
@@ -216,16 +124,7 @@ export function StepHealthQuestions({
               />
               Yes
             </label>
-            <label
-              className="flex items-center gap-2 text-sm"
-              style={{
-                display: "flex",
-                alignItems: "center",
-                gap: "0.5rem",
-                fontSize: "0.875rem",
-                cursor: "pointer",
-              }}
-            >
+            <label className="flex cursor-pointer items-center gap-2 text-sm">
               <input
                 type="radio"
                 name="prior_diagnosis"
@@ -244,13 +143,6 @@ export function StepHealthQuestions({
           <label
             htmlFor="seasonal_pattern"
             className="block text-sm font-medium text-gray-700"
-            style={{
-              display: "block",
-              fontSize: "0.875rem",
-              fontWeight: 500,
-              color: "#374151",
-              marginBottom: "0.25rem",
-            }}
           >
             When are your symptoms worst?
           </label>
@@ -262,18 +154,7 @@ export function StepHealthQuestions({
                 seasonal_pattern: e.target.value as SeasonalPattern,
               })
             }
-            className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 text-sm"
-            style={{
-              display: "block",
-              width: "100%",
-              borderRadius: "0.375rem",
-              border: "1px solid #d1d5db",
-              padding: "0.5rem 0.75rem",
-              fontSize: "0.875rem",
-              marginTop: "0.25rem",
-              boxSizing: "border-box",
-              backgroundColor: "#ffffff",
-            }}
+            className="mt-1 block w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm"
           >
             {SEASONAL_OPTIONS.map((opt) => (
               <option key={opt.value} value={opt.value}>
@@ -284,37 +165,12 @@ export function StepHealthQuestions({
         </div>
 
         {/* Indoor risk factors */}
-        <fieldset style={{ border: "none", padding: 0, margin: 0 }}>
-          <legend
-            className="text-sm font-medium text-gray-700"
-            style={{
-              fontSize: "0.875rem",
-              fontWeight: 500,
-              color: "#374151",
-              marginBottom: "0.5rem",
-            }}
-          >
+        <fieldset className="border-none p-0 m-0">
+          <legend className="mb-2 text-sm font-medium text-gray-700">
             Indoor risk factors (check any that apply)
           </legend>
-          <div
-            className="space-y-2"
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              gap: "0.5rem",
-              marginTop: "0.25rem",
-            }}
-          >
-            <label
-              className="flex items-center gap-2 text-sm"
-              style={{
-                display: "flex",
-                alignItems: "center",
-                gap: "0.5rem",
-                fontSize: "0.875rem",
-                cursor: "pointer",
-              }}
-            >
+          <div className="space-y-2">
+            <label className="flex cursor-pointer items-center gap-2 text-sm">
               <input
                 type="checkbox"
                 checked={formData.has_mold_moisture}
@@ -324,16 +180,7 @@ export function StepHealthQuestions({
               />
               Mold or moisture issues
             </label>
-            <label
-              className="flex items-center gap-2 text-sm"
-              style={{
-                display: "flex",
-                alignItems: "center",
-                gap: "0.5rem",
-                fontSize: "0.875rem",
-                cursor: "pointer",
-              }}
-            >
+            <label className="flex cursor-pointer items-center gap-2 text-sm">
               <input
                 type="checkbox"
                 checked={formData.cockroach_sighting}
@@ -343,16 +190,7 @@ export function StepHealthQuestions({
               />
               Cockroach sightings
             </label>
-            <label
-              className="flex items-center gap-2 text-sm"
-              style={{
-                display: "flex",
-                alignItems: "center",
-                gap: "0.5rem",
-                fontSize: "0.875rem",
-                cursor: "pointer",
-              }}
-            >
+            <label className="flex cursor-pointer items-center gap-2 text-sm">
               <input
                 type="checkbox"
                 checked={formData.smoking_in_home}
@@ -366,42 +204,17 @@ export function StepHealthQuestions({
         </fieldset>
 
         {/* Navigation */}
-        <div
-          className="flex gap-3"
-          style={{ display: "flex", gap: "0.75rem" }}
-        >
+        <div className="flex gap-3">
           <button
             type="button"
             onClick={onBack}
-            className="flex-1 rounded-md border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
-            style={{
-              flex: 1,
-              borderRadius: "0.375rem",
-              border: "1px solid #d1d5db",
-              padding: "0.5rem 1rem",
-              fontSize: "0.875rem",
-              fontWeight: 500,
-              color: "#374151",
-              backgroundColor: "#ffffff",
-              cursor: "pointer",
-            }}
+            className="flex-1 rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
           >
             Back
           </button>
           <button
             type="submit"
             className="flex-1 rounded-md bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700"
-            style={{
-              flex: 1,
-              borderRadius: "0.375rem",
-              backgroundColor: "#2563eb",
-              padding: "0.5rem 1rem",
-              fontSize: "0.875rem",
-              fontWeight: 500,
-              color: "#ffffff",
-              border: "none",
-              cursor: "pointer",
-            }}
           >
             Continue
           </button>

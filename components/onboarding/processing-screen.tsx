@@ -95,43 +95,12 @@ export function ProcessingScreen({ formData }: ProcessingScreenProps) {
 
   if (error) {
     return (
-      <div
-        className="space-y-4 text-center"
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          gap: "1rem",
-          textAlign: "center",
-        }}
-      >
-        <div
-          className="rounded-md border border-red-200 bg-red-50 p-4"
-          style={{
-            borderRadius: "0.375rem",
-            border: "1px solid #fecaca",
-            backgroundColor: "#fef2f2",
-            padding: "1rem",
-          }}
-        >
-          <p
-            className="text-sm font-medium text-red-800"
-            style={{
-              fontSize: "0.875rem",
-              fontWeight: 500,
-              color: "#991b1b",
-              margin: 0,
-            }}
-          >
+      <div className="space-y-4 text-center">
+        <div className="rounded-md border border-red-200 bg-red-50 p-4">
+          <p className="text-sm font-medium text-red-800">
             Something went wrong
           </p>
-          <p
-            className="mt-1 text-sm text-red-600"
-            style={{
-              fontSize: "0.875rem",
-              color: "#dc2626",
-              marginTop: "0.25rem",
-            }}
-          >
+          <p className="mt-1 text-sm text-red-600">
             {error}
           </p>
         </div>
@@ -144,16 +113,6 @@ export function ProcessingScreen({ formData }: ProcessingScreenProps) {
             submitOnboarding();
           }}
           className="rounded-md bg-blue-600 px-4 py-2 text-sm font-medium text-white"
-          style={{
-            borderRadius: "0.375rem",
-            backgroundColor: "#2563eb",
-            padding: "0.5rem 1rem",
-            fontSize: "0.875rem",
-            fontWeight: 500,
-            color: "#ffffff",
-            border: "none",
-            cursor: "pointer",
-          }}
         >
           Try again
         </button>
@@ -167,53 +126,21 @@ export function ProcessingScreen({ formData }: ProcessingScreenProps) {
   return (
     <div
       className="space-y-8 text-center"
-      style={{
-        display: "flex",
-        flexDirection: "column",
-        gap: "2rem",
-        textAlign: "center",
-      }}
       data-testid="processing-screen"
     >
       <div>
-        <h2
-          className="text-xl font-bold text-gray-900"
-          style={{
-            fontSize: "1.25rem",
-            fontWeight: 700,
-            color: "#111827",
-            margin: 0,
-          }}
-        >
+        <h2 className="text-xl font-bold text-gray-900">
           Building your prediction
         </h2>
-        <p
-          className="mt-2 text-sm text-gray-500"
-          style={{
-            fontSize: "0.875rem",
-            color: "#6b7280",
-            marginTop: "0.5rem",
-          }}
-        >
+        <p className="mt-2 text-sm text-gray-500">
           Analyzing your data against regional allergen profiles...
         </p>
       </div>
 
       {/* Spinner */}
-      <div
-        className="flex justify-center"
-        style={{ display: "flex", justifyContent: "center" }}
-      >
+      <div className="flex justify-center">
         <div
           className="h-12 w-12 animate-spin rounded-full border-4 border-gray-200 border-t-blue-600"
-          style={{
-            height: "3rem",
-            width: "3rem",
-            borderRadius: "9999px",
-            border: "4px solid #e5e7eb",
-            borderTopColor: "#2563eb",
-            animation: "spin 1s linear infinite",
-          }}
           role="status"
           aria-label="Processing"
         />
@@ -221,13 +148,7 @@ export function ProcessingScreen({ formData }: ProcessingScreenProps) {
 
       {/* Current message */}
       <p
-        className="text-sm font-medium text-gray-700"
-        style={{
-          fontSize: "0.875rem",
-          fontWeight: 500,
-          color: "#374151",
-          minHeight: "1.25rem",
-        }}
+        className="min-h-5 text-sm font-medium text-gray-700"
         data-testid="processing-message"
         aria-live="polite"
       >
@@ -235,29 +156,11 @@ export function ProcessingScreen({ formData }: ProcessingScreenProps) {
       </p>
 
       {/* Progress bar */}
-      <div
-        className="mx-auto w-full max-w-xs"
-        style={{ maxWidth: "20rem", margin: "0 auto", width: "100%" }}
-      >
-        <div
-          className="h-2 w-full rounded-full bg-gray-200"
-          style={{
-            height: "0.5rem",
-            width: "100%",
-            borderRadius: "9999px",
-            backgroundColor: "#e5e7eb",
-            overflow: "hidden",
-          }}
-        >
+      <div className="mx-auto w-full max-w-xs">
+        <div className="h-2 w-full overflow-hidden rounded-full bg-gray-200">
           <div
             className="h-full rounded-full bg-blue-600 transition-all duration-500"
-            style={{
-              height: "100%",
-              borderRadius: "9999px",
-              backgroundColor: "#2563eb",
-              width: `${progress}%`,
-              transition: "width 0.5s ease",
-            }}
+            style={{ width: `${progress}%` }}
             role="progressbar"
             aria-valuenow={progress}
             aria-valuemin={0}

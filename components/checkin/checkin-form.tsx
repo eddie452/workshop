@@ -40,7 +40,6 @@ export function CheckinForm({ onSuccess, alreadyCheckedIn = false }: CheckinForm
     setFormData((prev) => ({
       ...prev,
       severity,
-      // Clear symptoms if severity goes to 0
       symptoms: severity === 0 ? {} : prev.symptoms,
     }));
   }, []);
@@ -103,34 +102,12 @@ export function CheckinForm({ onSuccess, alreadyCheckedIn = false }: CheckinForm
     return (
       <div
         className="rounded-lg border border-green-200 bg-green-50 p-6 text-center"
-        style={{
-          borderRadius: "0.5rem",
-          border: "1px solid #bbf7d0",
-          backgroundColor: "#f0fdf4",
-          padding: "1.5rem",
-          textAlign: "center",
-        }}
         data-testid="checkin-complete"
       >
-        <p
-          className="text-lg font-semibold text-green-800"
-          style={{
-            fontSize: "1.125rem",
-            fontWeight: 600,
-            color: "#166534",
-            margin: "0 0 0.5rem 0",
-          }}
-        >
+        <p className="text-lg font-semibold text-green-800">
           {submitted ? "Check-in submitted!" : "Already checked in today"}
         </p>
-        <p
-          className="text-sm text-green-600"
-          style={{
-            fontSize: "0.875rem",
-            color: "#16a34a",
-            margin: 0,
-          }}
-        >
+        <p className="mt-2 text-sm text-green-600">
           {submitted
             ? "Your leaderboard is being updated."
             : "Come back tomorrow for your next check-in."}
@@ -143,7 +120,6 @@ export function CheckinForm({ onSuccess, alreadyCheckedIn = false }: CheckinForm
     <form
       onSubmit={handleSubmit}
       className="space-y-8"
-      style={{ display: "flex", flexDirection: "column", gap: "2rem" }}
       data-testid="checkin-form"
     >
       {/* Error message */}
@@ -151,14 +127,6 @@ export function CheckinForm({ onSuccess, alreadyCheckedIn = false }: CheckinForm
         <div
           role="alert"
           className="rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700"
-          style={{
-            borderRadius: "0.5rem",
-            border: "1px solid #fecaca",
-            backgroundColor: "#fef2f2",
-            padding: "0.75rem 1rem",
-            fontSize: "0.875rem",
-            color: "#b91c1c",
-          }}
           data-testid="checkin-error"
         >
           {error}
@@ -191,35 +159,14 @@ export function CheckinForm({ onSuccess, alreadyCheckedIn = false }: CheckinForm
         type="submit"
         disabled={isSubmitting}
         data-testid="checkin-submit"
-        className="w-full rounded-lg bg-blue-600 px-4 py-3 text-base font-semibold text-white hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-        style={{
-          width: "100%",
-          borderRadius: "0.5rem",
-          backgroundColor: isSubmitting ? "#93c5fd" : "#2563eb",
-          padding: "0.75rem 1rem",
-          fontSize: "1rem",
-          fontWeight: 600,
-          color: "#ffffff",
-          border: "none",
-          cursor: isSubmitting ? "not-allowed" : "pointer",
-          opacity: isSubmitting ? 0.5 : 1,
-          transition: "background-color 0.15s",
-        }}
+        className="w-full rounded-lg bg-blue-600 px-4 py-3 text-base font-semibold text-white transition-colors hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-50"
       >
         {isSubmitting ? "Submitting..." : formData.severity === 0 ? "Log Symptom-Free Day" : "Submit Check-in"}
       </button>
 
       {/* Severity 0 hint */}
       {formData.severity === 0 && (
-        <p
-          className="text-xs text-gray-500 text-center"
-          style={{
-            fontSize: "0.75rem",
-            color: "#6b7280",
-            textAlign: "center",
-            margin: 0,
-          }}
-        >
+        <p className="text-center text-xs text-gray-500">
           Logging a symptom-free day helps calibrate your Environmental Forecast.
         </p>
       )}

@@ -9,8 +9,6 @@
  *
  * Premium feature — gated behind Madness+ subscription.
  * Free-tier users see allergen names but food lists are blurred.
- *
- * Dual styling: Tailwind utility classes + inline styles.
  */
 
 import { FdaDisclaimer } from "@/components/shared/fda-disclaimer";
@@ -67,15 +65,6 @@ function SeverityBadge({ severity }: { severity: PfasSeverity }) {
       data-testid="pfas-severity-badge"
       className="inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium"
       style={{
-        display: "inline-flex",
-        alignItems: "center",
-        borderRadius: "9999px",
-        paddingLeft: "0.5rem",
-        paddingRight: "0.5rem",
-        paddingTop: "0.125rem",
-        paddingBottom: "0.125rem",
-        fontSize: "0.75rem",
-        fontWeight: 500,
         backgroundColor: colors.bg,
         color: colors.text,
         border: `1px solid ${colors.border}`,
@@ -90,20 +79,7 @@ function FoodTag({ food }: { food: string }) {
   return (
     <span
       data-testid="pfas-food-tag"
-      className="inline-block rounded-md bg-green-50 px-2 py-1 text-xs font-medium text-green-800"
-      style={{
-        display: "inline-block",
-        borderRadius: "0.375rem",
-        backgroundColor: "#f0fdf4",
-        paddingLeft: "0.5rem",
-        paddingRight: "0.5rem",
-        paddingTop: "0.25rem",
-        paddingBottom: "0.25rem",
-        fontSize: "0.75rem",
-        fontWeight: 500,
-        color: "#166534",
-        border: "1px solid #bbf7d0",
-      }}
+      className="inline-block rounded-md border border-green-200 bg-green-50 px-2 py-1 text-xs font-medium text-green-800"
     >
       {food}
     </span>
@@ -118,14 +94,7 @@ function AllergenCrossReactivityCard({
   isPremium: boolean;
 }) {
   const foodContent = (
-    <div
-      className="flex flex-wrap gap-2"
-      style={{
-        display: "flex",
-        flexWrap: "wrap",
-        gap: "0.5rem",
-      }}
-    >
+    <div className="flex flex-wrap gap-2">
       {entry.cross_reactive_foods.map((food) => (
         <FoodTag key={food} food={food} />
       ))}
@@ -136,40 +105,12 @@ function AllergenCrossReactivityCard({
     <div
       data-testid="pfas-allergen-card"
       className="rounded-lg border border-gray-200 bg-white p-4"
-      style={{
-        borderRadius: "0.5rem",
-        border: "1px solid #e5e7eb",
-        backgroundColor: "#ffffff",
-        padding: "1rem",
-      }}
     >
       {/* Allergen header — always visible */}
-      <div
-        className="mb-3 flex items-center justify-between"
-        style={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between",
-          marginBottom: "0.75rem",
-        }}
-      >
-        <div
-          className="flex items-center gap-2"
-          style={{
-            display: "flex",
-            alignItems: "center",
-            gap: "0.5rem",
-          }}
-        >
+      <div className="mb-3 flex items-center justify-between">
+        <div className="flex items-center gap-2">
           <CategoryIcon category={entry.category} />
-          <span
-            className="text-sm font-semibold text-gray-900"
-            style={{
-              fontSize: "0.875rem",
-              fontWeight: 600,
-              color: "#111827",
-            }}
-          >
+          <span className="text-sm font-semibold text-gray-900">
             {entry.common_name}
           </span>
         </div>
@@ -178,15 +119,7 @@ function AllergenCrossReactivityCard({
 
       {/* Food list — blurred for free tier */}
       <div>
-        <p
-          className="mb-2 text-xs font-medium text-gray-500"
-          style={{
-            fontSize: "0.75rem",
-            fontWeight: 500,
-            color: "#6b7280",
-            marginBottom: "0.5rem",
-          }}
-        >
+        <p className="mb-2 text-xs font-medium text-gray-500">
           Cross-reactive foods
         </p>
         {isPremium ? (
@@ -211,33 +144,13 @@ export function PfasPanel({ entries, isPremium }: PfasPanelProps) {
       data-testid="pfas-panel"
       aria-label="Food cross-reactivity panel"
       className="space-y-4"
-      style={{
-        display: "flex",
-        flexDirection: "column",
-        gap: "1rem",
-      }}
     >
       {/* Section header */}
       <div>
-        <h2
-          className="text-lg font-semibold text-gray-800"
-          style={{
-            fontSize: "1.125rem",
-            fontWeight: 600,
-            color: "#1f2937",
-            margin: 0,
-          }}
-        >
+        <h2 className="text-lg font-semibold text-gray-800">
           Food Cross-Reactivity (PFAS)
         </h2>
-        <p
-          className="mt-1 text-xs text-gray-500"
-          style={{
-            fontSize: "0.75rem",
-            color: "#6b7280",
-            marginTop: "0.25rem",
-          }}
-        >
+        <p className="mt-1 text-xs text-gray-500">
           Foods that may trigger oral symptoms due to pollen-food allergy
           syndrome
         </p>
@@ -259,7 +172,7 @@ export function PfasPanel({ entries, isPremium }: PfasPanelProps) {
       {!isPremium && (
         <div
           data-testid="pfas-upgrade-cta"
-          style={{ marginTop: "0.5rem" }}
+          className="mt-2"
         >
           <UpgradeCta feature="food cross-reactivity details" />
         </div>

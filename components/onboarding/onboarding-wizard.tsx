@@ -80,58 +80,27 @@ export function OnboardingWizard() {
   // Processing screen has its own layout
   if (currentStep === "processing") {
     return (
-      <div
-        className="mx-auto max-w-md px-4 py-16"
-        style={{
-          maxWidth: "28rem",
-          margin: "0 auto",
-          padding: "4rem 1rem",
-        }}
-      >
+      <div className="mx-auto max-w-md px-4 py-16">
         <ProcessingScreen formData={formData} />
       </div>
     );
   }
 
   return (
-    <div
-      className="mx-auto max-w-md px-4 py-8"
-      style={{
-        maxWidth: "28rem",
-        margin: "0 auto",
-        padding: "2rem 1rem",
-      }}
-    >
+    <div className="mx-auto max-w-md px-4 py-8">
       {/* Step indicator */}
       <nav
         aria-label="Onboarding progress"
         className="mb-8"
-        style={{ marginBottom: "2rem" }}
       >
-        <ol
-          className="flex items-center justify-between"
-          style={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
-            listStyle: "none",
-            padding: 0,
-            margin: 0,
-          }}
-        >
+        <ol className="flex list-none items-center justify-between p-0 m-0">
           {STEPS.filter((s) => s !== "processing").map((step, i) => {
             const isActive = i === stepIndex;
             const isCompleted = i < stepIndex;
             return (
               <li
                 key={step}
-                className="flex flex-col items-center"
-                style={{
-                  display: "flex",
-                  flexDirection: "column",
-                  alignItems: "center",
-                  flex: 1,
-                }}
+                className="flex flex-1 flex-col items-center"
               >
                 <div
                   className={`flex h-8 w-8 items-center justify-center rounded-full text-xs font-bold ${
@@ -141,26 +110,6 @@ export function OnboardingWizard() {
                         ? "bg-blue-100 text-blue-600"
                         : "bg-gray-200 text-gray-500"
                   }`}
-                  style={{
-                    display: "flex",
-                    height: "2rem",
-                    width: "2rem",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    borderRadius: "9999px",
-                    fontSize: "0.75rem",
-                    fontWeight: 700,
-                    backgroundColor: isActive
-                      ? "#2563eb"
-                      : isCompleted
-                        ? "#dbeafe"
-                        : "#e5e7eb",
-                    color: isActive
-                      ? "#ffffff"
-                      : isCompleted
-                        ? "#2563eb"
-                        : "#6b7280",
-                  }}
                   aria-current={isActive ? "step" : undefined}
                 >
                   {isCompleted ? "\u2713" : i + 1}
@@ -171,12 +120,6 @@ export function OnboardingWizard() {
                       ? "font-medium text-blue-600"
                       : "text-gray-500"
                   }`}
-                  style={{
-                    marginTop: "0.25rem",
-                    fontSize: "0.75rem",
-                    fontWeight: isActive ? 500 : 400,
-                    color: isActive ? "#2563eb" : "#6b7280",
-                  }}
                 >
                   {STEP_LABELS[step]}
                 </span>

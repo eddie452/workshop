@@ -2,8 +2,12 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Agile Flow",
-  description: "Workshop template for agentic development workflows",
+  title: "Allergy Madness — The Digital Allergy Test by Champ Health",
+  description:
+    "Discover your top allergen triggers with Allergy Madness, a free predictive allergy screening tool by Champ Health.",
+  icons: {
+    icon: "/favicon.svg",
+  },
 };
 
 export default function RootLayout({

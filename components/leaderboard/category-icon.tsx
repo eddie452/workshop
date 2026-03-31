@@ -30,7 +30,6 @@ export function CategoryIcon({ category }: CategoryIconProps) {
       data-testid="category-icon"
       data-category={category}
       className="text-lg"
-      style={{ fontSize: "1.125rem" }}
     >
       {config.icon}
     </span>

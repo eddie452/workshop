@@ -57,6 +57,6 @@ describe("BlurOverlay", () => {
     const lockOverlay = screen.getByTestId("blur-lock-overlay");
     const lockIcon = lockOverlay.querySelector("span[aria-hidden='true']");
     expect(lockIcon).toBeTruthy();
-    expect(lockIcon?.getAttribute("style")).toContain("pulse");
+    expect(lockIcon?.className).toContain("animate-pulse");
   });
 });

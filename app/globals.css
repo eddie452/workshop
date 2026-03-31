@@ -1,3 +1,127 @@
+@import "tailwindcss";
+
+/*
+ * Champ Health / Allergy Madness Design System
+ *
+ * Brand tokens defined via Tailwind v4 @theme directive.
+ * All semantic colors are available as utility classes:
+ *   bg-brand-primary, text-brand-accent, border-brand-warning, etc.
+ *
+ * CSS custom properties are also set on :root for runtime access
+ * and PDF report usage.
+ */
+
+@theme {
+  /* ------------------------------------------------------------------ */
+  /* Brand Colors                                                        */
+  /* ------------------------------------------------------------------ */
+
+  /* Primary — Health-forward blue */
+  --color-brand-primary: #2563eb;
+  --color-brand-primary-light: #dbeafe;
+  --color-brand-primary-dark: #1d4ed8;
+
+  /* Accent — Wellness green */
+  --color-brand-accent: #16a34a;
+  --color-brand-accent-light: #dcfce7;
+  --color-brand-accent-dark: #15803d;
+
+  /* Warning — FDA disclaimer amber */
+  --color-brand-warning: #d97706;
+  --color-brand-warning-light: #fffbeb;
+  --color-brand-warning-dark: #92400e;
+
+  /* Error — Alert red */
+  --color-brand-error: #dc2626;
+  --color-brand-error-light: #fef2f2;
+  --color-brand-error-dark: #991b1b;
+
+  /* Premium — Madness+ purple */
+  --color-brand-premium: #9333ea;
+  --color-brand-premium-light: #faf5ff;
+  --color-brand-premium-dark: #581c87;
+
+  /* Surface / Neutral */
+  --color-brand-surface: #ffffff;
+  --color-brand-surface-muted: #f9fafb;
+  --color-brand-border: #e5e7eb;
+  --color-brand-border-light: #f3f4f6;
+
+  /* Text */
+  --color-brand-text: #111827;
+  --color-brand-text-secondary: #4b5563;
+  --color-brand-text-muted: #6b7280;
+  --color-brand-text-faint: #9ca3af;
+
+  /* ------------------------------------------------------------------ */
+  /* Typography                                                          */
+  /* ------------------------------------------------------------------ */
+
+  --font-family-sans: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+    Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+
+  /* ------------------------------------------------------------------ */
+  /* Border Radius                                                       */
+  /* ------------------------------------------------------------------ */
+
+  --radius-card: 0.5rem;
+  --radius-button: 0.375rem;
+  --radius-pill: 9999px;
+  --radius-xl: 0.75rem;
+}
+
+/* ------------------------------------------------------------------ */
+/* CSS Custom Properties (for runtime/PDF access)                       */
+/* ------------------------------------------------------------------ */
+
+:root {
+  /* Primary */
+  --champ-primary: #2563eb;
+  --champ-primary-light: #dbeafe;
+  --champ-primary-dark: #1d4ed8;
+  --champ-primary-rgb: 37, 99, 235;
+
+  /* Accent */
+  --champ-accent: #16a34a;
+  --champ-accent-light: #dcfce7;
+  --champ-accent-dark: #15803d;
+  --champ-accent-rgb: 22, 163, 74;
+
+  /* Warning */
+  --champ-warning: #d97706;
+  --champ-warning-light: #fffbeb;
+  --champ-warning-dark: #92400e;
+  --champ-warning-rgb: 217, 119, 6;
+
+  /* Error */
+  --champ-error: #dc2626;
+  --champ-error-light: #fef2f2;
+  --champ-error-dark: #991b1b;
+  --champ-error-rgb: 220, 38, 38;
+
+  /* Premium */
+  --champ-premium: #9333ea;
+  --champ-premium-light: #faf5ff;
+  --champ-premium-dark: #581c87;
+  --champ-premium-rgb: 147, 51, 234;
+
+  /* Surface */
+  --champ-surface: #ffffff;
+  --champ-surface-muted: #f9fafb;
+  --champ-border: #e5e7eb;
+  --champ-border-light: #f3f4f6;
+
+  /* Text */
+  --champ-text: #111827;
+  --champ-text-secondary: #4b5563;
+  --champ-text-muted: #6b7280;
+  --champ-text-faint: #9ca3af;
+}
+
+/* ------------------------------------------------------------------ */
+/* Base styles                                                          */
+/* ------------------------------------------------------------------ */
+
 *,
 *::before,
 *::after {
@@ -7,37 +131,35 @@
 }
 
 body {
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
-    Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+  font-family: var(--font-family-sans);
   line-height: 1.6;
-  color: #1a1a1a;
+  color: var(--champ-text);
   max-width: 640px;
   margin: 0 auto;
   padding: 2rem 1rem;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
-h1 {
-  font-size: 1.75rem;
-  margin-bottom: 0.5rem;
+/* ------------------------------------------------------------------ */
+/* Keyframes (used by components)                                       */
+/* ------------------------------------------------------------------ */
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
-h2 {
-  font-size: 1.25rem;
-  margin-top: 1.5rem;
-  margin-bottom: 0.5rem;
-}
-
-ul {
-  padding-left: 1.5rem;
-}
-
-li {
-  margin-bottom: 0.25rem;
-}
-
-code {
-  background: #f0f0f0;
-  padding: 0.15rem 0.35rem;
-  border-radius: 3px;
-  font-size: 0.9em;
+@keyframes pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
 }

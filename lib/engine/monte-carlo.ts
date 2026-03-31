@@ -271,8 +271,9 @@ export function runMonteCarloForAllergen(
   const wind = env.weather.wind_mph ?? MC_WEATHER_DEFAULTS.wind_mph;
   const humidity =
     env.weather.humidity_pct ?? MC_WEATHER_DEFAULTS.humidity_pct;
-  const rain = env.weather.rain_last_12h;
-  const thunderstorm = env.weather.thunderstorm_6h;
+  const rain = env.weather.rain_last_12h ?? MC_WEATHER_DEFAULTS.rain;
+  const thunderstorm =
+    env.weather.thunderstorm_6h ?? MC_WEATHER_DEFAULTS.thunderstorm;
 
   // Get pollen concentration for this allergen's category
   const upi = getPollenUpi(env.pollen, allergen.category);

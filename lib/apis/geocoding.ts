@@ -23,11 +23,6 @@ export interface GeocodingResult {
   is_continental_us: boolean;
 }
 
-export interface GeocodingError {
-  error: string;
-  status: string;
-}
-
 /* ------------------------------------------------------------------ */
 /* Continental US bounds                                                */
 /* ------------------------------------------------------------------ */

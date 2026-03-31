@@ -4,6 +4,8 @@
  * Generates or retrieves the authenticated user's referral link.
  * The link uses the request origin (never hardcoded) to build the URL.
  *
+ * Rate limited: 10 requests per hour per authenticated user.
+ *
  * Response:
  *   { referral_link: string, referral_code: string }
  *
@@ -14,6 +16,13 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 import { ensureReferralCode, buildReferralLink } from "@/lib/referral";
+import { checkRateLimit } from "@/lib/rate-limit";
+
+/** 10 invites per hour per user */
+const RATE_LIMIT_CONFIG = {
+  maxRequests: 10,
+  windowMs: 60 * 60 * 1000, // 1 hour
+} as const;
 
 export async function POST(request: NextRequest) {
   try {
@@ -29,6 +38,28 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    // Per-user rate limiting
+    const rateLimit = checkRateLimit(
+      "referral-invite",
+      user.id,
+      RATE_LIMIT_CONFIG,
+    );
+
+    if (!rateLimit.allowed) {
+      return NextResponse.json(
+        { error: "Too many requests. Please try again later." },
+        {
+          status: 429,
+          headers: {
+            "Retry-After": String(rateLimit.retryAfterSeconds),
+            "X-RateLimit-Limit": String(RATE_LIMIT_CONFIG.maxRequests),
+            "X-RateLimit-Remaining": "0",
+            "X-RateLimit-Reset": String(rateLimit.resetAt),
+          },
+        },
+      );
+    }
+
     const referralCode = await ensureReferralCode(supabase, user.id);
 
     // Use request origin — NEVER hardcode the URL
@@ -38,10 +69,19 @@ export async function POST(request: NextRequest) {
 
     const referralLink = buildReferralLink(origin, referralCode);
 
-    return NextResponse.json({
-      referral_link: referralLink,
-      referral_code: referralCode,
-    });
+    return NextResponse.json(
+      {
+        referral_link: referralLink,
+        referral_code: referralCode,
+      },
+      {
+        headers: {
+          "X-RateLimit-Limit": String(RATE_LIMIT_CONFIG.maxRequests),
+          "X-RateLimit-Remaining": String(rateLimit.remaining),
+          "X-RateLimit-Reset": String(rateLimit.resetAt),
+        },
+      },
+    );
   } catch (error) {
     console.error("Referral invite error:", error);
     return NextResponse.json(

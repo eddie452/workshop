@@ -10,6 +10,7 @@
  */
 
 import { describe, it, expect, vi, beforeEach } from "vitest";
+import { resetRateLimit } from "@/lib/rate-limit";
 
 vi.mock("@/lib/supabase/server", () => ({
   createClient: vi.fn(),
@@ -35,9 +36,18 @@ function createMockRequest(origin = "https://test.example.com"): NextRequest {
   });
 }
 
+function mockAuthenticatedUser(userId = "user-1") {
+  mockCreateClient.mockResolvedValue({
+    auth: {
+      getUser: vi.fn().mockResolvedValue({ data: { user: { id: userId } } }),
+    },
+  } as unknown as Awaited<ReturnType<typeof createClient>>);
+}
+
 describe("POST /api/referral/invite", () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    resetRateLimit("referral-invite");
   });
 
   it("returns 401 when not authenticated", async () => {
@@ -55,13 +65,7 @@ describe("POST /api/referral/invite", () => {
   });
 
   it("returns referral link and code on success", async () => {
-    mockCreateClient.mockResolvedValue({
-      auth: {
-        getUser: vi
-          .fn()
-          .mockResolvedValue({ data: { user: { id: "user-1" } } }),
-      },
-    } as unknown as Awaited<ReturnType<typeof createClient>>);
+    mockAuthenticatedUser();
 
     const res = await POST(createMockRequest());
     expect(res.status).toBe(200);
@@ -73,13 +77,7 @@ describe("POST /api/referral/invite", () => {
   });
 
   it("uses request origin for link (not hardcoded)", async () => {
-    mockCreateClient.mockResolvedValue({
-      auth: {
-        getUser: vi
-          .fn()
-          .mockResolvedValue({ data: { user: { id: "user-1" } } }),
-      },
-    } as unknown as Awaited<ReturnType<typeof createClient>>);
+    mockAuthenticatedUser();
 
     const res = await POST(createMockRequest("https://pr-preview.render.com"));
     const body = await res.json();
@@ -87,13 +85,7 @@ describe("POST /api/referral/invite", () => {
   });
 
   it("never includes income_tier in response", async () => {
-    mockCreateClient.mockResolvedValue({
-      auth: {
-        getUser: vi
-          .fn()
-          .mockResolvedValue({ data: { user: { id: "user-1" } } }),
-      },
-    } as unknown as Awaited<ReturnType<typeof createClient>>);
+    mockAuthenticatedUser();
 
     const res = await POST(createMockRequest());
     const body = await res.json();
@@ -102,18 +94,54 @@ describe("POST /api/referral/invite", () => {
   });
 
   it("referral link contains no health data", async () => {
-    mockCreateClient.mockResolvedValue({
-      auth: {
-        getUser: vi
-          .fn()
-          .mockResolvedValue({ data: { user: { id: "user-1" } } }),
-      },
-    } as unknown as Awaited<ReturnType<typeof createClient>>);
+    mockAuthenticatedUser();
 
     const res = await POST(createMockRequest());
     const body = await res.json();
     expect(body.referral_link).not.toContain("allergen");
     expect(body.referral_link).not.toContain("symptom");
     expect(body.referral_link).not.toContain("diagnosis");
+  });
+
+  it("returns rate limit headers on success", async () => {
+    mockAuthenticatedUser();
+
+    const res = await POST(createMockRequest());
+    expect(res.status).toBe(200);
+    expect(res.headers.get("X-RateLimit-Limit")).toBe("10");
+    expect(res.headers.get("X-RateLimit-Remaining")).toBeTruthy();
+    expect(res.headers.get("X-RateLimit-Reset")).toBeTruthy();
+  });
+
+  it("returns 429 when rate limit exceeded", async () => {
+    mockAuthenticatedUser();
+
+    // Exhaust the 10-request limit
+    for (let i = 0; i < 10; i++) {
+      const res = await POST(createMockRequest());
+      expect(res.status).toBe(200);
+    }
+
+    // 11th request should be rate-limited
+    const res = await POST(createMockRequest());
+    expect(res.status).toBe(429);
+
+    const body = await res.json();
+    expect(body.error).toContain("Too many requests");
+    expect(res.headers.get("Retry-After")).toBeTruthy();
+    expect(res.headers.get("X-RateLimit-Remaining")).toBe("0");
+  });
+
+  it("rate limits are per-user, not global", async () => {
+    // Exhaust limit for user-1
+    mockAuthenticatedUser("user-1");
+    for (let i = 0; i < 10; i++) {
+      await POST(createMockRequest());
+    }
+
+    // user-2 should still be allowed
+    mockAuthenticatedUser("user-2");
+    const res = await POST(createMockRequest());
+    expect(res.status).toBe(200);
   });
 });

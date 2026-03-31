@@ -15,7 +15,8 @@ export type PremiumFeature =
   | "pdf_report"
   | "detailed_confidence"
   | "full_rankings"
-  | "pfas_panel";
+  | "pfas_panel"
+  | "child_profiles";
 
 /** Result of checking a user's access level */
 export interface AccessStatus {

@@ -9,15 +9,21 @@
 import { REFERRAL_CODE_LENGTH, REFERRAL_CODE_CHARS } from "./constants";
 
 /**
- * Generate a random referral code.
+ * Generate a random referral code using cryptographically secure randomness.
+ *
+ * Uses crypto.getRandomValues() for better randomness and reduced collision
+ * risk at scale. Referral codes are not security tokens, but crypto-grade
+ * randomness is a low-cost quality improvement.
  *
  * @returns An 8-character alphanumeric code (e.g., "X7KP3RVN")
  */
 export function generateReferralCode(): string {
+  const randomBytes = new Uint8Array(REFERRAL_CODE_LENGTH);
+  crypto.getRandomValues(randomBytes);
+
   let code = "";
   for (let i = 0; i < REFERRAL_CODE_LENGTH; i++) {
-    const randomIndex = Math.floor(Math.random() * REFERRAL_CODE_CHARS.length);
-    code += REFERRAL_CODE_CHARS[randomIndex];
+    code += REFERRAL_CODE_CHARS[randomBytes[i] % REFERRAL_CODE_CHARS.length];
   }
   return code;
 }

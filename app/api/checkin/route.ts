@@ -41,6 +41,7 @@ interface CheckinRequestBody {
 interface CheckinSuccessResponse {
   success: true;
   checkin_id: string;
+  symptom_gate_passed: boolean;
   trigger_champion: string | null;
   final_four: string[];
 }
@@ -492,6 +493,7 @@ export async function POST(
     return NextResponse.json({
       success: true as const,
       checkin_id: checkinId,
+      symptom_gate_passed: runResult.symptom_gate_passed,
       trigger_champion: triggerChampionId,
       final_four: finalFourIds,
     });

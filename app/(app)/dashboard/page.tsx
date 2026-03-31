@@ -69,7 +69,42 @@ export default async function DashboardPage() {
     .order("elo_score", { ascending: false });
 
   const eloRows = (rawEloRows ?? []) as unknown as EloRowWithAllergen[];
-  const isEnvironmentalForecast = eloRows.length === 0;
+
+  // Determine if we should show Environmental Forecast mode.
+  // Forecast mode activates when the user's most recent check-in has severity = 0,
+  // OR when they have no Elo data yet (first-time user).
+  let isEnvironmentalForecast = eloRows.length === 0;
+
+  type CheckinSeverityQuery = {
+    select: (cols: string) => {
+      eq: (col: string, val: string) => {
+        is: (col: string, val: null) => {
+          order: (col: string, opts: { ascending: boolean }) => {
+            limit: (n: number) => {
+              single: () => Promise<{
+                data: { severity: number } | null;
+                error: { message: string } | null;
+              }>;
+            };
+          };
+        };
+      };
+    };
+  };
+
+  const { data: latestCheckin } = await (
+    supabase.from("symptom_checkins") as unknown as CheckinSeverityQuery
+  )
+    .select("severity")
+    .eq("user_id", user.id)
+    .is("child_id", null)
+    .order("checked_in_at", { ascending: false })
+    .limit(1)
+    .single();
+
+  if (latestCheckin?.severity === 0) {
+    isEnvironmentalForecast = true;
+  }
 
   return (
     <div

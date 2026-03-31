@@ -194,6 +194,7 @@ export interface CheckinRequest {
 export interface CheckinResponse {
   success: true;
   checkin_id: string;
+  symptom_gate_passed: boolean;
   trigger_champion: string | null;
   final_four: string[];
 }

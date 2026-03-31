@@ -13,6 +13,7 @@ export { BlurOverlay } from "./blur-overlay";
 export { ConfidenceBadge } from "./confidence-badge";
 export { CategoryIcon } from "./category-icon";
 export { EnvironmentalForecast } from "./environmental-forecast";
+export type { ForecastData, EnvironmentalForecastProps } from "./environmental-forecast";
 
 export type {
   RankedAllergen,

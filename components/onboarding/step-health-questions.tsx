@@ -1,0 +1,412 @@
+"use client";
+
+/**
+ * Step 3: Health Questions
+ *
+ * Three key questions from the ticket:
+ * - Pets (yes/no + types)
+ * - Prior allergy diagnosis
+ * - Seasonal pattern
+ *
+ * Plus indoor risk factors (mold/moisture, cockroach sighting, smoking).
+ */
+
+import type { StepProps } from "./types";
+import type { SeasonalPattern } from "@/lib/supabase/types";
+
+const SEASONAL_OPTIONS: { value: SeasonalPattern; label: string }[] = [
+  { value: "spring", label: "Mostly in spring" },
+  { value: "summer", label: "Mostly in summer" },
+  { value: "fall", label: "Mostly in fall" },
+  { value: "year_round", label: "Year-round" },
+  { value: "unknown", label: "Not sure" },
+];
+
+const PET_OPTIONS = ["Dog", "Cat", "Bird", "Rodent", "Other"];
+
+export function StepHealthQuestions({
+  formData,
+  onUpdate,
+  onNext,
+  onBack,
+}: StepProps) {
+  function handleSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    onNext();
+  }
+
+  function togglePetType(pet: string) {
+    const current = formData.pet_types;
+    if (current.includes(pet)) {
+      onUpdate({ pet_types: current.filter((p) => p !== pet) });
+    } else {
+      onUpdate({ pet_types: [...current, pet] });
+    }
+  }
+
+  return (
+    <form onSubmit={handleSubmit}>
+      <div
+        className="space-y-6"
+        style={{ display: "flex", flexDirection: "column", gap: "1.5rem" }}
+      >
+        <div>
+          <h2
+            className="text-xl font-bold text-gray-900"
+            style={{
+              fontSize: "1.25rem",
+              fontWeight: 700,
+              color: "#111827",
+              margin: 0,
+            }}
+          >
+            A few quick questions
+          </h2>
+          <p
+            className="mt-2 text-sm text-gray-600"
+            style={{
+              fontSize: "0.875rem",
+              color: "#4b5563",
+              marginTop: "0.5rem",
+            }}
+          >
+            These help us fine-tune your allergen predictions.
+          </p>
+        </div>
+
+        {/* Pets */}
+        <fieldset
+          style={{
+            border: "none",
+            padding: 0,
+            margin: 0,
+          }}
+        >
+          <legend
+            className="text-sm font-medium text-gray-700"
+            style={{
+              fontSize: "0.875rem",
+              fontWeight: 500,
+              color: "#374151",
+              marginBottom: "0.5rem",
+            }}
+          >
+            Do you have pets at home?
+          </legend>
+          <div
+            className="flex gap-4"
+            style={{ display: "flex", gap: "1rem", marginTop: "0.25rem" }}
+          >
+            <label
+              className="flex items-center gap-2 text-sm"
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: "0.5rem",
+                fontSize: "0.875rem",
+                cursor: "pointer",
+              }}
+            >
+              <input
+                type="radio"
+                name="has_pets"
+                checked={formData.has_pets}
+                onChange={() => onUpdate({ has_pets: true })}
+              />
+              Yes
+            </label>
+            <label
+              className="flex items-center gap-2 text-sm"
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: "0.5rem",
+                fontSize: "0.875rem",
+                cursor: "pointer",
+              }}
+            >
+              <input
+                type="radio"
+                name="has_pets"
+                checked={!formData.has_pets}
+                onChange={() =>
+                  onUpdate({ has_pets: false, pet_types: [] })
+                }
+              />
+              No
+            </label>
+          </div>
+          {formData.has_pets && (
+            <div
+              className="mt-3 flex flex-wrap gap-2"
+              style={{
+                display: "flex",
+                flexWrap: "wrap",
+                gap: "0.5rem",
+                marginTop: "0.75rem",
+              }}
+            >
+              {PET_OPTIONS.map((pet) => {
+                const selected = formData.pet_types.includes(pet);
+                return (
+                  <button
+                    key={pet}
+                    type="button"
+                    onClick={() => togglePetType(pet)}
+                    className={`rounded-full border px-3 py-1 text-sm ${
+                      selected
+                        ? "border-blue-500 bg-blue-50 text-blue-700"
+                        : "border-gray-300 bg-white text-gray-700"
+                    }`}
+                    style={{
+                      borderRadius: "9999px",
+                      border: selected
+                        ? "1px solid #3b82f6"
+                        : "1px solid #d1d5db",
+                      backgroundColor: selected ? "#eff6ff" : "#ffffff",
+                      color: selected ? "#1d4ed8" : "#374151",
+                      padding: "0.25rem 0.75rem",
+                      fontSize: "0.875rem",
+                      cursor: "pointer",
+                    }}
+                    aria-pressed={selected}
+                  >
+                    {pet}
+                  </button>
+                );
+              })}
+            </div>
+          )}
+        </fieldset>
+
+        {/* Prior diagnosis */}
+        <fieldset style={{ border: "none", padding: 0, margin: 0 }}>
+          <legend
+            className="text-sm font-medium text-gray-700"
+            style={{
+              fontSize: "0.875rem",
+              fontWeight: 500,
+              color: "#374151",
+              marginBottom: "0.5rem",
+            }}
+          >
+            Have you been diagnosed with allergies before?
+          </legend>
+          <div
+            className="flex gap-4"
+            style={{ display: "flex", gap: "1rem", marginTop: "0.25rem" }}
+          >
+            <label
+              className="flex items-center gap-2 text-sm"
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: "0.5rem",
+                fontSize: "0.875rem",
+                cursor: "pointer",
+              }}
+            >
+              <input
+                type="radio"
+                name="prior_diagnosis"
+                checked={formData.prior_allergy_diagnosis}
+                onChange={() =>
+                  onUpdate({ prior_allergy_diagnosis: true })
+                }
+              />
+              Yes
+            </label>
+            <label
+              className="flex items-center gap-2 text-sm"
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: "0.5rem",
+                fontSize: "0.875rem",
+                cursor: "pointer",
+              }}
+            >
+              <input
+                type="radio"
+                name="prior_diagnosis"
+                checked={!formData.prior_allergy_diagnosis}
+                onChange={() =>
+                  onUpdate({ prior_allergy_diagnosis: false })
+                }
+              />
+              No
+            </label>
+          </div>
+        </fieldset>
+
+        {/* Seasonal pattern */}
+        <div>
+          <label
+            htmlFor="seasonal_pattern"
+            className="block text-sm font-medium text-gray-700"
+            style={{
+              display: "block",
+              fontSize: "0.875rem",
+              fontWeight: 500,
+              color: "#374151",
+              marginBottom: "0.25rem",
+            }}
+          >
+            When are your symptoms worst?
+          </label>
+          <select
+            id="seasonal_pattern"
+            value={formData.seasonal_pattern}
+            onChange={(e) =>
+              onUpdate({
+                seasonal_pattern: e.target.value as SeasonalPattern,
+              })
+            }
+            className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 text-sm"
+            style={{
+              display: "block",
+              width: "100%",
+              borderRadius: "0.375rem",
+              border: "1px solid #d1d5db",
+              padding: "0.5rem 0.75rem",
+              fontSize: "0.875rem",
+              marginTop: "0.25rem",
+              boxSizing: "border-box",
+              backgroundColor: "#ffffff",
+            }}
+          >
+            {SEASONAL_OPTIONS.map((opt) => (
+              <option key={opt.value} value={opt.value}>
+                {opt.label}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        {/* Indoor risk factors */}
+        <fieldset style={{ border: "none", padding: 0, margin: 0 }}>
+          <legend
+            className="text-sm font-medium text-gray-700"
+            style={{
+              fontSize: "0.875rem",
+              fontWeight: 500,
+              color: "#374151",
+              marginBottom: "0.5rem",
+            }}
+          >
+            Indoor risk factors (check any that apply)
+          </legend>
+          <div
+            className="space-y-2"
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              gap: "0.5rem",
+              marginTop: "0.25rem",
+            }}
+          >
+            <label
+              className="flex items-center gap-2 text-sm"
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: "0.5rem",
+                fontSize: "0.875rem",
+                cursor: "pointer",
+              }}
+            >
+              <input
+                type="checkbox"
+                checked={formData.has_mold_moisture}
+                onChange={(e) =>
+                  onUpdate({ has_mold_moisture: e.target.checked })
+                }
+              />
+              Mold or moisture issues
+            </label>
+            <label
+              className="flex items-center gap-2 text-sm"
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: "0.5rem",
+                fontSize: "0.875rem",
+                cursor: "pointer",
+              }}
+            >
+              <input
+                type="checkbox"
+                checked={formData.cockroach_sighting}
+                onChange={(e) =>
+                  onUpdate({ cockroach_sighting: e.target.checked })
+                }
+              />
+              Cockroach sightings
+            </label>
+            <label
+              className="flex items-center gap-2 text-sm"
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: "0.5rem",
+                fontSize: "0.875rem",
+                cursor: "pointer",
+              }}
+            >
+              <input
+                type="checkbox"
+                checked={formData.smoking_in_home}
+                onChange={(e) =>
+                  onUpdate({ smoking_in_home: e.target.checked })
+                }
+              />
+              Smoking in the home
+            </label>
+          </div>
+        </fieldset>
+
+        {/* Navigation */}
+        <div
+          className="flex gap-3"
+          style={{ display: "flex", gap: "0.75rem" }}
+        >
+          <button
+            type="button"
+            onClick={onBack}
+            className="flex-1 rounded-md border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
+            style={{
+              flex: 1,
+              borderRadius: "0.375rem",
+              border: "1px solid #d1d5db",
+              padding: "0.5rem 1rem",
+              fontSize: "0.875rem",
+              fontWeight: 500,
+              color: "#374151",
+              backgroundColor: "#ffffff",
+              cursor: "pointer",
+            }}
+          >
+            Back
+          </button>
+          <button
+            type="submit"
+            className="flex-1 rounded-md bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700"
+            style={{
+              flex: 1,
+              borderRadius: "0.375rem",
+              backgroundColor: "#2563eb",
+              padding: "0.5rem 1rem",
+              fontSize: "0.875rem",
+              fontWeight: 500,
+              color: "#ffffff",
+              border: "none",
+              cursor: "pointer",
+            }}
+          >
+            Continue
+          </button>
+        </div>
+      </div>
+    </form>
+  );
+}

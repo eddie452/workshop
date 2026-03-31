@@ -24,8 +24,8 @@ export const PAYWALL_ENABLED =
  */
 export const TIER_FEATURES: Record<SubscriptionTier, PremiumFeature[]> = {
   free: [],
-  madness_plus: ["final_four", "pdf_report", "detailed_confidence", "full_rankings"],
-  madness_family: ["final_four", "pdf_report", "detailed_confidence", "full_rankings"],
+  madness_plus: ["final_four", "pdf_report", "detailed_confidence", "full_rankings", "pfas_panel"],
+  madness_family: ["final_four", "pdf_report", "detailed_confidence", "full_rankings", "pfas_panel"],
 };
 
 /**

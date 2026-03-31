@@ -1,6 +1,7 @@
 import { describe, it, expect } from "vitest";
 import {
   getConfidenceTier,
+  getConfidenceTierBySignals,
   getAllConfidenceTiers,
   getConfidenceLabel,
 } from "@/lib/engine/confidence";
@@ -41,6 +42,41 @@ describe("getConfidenceTier", () => {
     expect(getConfidenceTier(1199)).toBe("medium");
     expect(getConfidenceTier(900)).toBe("medium");
     expect(getConfidenceTier(899)).toBe("low");
+  });
+});
+
+/* ------------------------------------------------------------------ */
+/* getConfidenceTierBySignals                                          */
+/* ------------------------------------------------------------------ */
+
+describe("getConfidenceTierBySignals", () => {
+  it("returns 'very_high' for totalSignals >= 30", () => {
+    expect(getConfidenceTierBySignals(30)).toBe("very_high");
+    expect(getConfidenceTierBySignals(50)).toBe("very_high");
+  });
+
+  it("returns 'high' for 14 <= totalSignals < 30", () => {
+    expect(getConfidenceTierBySignals(14)).toBe("high");
+    expect(getConfidenceTierBySignals(29)).toBe("high");
+  });
+
+  it("returns 'medium' for 7 <= totalSignals < 14", () => {
+    expect(getConfidenceTierBySignals(7)).toBe("medium");
+    expect(getConfidenceTierBySignals(13)).toBe("medium");
+  });
+
+  it("returns 'low' for totalSignals < 7", () => {
+    expect(getConfidenceTierBySignals(6)).toBe("low");
+    expect(getConfidenceTierBySignals(0)).toBe("low");
+  });
+
+  it("handles edge cases at tier boundaries", () => {
+    expect(getConfidenceTierBySignals(30)).toBe("very_high");
+    expect(getConfidenceTierBySignals(29)).toBe("high");
+    expect(getConfidenceTierBySignals(14)).toBe("high");
+    expect(getConfidenceTierBySignals(13)).toBe("medium");
+    expect(getConfidenceTierBySignals(7)).toBe("medium");
+    expect(getConfidenceTierBySignals(6)).toBe("low");
   });
 });
 

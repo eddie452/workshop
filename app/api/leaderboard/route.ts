@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
-import type { ConfidenceTier } from "@/lib/engine/types";
+import { getConfidenceTierBySignals } from "@/lib/engine";
 import type { RankedAllergen } from "@/components/leaderboard/types";
 
 /**
@@ -108,7 +108,7 @@ export async function GET() {
     common_name: row.allergens.common_name,
     category: row.allergens.category as RankedAllergen["category"],
     elo_score: row.elo_score,
-    confidence_tier: computeConfidenceTier(
+    confidence_tier: getConfidenceTierBySignals(
       row.positive_signals + row.negative_signals
     ),
     rank: index + 1,
@@ -122,13 +122,3 @@ export async function GET() {
   });
 }
 
-/**
- * Compute confidence tier based on total signal count.
- * More signals = higher confidence in the ranking.
- */
-function computeConfidenceTier(totalSignals: number): ConfidenceTier {
-  if (totalSignals >= 30) return "very_high";
-  if (totalSignals >= 14) return "high";
-  if (totalSignals >= 7) return "medium";
-  return "low";
-}

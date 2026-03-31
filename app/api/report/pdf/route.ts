@@ -14,7 +14,7 @@ import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 import { generateReportPdf } from "@/lib/pdf";
 import type { PdfAllergenEntry } from "@/lib/pdf";
-import type { ConfidenceTier } from "@/lib/engine/types";
+import { getConfidenceTierBySignals } from "@/lib/engine";
 
 /** Shape returned by the Supabase join query */
 interface EloRowWithAllergen {
@@ -26,16 +26,6 @@ interface EloRowWithAllergen {
     common_name: string;
     category: string;
   };
-}
-
-/**
- * Compute confidence tier based on total signal count.
- */
-function computeConfidenceTier(totalSignals: number): ConfidenceTier {
-  if (totalSignals >= 30) return "very_high";
-  if (totalSignals >= 14) return "high";
-  if (totalSignals >= 7) return "medium";
-  return "low";
 }
 
 export async function GET() {
@@ -111,7 +101,7 @@ export async function GET() {
     common_name: row.allergens.common_name,
     category: row.allergens.category as PdfAllergenEntry["category"],
     elo_score: row.elo_score,
-    confidence_tier: computeConfidenceTier(
+    confidence_tier: getConfidenceTierBySignals(
       row.positive_signals + row.negative_signals
     ),
   }));

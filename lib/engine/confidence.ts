@@ -48,6 +48,38 @@ export function getConfidenceTier(eloScore: number): ConfidenceTier {
   return DEFAULT_TIER;
 }
 
+/* ------------------------------------------------------------------ */
+/* Signal-count thresholds                                             */
+/* ------------------------------------------------------------------ */
+
+/**
+ * Signal-count tier boundaries.
+ * Used when a pre-computed Elo score is unavailable and only the raw
+ * positive + negative signal count is known (e.g. leaderboard API,
+ * PDF report generation).
+ * Order matters — checked from highest to lowest.
+ */
+const SIGNAL_TIER_THRESHOLDS: { min: number; tier: ConfidenceTier }[] = [
+  { min: 30, tier: "very_high" },
+  { min: 14, tier: "high" },
+  { min: 7, tier: "medium" },
+];
+
+/**
+ * Map a total signal count to a confidence tier.
+ *
+ * @param totalSignals — sum of positive + negative signals
+ * @returns confidence tier
+ */
+export function getConfidenceTierBySignals(
+  totalSignals: number,
+): ConfidenceTier {
+  for (const { min, tier } of SIGNAL_TIER_THRESHOLDS) {
+    if (totalSignals >= min) return tier;
+  }
+  return DEFAULT_TIER;
+}
+
 /**
  * Map multiple allergens' Elo scores to confidence tiers.
  *

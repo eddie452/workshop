@@ -23,6 +23,7 @@ import { EnvironmentalForecast } from "./environmental-forecast";
 import type { ForecastData } from "./environmental-forecast";
 import { ConfidenceBadge } from "./confidence-badge";
 import { CategoryIcon } from "./category-icon";
+import { UpgradeCta } from "@/components/subscription/upgrade-cta";
 import type { RankedAllergen } from "./types";
 
 export interface LeaderboardClientProps {
@@ -245,25 +246,65 @@ export function Leaderboard({
                     {allergen.common_name}
                   </span>
                 </div>
-                <div
-                  className="flex items-center gap-2"
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                    gap: "0.5rem",
-                  }}
-                >
-                  <span
-                    className="text-xs text-gray-500"
-                    style={{ fontSize: "0.75rem", color: "#6b7280" }}
+                {isPremium ? (
+                  <div
+                    data-testid="ranking-score-details"
+                    className="flex items-center gap-2"
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "0.5rem",
+                    }}
                   >
-                    {allergen.elo_score}
-                  </span>
-                  <ConfidenceBadge tier={allergen.confidence_tier} />
-                </div>
+                    <span
+                      className="text-xs text-gray-500"
+                      style={{ fontSize: "0.75rem", color: "#6b7280" }}
+                    >
+                      {allergen.elo_score}
+                    </span>
+                    <ConfidenceBadge tier={allergen.confidence_tier} />
+                  </div>
+                ) : (
+                  <div
+                    data-testid="ranking-score-locked"
+                    className="flex items-center gap-1.5"
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "0.375rem",
+                    }}
+                  >
+                    <span
+                      aria-hidden="true"
+                      style={{ fontSize: "0.875rem" }}
+                    >
+                      &#x1F512;
+                    </span>
+                    <span
+                      className="text-xs font-medium text-purple-600"
+                      style={{
+                        fontSize: "0.75rem",
+                        fontWeight: 500,
+                        color: "#9333ea",
+                      }}
+                    >
+                      Upgrade
+                    </span>
+                  </div>
+                )}
               </div>
             ))}
           </div>
+
+          {/* Upgrade CTA for free users */}
+          {!isPremium && (
+            <div
+              data-testid="rankings-upgrade-cta"
+              style={{ marginTop: "1rem" }}
+            >
+              <UpgradeCta feature="full ranking details" />
+            </div>
+          )}
         </div>
       )}
     </div>

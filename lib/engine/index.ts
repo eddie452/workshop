@@ -119,5 +119,20 @@ export {
   runTournament,
 } from "./tournament";
 
+// Trigger Scout
+export type {
+  ScoutAllergenSeed,
+  ScoutMatch,
+  ScoutConditions,
+  ScoutScanResult,
+} from "./trigger-scout";
+
+export {
+  TRIGGER_SCOUT_PROXIMITY_MULTIPLIER,
+  matchLabelsToAllergen,
+  matchLabelsToAllergens,
+  analyzeScan,
+} from "./trigger-scout";
+
 // Run orchestrator
 export { runTournamentPipeline } from "./run";

@@ -1,0 +1,228 @@
+"use client";
+
+/**
+ * Daily Check-in Form
+ *
+ * Primary data collection surface for Allergy Madness.
+ * Collects severity, symptom zones, timing, and indoor/outdoor context.
+ * Submits to POST /api/checkin which auto-fetches environmental data
+ * and triggers a tournament run.
+ *
+ * One check-in per day per user enforced server-side.
+ */
+
+import { useState, useCallback } from "react";
+import type { SymptomPeakTime } from "@/lib/supabase/types";
+import {
+  INITIAL_CHECKIN_DATA,
+  type CheckinFormData,
+  type CheckinResponse,
+  type CheckinErrorResponse,
+} from "./types";
+import { SeveritySlider } from "./severity-slider";
+import { SymptomZones } from "./symptom-zones";
+import { TimingSelector } from "./timing-selector";
+
+interface CheckinFormProps {
+  /** Called after successful check-in with the response */
+  onSuccess?: (result: CheckinResponse) => void;
+  /** Whether the user already checked in today */
+  alreadyCheckedIn?: boolean;
+}
+
+export function CheckinForm({ onSuccess, alreadyCheckedIn = false }: CheckinFormProps) {
+  const [formData, setFormData] = useState<CheckinFormData>(INITIAL_CHECKIN_DATA);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [submitted, setSubmitted] = useState(false);
+
+  const handleSeverityChange = useCallback((severity: number) => {
+    setFormData((prev) => ({
+      ...prev,
+      severity,
+      // Clear symptoms if severity goes to 0
+      symptoms: severity === 0 ? {} : prev.symptoms,
+    }));
+  }, []);
+
+  const handleSymptomsChange = useCallback(
+    (symptoms: Record<string, boolean>) => {
+      setFormData((prev) => ({ ...prev, symptoms }));
+    },
+    [],
+  );
+
+  const handlePeakTimeChange = useCallback((symptom_peak_time: SymptomPeakTime) => {
+    setFormData((prev) => ({ ...prev, symptom_peak_time }));
+  }, []);
+
+  const handleIndoorsChange = useCallback((mostly_indoors: boolean) => {
+    setFormData((prev) => ({ ...prev, mostly_indoors }));
+  }, []);
+
+  const handleSubmit = useCallback(
+    async (e: React.FormEvent) => {
+      e.preventDefault();
+      setError(null);
+      setIsSubmitting(true);
+
+      try {
+        const response = await fetch("/api/checkin", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            severity: formData.severity,
+            symptoms: formData.symptoms,
+            symptom_peak_time: formData.symptom_peak_time,
+            mostly_indoors: formData.mostly_indoors,
+          }),
+        });
+
+        const data: CheckinResponse | CheckinErrorResponse =
+          await response.json();
+
+        if (!response.ok || !data.success) {
+          const errData = data as CheckinErrorResponse;
+          setError(errData.error || "Check-in failed. Please try again.");
+          return;
+        }
+
+        setSubmitted(true);
+        onSuccess?.(data as CheckinResponse);
+      } catch {
+        setError("Network error. Please check your connection and try again.");
+      } finally {
+        setIsSubmitting(false);
+      }
+    },
+    [formData, onSuccess],
+  );
+
+  // Already checked in today
+  if (alreadyCheckedIn || submitted) {
+    return (
+      <div
+        className="rounded-lg border border-green-200 bg-green-50 p-6 text-center"
+        style={{
+          borderRadius: "0.5rem",
+          border: "1px solid #bbf7d0",
+          backgroundColor: "#f0fdf4",
+          padding: "1.5rem",
+          textAlign: "center",
+        }}
+        data-testid="checkin-complete"
+      >
+        <p
+          className="text-lg font-semibold text-green-800"
+          style={{
+            fontSize: "1.125rem",
+            fontWeight: 600,
+            color: "#166534",
+            margin: "0 0 0.5rem 0",
+          }}
+        >
+          {submitted ? "Check-in submitted!" : "Already checked in today"}
+        </p>
+        <p
+          className="text-sm text-green-600"
+          style={{
+            fontSize: "0.875rem",
+            color: "#16a34a",
+            margin: 0,
+          }}
+        >
+          {submitted
+            ? "Your leaderboard is being updated."
+            : "Come back tomorrow for your next check-in."}
+        </p>
+      </div>
+    );
+  }
+
+  return (
+    <form
+      onSubmit={handleSubmit}
+      className="space-y-8"
+      style={{ display: "flex", flexDirection: "column", gap: "2rem" }}
+      data-testid="checkin-form"
+    >
+      {/* Error message */}
+      {error && (
+        <div
+          role="alert"
+          className="rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700"
+          style={{
+            borderRadius: "0.5rem",
+            border: "1px solid #fecaca",
+            backgroundColor: "#fef2f2",
+            padding: "0.75rem 1rem",
+            fontSize: "0.875rem",
+            color: "#b91c1c",
+          }}
+          data-testid="checkin-error"
+        >
+          {error}
+        </div>
+      )}
+
+      {/* Step 1: Severity */}
+      <SeveritySlider value={formData.severity} onChange={handleSeverityChange} />
+
+      {/* Step 2: Symptom zones (only if severity > 0) */}
+      {formData.severity > 0 && (
+        <SymptomZones
+          symptoms={formData.symptoms}
+          onChange={handleSymptomsChange}
+        />
+      )}
+
+      {/* Step 3: Timing and context (only if severity > 0) */}
+      {formData.severity > 0 && (
+        <TimingSelector
+          peakTime={formData.symptom_peak_time}
+          mostlyIndoors={formData.mostly_indoors}
+          onPeakTimeChange={handlePeakTimeChange}
+          onIndoorsChange={handleIndoorsChange}
+        />
+      )}
+
+      {/* Submit */}
+      <button
+        type="submit"
+        disabled={isSubmitting}
+        data-testid="checkin-submit"
+        className="w-full rounded-lg bg-blue-600 px-4 py-3 text-base font-semibold text-white hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+        style={{
+          width: "100%",
+          borderRadius: "0.5rem",
+          backgroundColor: isSubmitting ? "#93c5fd" : "#2563eb",
+          padding: "0.75rem 1rem",
+          fontSize: "1rem",
+          fontWeight: 600,
+          color: "#ffffff",
+          border: "none",
+          cursor: isSubmitting ? "not-allowed" : "pointer",
+          opacity: isSubmitting ? 0.5 : 1,
+          transition: "background-color 0.15s",
+        }}
+      >
+        {isSubmitting ? "Submitting..." : formData.severity === 0 ? "Log Symptom-Free Day" : "Submit Check-in"}
+      </button>
+
+      {/* Severity 0 hint */}
+      {formData.severity === 0 && (
+        <p
+          className="text-xs text-gray-500 text-center"
+          style={{
+            fontSize: "0.75rem",
+            color: "#6b7280",
+            textAlign: "center",
+            margin: 0,
+          }}
+        >
+          Logging a symptom-free day helps calibrate your Environmental Forecast.
+        </p>
+      )}
+    </form>
+  );
+}

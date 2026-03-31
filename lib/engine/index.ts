@@ -64,6 +64,7 @@ export {
 // Confidence tiers
 export {
   getConfidenceTier,
+  getConfidenceTierBySignals,
   getAllConfidenceTiers,
   getConfidenceLabel,
 } from "./confidence";

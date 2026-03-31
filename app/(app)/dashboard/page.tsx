@@ -1,5 +1,7 @@
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
+import { getConfidenceTierBySignals } from "@/lib/engine";
+import type { RankedAllergen } from "@/components/leaderboard/types";
 import { SignOutButton } from "./sign-out-button";
 import { DashboardLeaderboard } from "./dashboard-leaderboard";
 
@@ -37,6 +39,7 @@ export default async function DashboardPage() {
     .single();
 
   const profile = profileData as { fda_acknowledged: boolean } | null;
+  const fdaAcknowledged = profile?.fda_acknowledged ?? false;
 
   // Fetch subscription tier
   const { data: subscriptionData } = await supabase
@@ -69,6 +72,18 @@ export default async function DashboardPage() {
     .order("elo_score", { ascending: false });
 
   const eloRows = (rawEloRows ?? []) as unknown as EloRowWithAllergen[];
+
+  // Map to ranked allergens with confidence tiers (server-side computation)
+  const allergens: RankedAllergen[] = eloRows.map((row, index) => ({
+    allergen_id: row.allergen_id,
+    common_name: row.allergens.common_name,
+    category: row.allergens.category as RankedAllergen["category"],
+    elo_score: row.elo_score,
+    confidence_tier: getConfidenceTierBySignals(
+      row.positive_signals + row.negative_signals
+    ),
+    rank: index + 1,
+  }));
 
   // Determine if we should show Environmental Forecast mode.
   // Forecast mode activates when the user's most recent check-in has severity = 0,
@@ -151,10 +166,10 @@ export default async function DashboardPage() {
       </div>
 
       <DashboardLeaderboard
-        eloRows={eloRows}
+        allergens={allergens}
         isPremium={isPremium}
         isEnvironmentalForecast={isEnvironmentalForecast}
-        fdaAcknowledged={profile?.fda_acknowledged ?? false}
+        fdaAcknowledged={fdaAcknowledged}
         userId={user.id}
       />
     </div>

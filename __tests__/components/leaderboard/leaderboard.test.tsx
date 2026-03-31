@@ -81,6 +81,14 @@ const mockAllergens: RankedAllergen[] = [
     confidence_tier: "medium",
     rank: 5,
   },
+  {
+    allergen_id: "cat_dander",
+    common_name: "Cat Dander",
+    category: "indoor",
+    elo_score: 1300,
+    confidence_tier: "low",
+    rank: 6,
+  },
 ];
 
 const defaultProps = {
@@ -119,7 +127,7 @@ describe("Leaderboard", () => {
       render(<Leaderboard {...defaultProps} />);
       expect(screen.getByText("Full Rankings")).toBeDefined();
       const rows = screen.getAllByTestId("ranked-allergen-row");
-      expect(rows.length).toBe(1); // Only #5 (Dust Mites)
+      expect(rows.length).toBe(2); // #5 (Dust Mites) and #6 (Cat Dander)
     });
 
     it("shows Dust Mites in full rankings", () => {
@@ -203,6 +211,61 @@ describe("Leaderboard", () => {
       render(<Leaderboard {...defaultProps} fdaAcknowledged={true} />);
       expect(screen.queryByTestId("disclaimer-modal")).toBeNull();
       expect(screen.getByTestId("leaderboard")).toBeDefined();
+    });
+  });
+
+  describe("free-tier user (ranks #5+ score gating)", () => {
+    it("shows allergen names for ranks #5+ but hides scores", () => {
+      render(<Leaderboard {...defaultProps} isPremium={false} />);
+      // Allergen names are visible
+      expect(screen.getByText("Dust Mites")).toBeDefined();
+      expect(screen.getByText("Cat Dander")).toBeDefined();
+      // Scores are hidden — lock icons shown instead
+      const lockedElements = screen.getAllByTestId("ranking-score-locked");
+      expect(lockedElements.length).toBe(2);
+      // Score values should NOT appear
+      expect(screen.queryByText("1350")).toBeNull();
+      expect(screen.queryByText("1300")).toBeNull();
+    });
+
+    it("shows 'Upgrade' text where scores would be for free users", () => {
+      render(<Leaderboard {...defaultProps} isPremium={false} />);
+      const upgradeTexts = screen.getAllByText("Upgrade");
+      // Each ranked row (#5, #6) shows "Upgrade"
+      expect(upgradeTexts.length).toBe(2);
+    });
+
+    it("shows upgrade CTA below full rankings for free users", () => {
+      render(<Leaderboard {...defaultProps} isPremium={false} />);
+      expect(screen.getByTestId("rankings-upgrade-cta")).toBeDefined();
+      expect(screen.getByTestId("upgrade-cta")).toBeDefined();
+    });
+
+    it("does not show score details for free users", () => {
+      render(<Leaderboard {...defaultProps} isPremium={false} />);
+      expect(screen.queryByTestId("ranking-score-details")).toBeNull();
+    });
+  });
+
+  describe("premium user (full rankings visible)", () => {
+    it("shows full scores and confidence for ranks #5+", () => {
+      render(<Leaderboard {...defaultProps} isPremium={true} />);
+      // Scores are visible
+      expect(screen.getByText("1350")).toBeDefined();
+      expect(screen.getByText("1300")).toBeDefined();
+      // Score detail elements present
+      const scoreDetails = screen.getAllByTestId("ranking-score-details");
+      expect(scoreDetails.length).toBe(2);
+    });
+
+    it("does not show lock icons for premium users", () => {
+      render(<Leaderboard {...defaultProps} isPremium={true} />);
+      expect(screen.queryByTestId("ranking-score-locked")).toBeNull();
+    });
+
+    it("does not show rankings upgrade CTA for premium users", () => {
+      render(<Leaderboard {...defaultProps} isPremium={true} />);
+      expect(screen.queryByTestId("rankings-upgrade-cta")).toBeNull();
     });
   });
 

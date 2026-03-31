@@ -13,7 +13,8 @@ export type { SubscriptionTier };
 export type PremiumFeature =
   | "final_four"
   | "pdf_report"
-  | "detailed_confidence";
+  | "detailed_confidence"
+  | "full_rankings";
 
 /** Result of checking a user's access level */
 export interface AccessStatus {

@@ -14,7 +14,8 @@ export type PremiumFeature =
   | "final_four"
   | "pdf_report"
   | "detailed_confidence"
-  | "full_rankings";
+  | "full_rankings"
+  | "pfas_panel";
 
 /** Result of checking a user's access level */
 export interface AccessStatus {

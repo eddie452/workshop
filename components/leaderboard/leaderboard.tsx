@@ -24,6 +24,8 @@ import type { ForecastData } from "./environmental-forecast";
 import { ConfidenceBadge } from "./confidence-badge";
 import { CategoryIcon } from "./category-icon";
 import { UpgradeCta } from "@/components/subscription/upgrade-cta";
+import { PfasPanel } from "@/components/pfas/pfas-panel";
+import type { PfasCrossReactivity } from "@/lib/pfas/types";
 import type { RankedAllergen } from "./types";
 
 export interface LeaderboardClientProps {
@@ -37,6 +39,8 @@ export interface LeaderboardClientProps {
   fdaAcknowledged: boolean;
   /** Authenticated user ID */
   userId: string;
+  /** PFAS cross-reactivity entries for top allergens (optional) */
+  pfasEntries?: PfasCrossReactivity[];
 }
 
 export function Leaderboard({
@@ -45,6 +49,7 @@ export function Leaderboard({
   isEnvironmentalForecast,
   fdaAcknowledged,
   userId,
+  pfasEntries = [],
 }: LeaderboardClientProps) {
   const [acknowledged, setAcknowledged] = useState(fdaAcknowledged);
   const [forecastData, setForecastData] = useState<ForecastData | null>(null);
@@ -305,6 +310,13 @@ export function Leaderboard({
               <UpgradeCta feature="full ranking details" />
             </div>
           )}
+        </div>
+      )}
+
+      {/* PFAS Cross-Reactivity Panel */}
+      {pfasEntries.length > 0 && (
+        <div style={{ marginTop: "1.5rem" }}>
+          <PfasPanel entries={pfasEntries} isPremium={isPremium} />
         </div>
       )}
     </div>

@@ -7,6 +7,8 @@
  * Reference: https://developers.google.com/maps/documentation/geocoding
  */
 
+import { fetchWithTimeout } from "./fetch-with-timeout";
+
 /* ------------------------------------------------------------------ */
 /* Types                                                               */
 /* ------------------------------------------------------------------ */
@@ -74,7 +76,12 @@ export async function geocodeAddress(
   // Bias toward US results
   url.searchParams.set("components", "country:US");
 
-  const response = await fetch(url.toString());
+  let response: Response;
+  try {
+    response = await fetchWithTimeout(url.toString());
+  } catch {
+    throw new Error("Geocoding API timeout");
+  }
   if (!response.ok) {
     throw new Error(`Geocoding API HTTP error: ${response.status}`);
   }

@@ -10,6 +10,8 @@
  * Reference: https://api.census.gov/data/2022/acs/acs5
  */
 
+import { fetchWithTimeout } from "./fetch-with-timeout";
+
 /* ------------------------------------------------------------------ */
 /* Types                                                               */
 /* ------------------------------------------------------------------ */
@@ -74,7 +76,7 @@ async function latLngToFips(
     url.searchParams.set("format", "json");
     url.searchParams.set("showall", "false");
 
-    const response = await fetch(url.toString());
+    const response = await fetchWithTimeout(url.toString());
     if (!response.ok) return null;
 
     const data = await response.json();
@@ -131,7 +133,7 @@ export async function getBlockGroupIncome(
       `&in=state:${fips.state}%20county:${fips.county}%20tract:${fips.tract}` +
       keyParam;
 
-    const response = await fetch(url);
+    const response = await fetchWithTimeout(url);
     if (!response.ok) return null;
 
     const data = await response.json();

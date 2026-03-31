@@ -10,6 +10,8 @@
  * Reference: https://aqicn.org/json-api/doc/
  */
 
+import { fetchWithTimeout } from "./fetch-with-timeout";
+
 /* ------------------------------------------------------------------ */
 /* Types                                                               */
 /* ------------------------------------------------------------------ */
@@ -81,7 +83,7 @@ export async function getAqiData(
   try {
     const url = `https://api.waqi.info/feed/geo:${lat};${lng}/?token=${apiToken}`;
 
-    const response = await fetch(url);
+    const response = await fetchWithTimeout(url);
     if (!response.ok) return AQI_DEFAULTS;
 
     const data = await response.json();

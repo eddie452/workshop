@@ -10,6 +10,8 @@
  * Reference: https://developers.google.com/maps/documentation/pollen
  */
 
+import { fetchWithTimeout } from "./fetch-with-timeout";
+
 /* ------------------------------------------------------------------ */
 /* Types                                                               */
 /* ------------------------------------------------------------------ */
@@ -137,7 +139,7 @@ export async function getPollenData(
     url.searchParams.set("days", "1");
     url.searchParams.set("plantsDescription", "true");
 
-    const response = await fetch(url.toString());
+    const response = await fetchWithTimeout(url.toString());
     if (!response.ok) return POLLEN_DEFAULTS;
 
     const data = await response.json();

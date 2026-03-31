@@ -11,6 +11,7 @@
  */
 
 import fixtureData from "@/lib/data/batchdata-fixtures.json";
+import { fetchWithTimeout } from "./fetch-with-timeout";
 
 /* ------------------------------------------------------------------ */
 /* Types                                                               */
@@ -81,7 +82,7 @@ async function fetchFromApi(address: string): Promise<PropertyData | null> {
     );
     url.searchParams.set("address", address);
 
-    const response = await fetch(url.toString(), {
+    const response = await fetchWithTimeout(url.toString(), {
       headers: {
         Authorization: `Bearer ${apiKey}`,
         "Content-Type": "application/json",

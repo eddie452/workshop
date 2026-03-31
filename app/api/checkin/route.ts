@@ -465,16 +465,19 @@ export async function POST(
           };
         };
 
+        const existingRow = (eloRows ?? []).find(
+          (r) => r.allergen_id === update.allergen_id,
+        );
+        const currentPositive = existingRow?.positive_signals ?? 0;
+        const currentNegative = existingRow?.negative_signals ?? 0;
+
         await (supabase.from("user_allergen_elo") as unknown as EloUpdateQuery)
           .update({
             elo_score: update.new_elo,
-            positive_signals: (eloRows ?? []).find(
-              (r) => r.allergen_id === update.allergen_id,
-            )
-              ? ((eloRows ?? []).find(
-                  (r) => r.allergen_id === update.allergen_id,
-                )!.positive_signals ?? 0) + 1
-              : 1,
+            positive_signals:
+              update.delta >= 0 ? currentPositive + 1 : currentPositive,
+            negative_signals:
+              update.delta < 0 ? currentNegative + 1 : currentNegative,
             last_updated: new Date().toISOString(),
           })
           .eq("user_id", user.id)

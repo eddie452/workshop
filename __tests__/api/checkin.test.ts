@@ -83,6 +83,7 @@ import { createClient } from "@/lib/supabase/server";
 import { getWeatherData } from "@/lib/apis/weather";
 import { getPollenData } from "@/lib/apis/pollen";
 import { getAqiData } from "@/lib/apis/aqi";
+import { runTournamentPipeline } from "@/lib/engine/run";
 
 // Import after mocks
 import { POST } from "@/app/api/checkin/route";
@@ -384,5 +385,70 @@ describe("POST /api/checkin", () => {
     const data = await response.json();
     expect(data.success).toBe(true);
     expect(data.checkin_id).toBe("checkin-123");
+  });
+
+  it("increments negative_signals (not positive_signals) when Elo delta is negative", async () => {
+    // Override runTournamentPipeline to return a negative delta
+    vi.mocked(runTournamentPipeline).mockReturnValueOnce({
+      symptom_gate_passed: true,
+      tournament: {
+        leaderboard: [],
+        final_four: [],
+        trigger_champion: null,
+      },
+      elo_updates: [
+        { allergen_id: "a1", new_elo: 1180, delta: -20, k_factor: 32 },
+      ],
+      step_trace: [],
+    } as never);
+
+    const mockSupabase = createMockSupabase();
+
+    // Track the update calls to user_allergen_elo
+    const eloUpdateData: Record<string, unknown>[] = [];
+    const mockEloUpdate = vi.fn((data: Record<string, unknown>) => {
+      eloUpdateData.push(data);
+      return {
+        eq: vi.fn().mockReturnValue({
+          eq: vi.fn().mockReturnValue({
+            is: vi.fn().mockResolvedValue({ error: null }),
+          }),
+        }),
+      };
+    });
+
+    const originalFrom = mockSupabase.from;
+    mockSupabase.from = vi.fn((table: string) => {
+      const result = originalFrom(table);
+      if (table === "user_allergen_elo") {
+        return { ...result, update: mockEloUpdate };
+      }
+      return result;
+    });
+
+    vi.mocked(createClient).mockResolvedValue(mockSupabase as never);
+
+    const response = await POST(
+      makeRequest({
+        severity: 2,
+        symptoms: { sx_sneezing: true },
+        symptom_peak_time: "morning",
+        mostly_indoors: false,
+      }),
+    );
+
+    const data = await response.json();
+    expect(data.success).toBe(true);
+
+    // The Elo update should have been called
+    expect(mockEloUpdate).toHaveBeenCalled();
+
+    // Verify negative delta incremented negative_signals, not positive_signals
+    const updatePayload = eloUpdateData[0];
+    expect(updatePayload).toBeDefined();
+    expect(updatePayload.elo_score).toBe(1180);
+    // existing row has positive_signals: 3, negative_signals: 1
+    expect(updatePayload.positive_signals).toBe(3); // unchanged
+    expect(updatePayload.negative_signals).toBe(2); // incremented from 1 to 2
   });
 });

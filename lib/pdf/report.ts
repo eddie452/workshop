@@ -48,6 +48,18 @@ const TIER_LABELS: Record<string, string> = {
 };
 
 /* ------------------------------------------------------------------ */
+/* Helper: sanitize text for jsPDF                                     */
+/* ------------------------------------------------------------------ */
+
+/**
+ * Replace characters unsupported by jsPDF's default Helvetica font.
+ * Em dashes (\u2014) are silently dropped; replace with ASCII hyphen.
+ */
+function sanitizeForPdf(text: string): string {
+  return text.replace(/\u2014/g, "-");
+}
+
+/* ------------------------------------------------------------------ */
 /* Helper: format date                                                 */
 /* ------------------------------------------------------------------ */
 
@@ -90,13 +102,13 @@ function addFdaFooter(doc: jsPDF): void {
   doc.setFontSize(7);
   doc.setFont("helvetica", "bold");
   doc.setTextColor(...COLOR_AMBER_TEXT);
-  doc.text(FDA_DISCLAIMER_LABEL, MARGIN_LEFT, FOOTER_Y + 5);
+  doc.text(sanitizeForPdf(FDA_DISCLAIMER_LABEL), MARGIN_LEFT, FOOTER_Y + 5);
 
   // FDA full text (wrapped)
   doc.setFontSize(6);
   doc.setFont("helvetica", "normal");
   doc.setTextColor(...COLOR_MUTED);
-  const lines = doc.splitTextToSize(FDA_DISCLAIMER_FULL_TEXT, CONTENT_WIDTH);
+  const lines = doc.splitTextToSize(sanitizeForPdf(FDA_DISCLAIMER_FULL_TEXT), CONTENT_WIDTH);
   doc.text(lines, MARGIN_LEFT, FOOTER_Y + 9);
 }
 
@@ -176,11 +188,11 @@ export function generateReportPdf(input: PdfReportInput): Uint8Array {
   doc.setFontSize(10);
   doc.setFont("helvetica", "bold");
   doc.setTextColor(...COLOR_AMBER_TEXT);
-  doc.text(FDA_DISCLAIMER_LABEL, MARGIN_LEFT + 4, y + 1);
+  doc.text(sanitizeForPdf(FDA_DISCLAIMER_LABEL), MARGIN_LEFT + 4, y + 1);
   doc.setFontSize(7);
   doc.setFont("helvetica", "normal");
   const disclaimerLines = doc.splitTextToSize(
-    FDA_DISCLAIMER_FULL_TEXT,
+    sanitizeForPdf(FDA_DISCLAIMER_FULL_TEXT),
     CONTENT_WIDTH - 8
   );
   doc.text(disclaimerLines[0] ?? "", MARGIN_LEFT + 4, y + 6);

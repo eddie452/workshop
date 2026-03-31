@@ -94,8 +94,10 @@ describe("generateReportPdf", () => {
     const result = generateReportPdf(input);
 
     // Convert to string to search for text content
+    // jsPDF Helvetica cannot render em dash; report.ts sanitizes to ASCII hyphen
     const pdfText = new TextDecoder("latin1").decode(result);
-    expect(pdfText).toContain(FDA_DISCLAIMER_LABEL);
+    const sanitizedLabel = FDA_DISCLAIMER_LABEL.replace(/\u2014/g, "-");
+    expect(pdfText).toContain(sanitizedLabel);
   });
 
   it("includes FDA disclaimer full text in PDF content", () => {
@@ -223,6 +225,7 @@ describe("generateReportPdf", () => {
     expect(result.length).toBeGreaterThan(0);
 
     const pdfText = new TextDecoder("latin1").decode(result);
-    expect(pdfText).toContain(FDA_DISCLAIMER_LABEL);
+    const sanitizedLabel = FDA_DISCLAIMER_LABEL.replace(/\u2014/g, "-");
+    expect(pdfText).toContain(sanitizedLabel);
   });
 });

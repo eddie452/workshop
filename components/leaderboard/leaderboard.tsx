@@ -14,12 +14,13 @@
  * - First-time FDA acknowledgment gate
  */
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { FdaDisclaimer } from "@/components/shared/fda-disclaimer";
 import { DisclaimerModal } from "@/components/shared/disclaimer-modal";
 import { TriggerChampionCard } from "./trigger-champion-card";
 import { FinalFour } from "./final-four";
 import { EnvironmentalForecast } from "./environmental-forecast";
+import type { ForecastData } from "./environmental-forecast";
 import { ConfidenceBadge } from "./confidence-badge";
 import { CategoryIcon } from "./category-icon";
 import type { RankedAllergen } from "./types";
@@ -45,6 +46,39 @@ export function Leaderboard({
   userId,
 }: LeaderboardClientProps) {
   const [acknowledged, setAcknowledged] = useState(fdaAcknowledged);
+  const [forecastData, setForecastData] = useState<ForecastData | null>(null);
+  const [forecastLoading, setForecastLoading] = useState(false);
+
+  // Fetch environmental forecast data when in forecast mode
+  useEffect(() => {
+    if (!isEnvironmentalForecast || !acknowledged) return;
+
+    let cancelled = false;
+    setForecastLoading(true);
+
+    fetch(`${window.location.origin}/api/forecast`)
+      .then((res) => res.json())
+      .then((data) => {
+        if (!cancelled && data.success) {
+          setForecastData({
+            pollen: data.pollen,
+            weather: data.weather,
+            aqi: data.aqi,
+            region: data.region,
+          });
+        }
+      })
+      .catch(() => {
+        // Graceful degradation — forecast shows "no data" state
+      })
+      .finally(() => {
+        if (!cancelled) setForecastLoading(false);
+      });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [isEnvironmentalForecast, acknowledged]);
 
   // First-time gate: must acknowledge FDA disclaimer
   if (!acknowledged) {
@@ -77,10 +111,9 @@ export function Leaderboard({
             margin: 0,
           }}
         >
-          Your Allergen Leaderboard
+          Environmental Forecast
         </h1>
-        <FdaDisclaimer />
-        <EnvironmentalForecast />
+        <EnvironmentalForecast data={forecastData} loading={forecastLoading} />
       </div>
     );
   }

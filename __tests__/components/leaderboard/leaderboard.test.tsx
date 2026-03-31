@@ -165,7 +165,7 @@ describe("Leaderboard", () => {
       );
       expect(screen.getByTestId("environmental-forecast")).toBeDefined();
       expect(
-        screen.getByText("Environmental Forecast Mode")
+        screen.getByText("Environmental Forecast")
       ).toBeDefined();
     });
 

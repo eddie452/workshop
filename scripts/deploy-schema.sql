@@ -41,8 +41,8 @@ CREATE TABLE user_profiles (
                           'wood_frame','brick_old','brick_modern',
                           'concrete_highrise','modern_sealed','other')),
 
-  -- Cockroach Climate Risk Score 0-3 (derived from home_state at onboarding)
-  ccrs                  SMALLINT DEFAULT 1 CHECK (ccrs BETWEEN 0 AND 3),
+  -- Cockroach Climate Risk Score 0-100 (derived from home_state at onboarding)
+  ccrs                  SMALLINT DEFAULT 0 CHECK (ccrs BETWEEN 0 AND 100),
 
   -- Indoor allergen context
   has_pets              BOOLEAN DEFAULT FALSE,
@@ -213,7 +213,7 @@ CREATE TABLE user_locations (
   state           TEXT,
   country_code    TEXT DEFAULT 'US',
   region          TEXT,
-  ccrs            SMALLINT DEFAULT 1 CHECK (ccrs BETWEEN 0 AND 3),
+  ccrs            SMALLINT DEFAULT 0 CHECK (ccrs BETWEEN 0 AND 100),
 
   -- Indoor profile at this location
   year_built      INT,

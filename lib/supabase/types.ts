@@ -147,6 +147,12 @@ export interface Database {
           neighborhood_ndvi: number | null;
           /** Has user acknowledged the FDA disclaimer? */
           fda_acknowledged: boolean;
+          /** Unique referral code for sharing */
+          referral_code: string | null;
+          /** Number of successful referrals */
+          referral_count: number;
+          /** Whether all features are permanently unlocked via referrals */
+          features_unlocked: boolean;
         };
         Insert: {
           id: string;
@@ -175,6 +181,9 @@ export interface Database {
           income_tier?: number | null;
           neighborhood_ndvi?: number | null;
           fda_acknowledged?: boolean;
+          referral_code?: string | null;
+          referral_count?: number;
+          features_unlocked?: boolean;
         };
         Update: {
           id?: string;
@@ -203,6 +212,9 @@ export interface Database {
           income_tier?: number | null;
           neighborhood_ndvi?: number | null;
           fda_acknowledged?: boolean;
+          referral_code?: string | null;
+          referral_count?: number;
+          features_unlocked?: boolean;
         };
       };
 
@@ -673,6 +685,27 @@ export interface Database {
           updated_at?: string;
         };
       };
+
+      referrals: {
+        Row: {
+          id: string;
+          referrer_id: string;
+          referred_id: string;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          referrer_id: string;
+          referred_id: string;
+          created_at?: string;
+        };
+        Update: {
+          id?: string;
+          referrer_id?: string;
+          referred_id?: string;
+          created_at?: string;
+        };
+      };
     };
 
     Views: Record<string, never>;
@@ -723,6 +756,10 @@ export type TriggerScoutScanUpdate = Tables["trigger_scout_scans"]["Update"];
 export type UserSubscription = Tables["user_subscriptions"]["Row"];
 export type UserSubscriptionInsert = Tables["user_subscriptions"]["Insert"];
 export type UserSubscriptionUpdate = Tables["user_subscriptions"]["Update"];
+
+export type Referral = Tables["referrals"]["Row"];
+export type ReferralInsert = Tables["referrals"]["Insert"];
+export type ReferralUpdate = Tables["referrals"]["Update"];
 
 /**
  * UserProfile with income_tier stripped out.

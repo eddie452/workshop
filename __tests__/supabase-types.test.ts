@@ -11,12 +11,13 @@ import type {
   TriggerScoutScan,
   UserSubscription,
   ChildProfile,
+  Referral,
   Region,
   AllergenCategory,
 } from "@/lib/supabase/types";
 
 describe("Supabase database types", () => {
-  it("Database interface has all 9 tables", () => {
+  it("Database interface has all 10 tables", () => {
     // This is a compile-time test — if types are wrong, tsc fails.
     // At runtime we verify the structure exists as expected.
     type TableNames = keyof Database["public"]["Tables"];
@@ -30,8 +31,9 @@ describe("Supabase database types", () => {
       "symptom_checkins",
       "trigger_scout_scans",
       "user_subscriptions",
+      "referrals",
     ];
-    expect(tables).toHaveLength(9);
+    expect(tables).toHaveLength(10);
   });
 
   it("SafeUserProfile omits income_tier", () => {
@@ -62,6 +64,9 @@ describe("Supabase database types", () => {
       seasonal_pattern: null,
       neighborhood_ndvi: null,
       fda_acknowledged: false,
+      referral_code: null,
+      referral_count: 0,
+      features_unlocked: false,
     };
     expect(safe).not.toHaveProperty("income_tier");
   });
@@ -101,6 +106,7 @@ describe("Supabase database types", () => {
     const _scan: TriggerScoutScan["match_method"] = "exact";
     const _sub: UserSubscription["tier"] = "free";
     const _child: ChildProfile["parent_id"] = "uuid-string";
+    const _referral: Referral["referrer_id"] = "uuid-string";
 
     expect(_profile).toBe("uuid-string");
     expect(_allergen).toBe("tree");
@@ -111,5 +117,6 @@ describe("Supabase database types", () => {
     expect(_scan).toBe("exact");
     expect(_sub).toBe("free");
     expect(_child).toBe("uuid-string");
+    expect(_referral).toBe("uuid-string");
   });
 });

@@ -10,6 +10,8 @@
  * Reference: https://openweathermap.org/current
  */
 
+import { fetchWithTimeout } from "./fetch-with-timeout";
+
 /* ------------------------------------------------------------------ */
 /* Types                                                               */
 /* ------------------------------------------------------------------ */
@@ -110,7 +112,7 @@ export async function getWeatherData(
     url.searchParams.set("appid", apiKey);
     // Units: standard (Kelvin) — we convert manually for precision
 
-    const response = await fetch(url.toString());
+    const response = await fetchWithTimeout(url.toString());
     if (!response.ok) return WEATHER_DEFAULTS;
 
     const data = await response.json();

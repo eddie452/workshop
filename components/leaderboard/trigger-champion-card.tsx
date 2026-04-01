@@ -15,10 +15,15 @@ export function TriggerChampionCard({ allergen }: TriggerChampionCardProps) {
       data-testid="trigger-champion-card"
       className="rounded-xl border-2 border-brand-primary bg-gradient-to-br from-[#E0F5FB] to-[#D6F0F8] p-6 shadow-lg"
     >
-      {/* Crown / header */}
+      {/* Champion header — white icon on blue circle per brand guide */}
       <div className="mb-3 flex items-center gap-2">
-        <span className="text-2xl" aria-hidden="true">
-          &#x1F451;
+        <span
+          className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-brand-primary"
+          aria-hidden="true"
+        >
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
+            <path d="M2 4L6 12H18L22 4M6 12L4 20H20L18 12M12 4V2M8 4L7 2M16 4L17 2" />
+          </svg>
         </span>
         <h2 className="text-sm font-bold uppercase tracking-wider text-brand-primary-dark">
           Trigger Champion

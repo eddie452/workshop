@@ -43,7 +43,7 @@ export function NavHeader() {
           className="flex items-center"
         >
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/champ-logo-alt.png" alt="Champ Allergy" className="h-8 w-auto" />
+          <img src="/champ-logo-alt.png" alt="Champ Allergy" className="h-10 w-auto" />
         </Link>
 
         {/* Desktop nav links */}

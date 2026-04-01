@@ -34,10 +34,13 @@ export function BlurOverlay({
         className="absolute inset-0 flex flex-col items-center justify-center"
       >
         <span
-          className="mb-2 animate-pulse text-3xl"
+          className="mb-2 inline-flex h-12 w-12 animate-pulse items-center justify-center rounded-full bg-brand-primary"
           aria-hidden="true"
         >
-          &#x1F512;
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
+            <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+            <path d="M7 11V7a5 5 0 0110 0v4" />
+          </svg>
         </span>
         {!showUpgradeCta && (
           <p className="text-sm font-medium text-brand-text-secondary">

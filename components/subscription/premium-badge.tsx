@@ -26,7 +26,13 @@ export function PremiumBadge({
         data-testid="premium-badge"
         className="inline-flex items-center gap-1 rounded-full bg-brand-primary-light px-2 py-0.5 text-xs font-medium text-brand-primary-dark"
       >
-        {!compact && <span aria-hidden="true">&#x2B50;</span>}
+        {!compact && (
+          <span aria-hidden="true" className="inline-flex h-4 w-4 items-center justify-center rounded-full bg-brand-primary">
+            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth={2.5} strokeLinecap="round" strokeLinejoin="round">
+              <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" />
+            </svg>
+          </span>
+        )}
         Madness+
       </span>
     );
@@ -37,7 +43,14 @@ export function PremiumBadge({
       data-testid="premium-badge-locked"
       className="inline-flex items-center gap-1 rounded-full bg-brand-surface-muted px-2 py-0.5 text-xs font-medium text-brand-text-muted"
     >
-      {!compact && <span aria-hidden="true">&#x1F512;</span>}
+      {!compact && (
+        <span aria-hidden="true" className="inline-flex h-4 w-4 items-center justify-center rounded-full bg-brand-surface-muted">
+          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5} strokeLinecap="round" strokeLinejoin="round">
+            <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+            <path d="M7 11V7a5 5 0 0110 0v4" />
+          </svg>
+        </span>
+      )}
       Premium
     </span>
   );

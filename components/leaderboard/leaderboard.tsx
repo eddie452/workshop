@@ -103,7 +103,7 @@ export function Leaderboard({
         data-testid="leaderboard"
         className="mx-auto max-w-2xl space-y-6 px-4 py-6"
       >
-        <h1 className="text-2xl font-bold text-gray-900">
+        <h1 className="text-2xl font-bold text-brand-primary-dark">
           Environmental Forecast
         </h1>
         <EnvironmentalForecast data={forecastData} loading={forecastLoading} />
@@ -119,7 +119,7 @@ export function Leaderboard({
       data-testid="leaderboard"
       className="mx-auto max-w-2xl space-y-6 px-4 py-6"
     >
-      <h1 className="text-2xl font-bold text-gray-900">
+      <h1 className="text-2xl font-bold text-brand-primary-dark">
         Your Allergen Leaderboard
       </h1>
 
@@ -136,7 +136,7 @@ export function Leaderboard({
       {/* Final Four (#2-#4) */}
       {finalFour.length > 0 && (
         <div className="mt-6">
-          <h2 className="mb-3 text-lg font-semibold text-gray-800">
+          <h2 className="mb-3 text-lg font-semibold text-brand-text">
             Final Four
           </h2>
           <FinalFour allergens={finalFour} isBlurred={!isPremium} />
@@ -146,12 +146,12 @@ export function Leaderboard({
       {/* Full Ranked List (beyond top 4) */}
       {allergens.length > 4 && (
         <div className="mt-6">
-          <h2 className="mb-3 text-lg font-semibold text-gray-800">
+          <h2 className="mb-3 text-lg font-semibold text-brand-text">
             Full Rankings
           </h2>
           <div
             data-testid="full-rankings"
-            className="divide-y divide-gray-100 rounded-lg border border-gray-200 bg-white"
+            className="divide-y divide-brand-border-light rounded-lg border border-brand-border bg-white"
           >
             {allergens.slice(4).map((allergen) => (
               <div
@@ -160,11 +160,11 @@ export function Leaderboard({
                 className="flex items-center justify-between px-4 py-3"
               >
                 <div className="flex items-center gap-3">
-                  <span className="flex h-7 w-7 items-center justify-center rounded-full bg-gray-100 text-xs font-bold text-gray-500">
+                  <span className="flex h-7 w-7 items-center justify-center rounded-full bg-brand-surface-muted text-xs font-bold text-brand-text-muted">
                     #{allergen.rank}
                   </span>
                   <CategoryIcon category={allergen.category} />
-                  <span className="text-sm font-medium text-gray-900">
+                  <span className="text-sm font-medium text-brand-primary-dark">
                     {allergen.common_name}
                   </span>
                 </div>
@@ -173,7 +173,7 @@ export function Leaderboard({
                     data-testid="ranking-score-details"
                     className="flex items-center gap-2"
                   >
-                    <span className="text-xs text-gray-500">
+                    <span className="text-xs text-brand-text-muted">
                       {allergen.elo_score}
                     </span>
                     <ConfidenceBadge tier={allergen.confidence_tier} />

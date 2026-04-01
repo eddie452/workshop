@@ -40,9 +40,10 @@ export function NavHeader() {
         {/* Logo */}
         <Link
           href="/dashboard"
-          className="text-lg font-bold text-brand-primary"
+          className="text-lg font-bold text-brand-primary-dark"
+          style={{ fontFamily: "var(--font-title)" }}
         >
-          Allergy Madness
+          Champ
         </Link>
 
         {/* Desktop nav links */}

@@ -13,52 +13,54 @@
 
 @theme {
   /* ------------------------------------------------------------------ */
-  /* Brand Colors                                                        */
+  /* Champ Allergy Brand Colors                                          */
   /* ------------------------------------------------------------------ */
 
-  /* Primary — Health-forward blue */
-  --color-brand-primary: #2563eb;
-  --color-brand-primary-light: #dbeafe;
-  --color-brand-primary-dark: #1d4ed8;
+  /* Primary — Champ Blue (Pantone 306 C) — 50% of visual */
+  --color-brand-primary: #00B6E2;
+  --color-brand-primary-light: #E0F5FB;
+  --color-brand-primary-dark: #0682BB;
 
-  /* Accent — Wellness green */
-  --color-brand-accent: #16a34a;
-  --color-brand-accent-light: #dcfce7;
-  --color-brand-accent-dark: #15803d;
+  /* Accent — Nature Pop (Pantone 381 C) — 2% CTAs, eye-catching */
+  --color-brand-accent: #CCDC29;
+  --color-brand-accent-light: #F5F8D9;
+  --color-brand-accent-dark: #B0C020;
 
-  /* Warning — FDA disclaimer amber */
+  /* Warning — FDA disclaimer amber (functional) */
   --color-brand-warning: #d97706;
   --color-brand-warning-light: #fffbeb;
   --color-brand-warning-dark: #92400e;
 
-  /* Error — Alert red */
+  /* Error — Alert red (functional) */
   --color-brand-error: #dc2626;
   --color-brand-error-light: #fef2f2;
   --color-brand-error-dark: #991b1b;
 
-  /* Premium — Madness+ purple */
-  --color-brand-premium: #9333ea;
-  --color-brand-premium-light: #faf5ff;
-  --color-brand-premium-dark: #581c87;
+  /* Premium — Dusty Denim (Pantone 640 C) */
+  --color-brand-premium: #055A8C;
+  --color-brand-premium-light: #E0F0F8;
+  --color-brand-premium-dark: #045A82;
 
-  /* Surface / Neutral */
+  /* Surface / Neutral — NO GRAY, use light blue tints */
   --color-brand-surface: #ffffff;
-  --color-brand-surface-muted: #f9fafb;
-  --color-brand-border: #e5e7eb;
-  --color-brand-border-light: #f3f4f6;
+  --color-brand-surface-muted: #F0F9FC;
+  --color-brand-border: #B8E4F0;
+  --color-brand-border-light: #D6F0F8;
 
-  /* Text */
-  --color-brand-text: #111827;
-  --color-brand-text-secondary: #4b5563;
-  --color-brand-text-muted: #6b7280;
-  --color-brand-text-faint: #9ca3af;
+  /* Text — NO BLACK, Dusty Denim hierarchy (WCAG AA compliant) */
+  --color-brand-text: #045A82;
+  --color-brand-text-secondary: #056DA5;
+  --color-brand-text-muted: #0678B1;
+  --color-brand-text-faint: #0776A8;
 
   /* ------------------------------------------------------------------ */
   /* Typography                                                          */
   /* ------------------------------------------------------------------ */
 
-  --font-family-sans: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
-    Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+  --font-family-sans: "Helvetica Neue", "Helvetica", "Arial", sans-serif;
+  --font-title: "Arial Rounded MT Bold", "Nunito", "Arial", sans-serif;
+  --font-subtitle: "Helvetica Neue", "Helvetica", "Arial", sans-serif;
+  --font-body: "Helvetica Neue Light", "Helvetica Neue", "Helvetica", "Arial", sans-serif;
 
   /* ------------------------------------------------------------------ */
   /* Border Radius                                                       */
@@ -75,17 +77,17 @@
 /* ------------------------------------------------------------------ */
 
 :root {
-  /* Primary */
-  --champ-primary: #2563eb;
-  --champ-primary-light: #dbeafe;
-  --champ-primary-dark: #1d4ed8;
-  --champ-primary-rgb: 37, 99, 235;
+  /* Primary — Champ Blue */
+  --champ-primary: #00B6E2;
+  --champ-primary-light: #E0F5FB;
+  --champ-primary-dark: #0682BB;
+  --champ-primary-rgb: 0, 182, 226;
 
-  /* Accent */
-  --champ-accent: #16a34a;
-  --champ-accent-light: #dcfce7;
-  --champ-accent-dark: #15803d;
-  --champ-accent-rgb: 22, 163, 74;
+  /* Accent — Nature Pop */
+  --champ-accent: #CCDC29;
+  --champ-accent-light: #F5F8D9;
+  --champ-accent-dark: #B0C020;
+  --champ-accent-rgb: 204, 220, 41;
 
   /* Warning */
   --champ-warning: #d97706;
@@ -99,23 +101,23 @@
   --champ-error-dark: #991b1b;
   --champ-error-rgb: 220, 38, 38;
 
-  /* Premium */
-  --champ-premium: #9333ea;
-  --champ-premium-light: #faf5ff;
-  --champ-premium-dark: #581c87;
-  --champ-premium-rgb: 147, 51, 234;
+  /* Premium — Dusty Denim */
+  --champ-premium: #055A8C;
+  --champ-premium-light: #E0F0F8;
+  --champ-premium-dark: #045A82;
+  --champ-premium-rgb: 5, 90, 140;
 
-  /* Surface */
+  /* Surface — NO GRAY */
   --champ-surface: #ffffff;
-  --champ-surface-muted: #f9fafb;
-  --champ-border: #e5e7eb;
-  --champ-border-light: #f3f4f6;
+  --champ-surface-muted: #F0F9FC;
+  --champ-border: #B8E4F0;
+  --champ-border-light: #D6F0F8;
 
-  /* Text */
-  --champ-text: #111827;
-  --champ-text-secondary: #4b5563;
-  --champ-text-muted: #6b7280;
-  --champ-text-faint: #9ca3af;
+  /* Text — NO BLACK, Dusty Denim hierarchy (WCAG AA compliant) */
+  --champ-text: #045A82;
+  --champ-text-secondary: #056DA5;
+  --champ-text-muted: #0678B1;
+  --champ-text-faint: #0776A8;
 }
 
 /* ------------------------------------------------------------------ */

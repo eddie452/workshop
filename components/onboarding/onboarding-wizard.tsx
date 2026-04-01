@@ -105,10 +105,10 @@ export function OnboardingWizard() {
                 <div
                   className={`flex h-8 w-8 items-center justify-center rounded-full text-xs font-bold ${
                     isActive
-                      ? "bg-blue-600 text-white"
+                      ? "bg-brand-primary text-white"
                       : isCompleted
-                        ? "bg-blue-100 text-blue-600"
-                        : "bg-gray-200 text-gray-500"
+                        ? "bg-brand-primary-light text-brand-primary"
+                        : "bg-brand-border-light text-brand-text-muted"
                   }`}
                   aria-current={isActive ? "step" : undefined}
                 >
@@ -117,8 +117,8 @@ export function OnboardingWizard() {
                 <span
                   className={`mt-1 text-xs ${
                     isActive
-                      ? "font-medium text-blue-600"
-                      : "text-gray-500"
+                      ? "font-medium text-brand-primary"
+                      : "text-brand-text-muted"
                   }`}
                 >
                   {STEP_LABELS[step]}

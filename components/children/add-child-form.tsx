@@ -37,7 +37,7 @@ export function AddChildForm({ onSubmit, onCancel, isLoading, error }: AddChildF
       onSubmit={handleSubmit}
       className="rounded-lg border border-brand-primary-light bg-white p-4 shadow-sm"
     >
-      <h3 className="mb-3 text-sm font-semibold text-gray-900">Add Child</h3>
+      <h3 className="mb-3 text-sm font-semibold text-brand-primary-dark">Add Child</h3>
 
       {error && (
         <p
@@ -51,7 +51,7 @@ export function AddChildForm({ onSubmit, onCancel, isLoading, error }: AddChildF
       <div className="mb-3">
         <label
           htmlFor="child-name"
-          className="mb-1 block text-xs font-medium text-gray-700"
+          className="mb-1 block text-xs font-medium text-brand-text"
         >
           Name *
         </label>
@@ -64,14 +64,14 @@ export function AddChildForm({ onSubmit, onCancel, isLoading, error }: AddChildF
           value={name}
           onChange={(e) => setName(e.target.value)}
           placeholder="Enter child's name"
-          className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm text-gray-900 placeholder-gray-400 focus:border-brand-primary focus:outline-none focus:ring-1 focus:ring-brand-primary"
+          className="w-full rounded-md border border-brand-border px-3 py-2 text-sm text-brand-primary-dark placeholder-brand-text-faint focus:border-brand-primary focus:outline-none focus:ring-1 focus:ring-brand-primary"
         />
       </div>
 
       <div className="mb-4">
         <label
           htmlFor="child-birth-year"
-          className="mb-1 block text-xs font-medium text-gray-700"
+          className="mb-1 block text-xs font-medium text-brand-text"
         >
           Birth Year (optional)
         </label>
@@ -84,7 +84,7 @@ export function AddChildForm({ onSubmit, onCancel, isLoading, error }: AddChildF
           value={birthYear}
           onChange={(e) => setBirthYear(e.target.value)}
           placeholder={`e.g. ${currentYear - 5}`}
-          className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm text-gray-900 placeholder-gray-400 focus:border-brand-primary focus:outline-none focus:ring-1 focus:ring-brand-primary"
+          className="w-full rounded-md border border-brand-border px-3 py-2 text-sm text-brand-primary-dark placeholder-brand-text-faint focus:border-brand-primary focus:outline-none focus:ring-1 focus:ring-brand-primary"
         />
       </div>
 
@@ -93,7 +93,7 @@ export function AddChildForm({ onSubmit, onCancel, isLoading, error }: AddChildF
           type="button"
           onClick={onCancel}
           disabled={isLoading}
-          className="rounded-md border border-gray-300 bg-white px-4 py-2 text-xs font-medium text-gray-700 hover:bg-gray-50 disabled:opacity-50"
+          className="rounded-md border border-brand-border bg-white px-4 py-2 text-xs font-medium text-brand-text hover:bg-brand-surface-muted disabled:opacity-50"
         >
           Cancel
         </button>

@@ -17,7 +17,7 @@ interface SeveritySliderProps {
 export function SeveritySlider({ value, onChange }: SeveritySliderProps) {
   return (
     <fieldset className="border-none p-0 m-0">
-      <legend className="mb-3 text-base font-semibold text-gray-900">
+      <legend className="mb-3 text-base font-semibold text-brand-primary-dark">
         How are your allergies today?
       </legend>
 
@@ -35,8 +35,8 @@ export function SeveritySlider({ value, onChange }: SeveritySliderProps) {
               onClick={() => onChange(level.value)}
               className={`cursor-pointer rounded-lg border-2 p-3 text-left transition-colors ${
                 isSelected
-                  ? "border-blue-600 bg-blue-50"
-                  : "border-gray-200 bg-white hover:border-gray-300"
+                  ? "border-brand-primary bg-brand-primary-light"
+                  : "border-brand-border bg-white hover:border-brand-border"
               }`}
             >
               <div className="mb-1 flex items-center gap-2">
@@ -45,11 +45,11 @@ export function SeveritySlider({ value, onChange }: SeveritySliderProps) {
                   style={{ backgroundColor: level.color }}
                   aria-hidden="true"
                 />
-                <span className="text-sm font-semibold text-gray-900">
+                <span className="text-sm font-semibold text-brand-primary-dark">
                   {level.label}
                 </span>
               </div>
-              <p className="text-xs text-gray-500">
+              <p className="text-xs text-brand-text-muted">
                 {level.description}
               </p>
             </button>

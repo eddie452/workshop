@@ -35,7 +35,7 @@ export function PremiumBadge({
   return (
     <span
       data-testid="premium-badge-locked"
-      className="inline-flex items-center gap-1 rounded-full bg-gray-100 px-2 py-0.5 text-xs font-medium text-gray-500"
+      className="inline-flex items-center gap-1 rounded-full bg-brand-surface-muted px-2 py-0.5 text-xs font-medium text-brand-text-muted"
     >
       {!compact && <span aria-hidden="true">&#x1F512;</span>}
       Premium

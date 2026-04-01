@@ -32,10 +32,10 @@ export function StepAddress({ formData, onUpdate, onNext }: StepProps) {
     <form onSubmit={handleSubmit}>
       <div className="space-y-6">
         <div>
-          <h2 className="text-xl font-bold text-gray-900">
+          <h2 className="text-xl font-bold text-brand-primary-dark">
             Where do you live?
           </h2>
-          <p className="mt-2 text-sm text-gray-600">
+          <p className="mt-2 text-sm text-brand-text-secondary">
             Your address helps us identify regional allergens and auto-populate
             your home profile. We use it to predict which allergens are most
             likely to affect you.
@@ -45,7 +45,7 @@ export function StepAddress({ formData, onUpdate, onNext }: StepProps) {
         <div>
           <label
             htmlFor="address"
-            className="block text-sm font-medium text-gray-700"
+            className="block text-sm font-medium text-brand-text"
           >
             Home address
           </label>
@@ -60,7 +60,7 @@ export function StepAddress({ formData, onUpdate, onNext }: StepProps) {
             placeholder="123 Main St, City, State ZIP"
             autoFocus
             autoComplete="street-address"
-            className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 text-sm shadow-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+            className="mt-1 block w-full rounded-md border border-brand-border px-3 py-2 text-sm shadow-sm focus:border-brand-primary focus:outline-none focus:ring-1 focus:ring-brand-primary"
           />
           {error && (
             <p
@@ -72,14 +72,14 @@ export function StepAddress({ formData, onUpdate, onNext }: StepProps) {
           )}
         </div>
 
-        <p className="text-xs text-gray-500">
+        <p className="text-xs text-brand-text-muted">
           Your address is geocoded server-side. It is never shared or sold. We
           use it to look up property age, type, and regional pollen data.
         </p>
 
         <button
           type="submit"
-          className="w-full rounded-md bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+          className="w-full rounded-md bg-brand-primary px-4 py-2 text-sm font-medium text-white hover:bg-brand-primary-dark focus:outline-none focus:ring-2 focus:ring-brand-primary focus:ring-offset-2"
         >
           Continue
         </button>

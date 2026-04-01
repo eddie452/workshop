@@ -49,7 +49,7 @@ function upiLabel(value: number | null): string {
 
 /** Map UPI (0-5) to a color */
 function upiColor(value: number | null): string {
-  if (value === null) return "#6b7280";
+  if (value === null) return "#0682BB";
   if (value <= 1) return "#16a34a";
   if (value <= 2) return "#65a30d";
   if (value <= 3) return "#ca8a04";
@@ -70,7 +70,7 @@ function aqiLabel(value: number | null): string {
 
 /** Map AQI to a color */
 function aqiColor(value: number | null): string {
-  if (value === null) return "#6b7280";
+  if (value === null) return "#0682BB";
   if (value <= 50) return "#16a34a";
   if (value <= 100) return "#ca8a04";
   if (value <= 150) return "#ea580c";
@@ -98,8 +98,8 @@ function DataCard({
   children: React.ReactNode;
 }) {
   return (
-    <div className="rounded-lg border border-gray-200 bg-white p-4">
-      <h3 className="mb-3 text-sm font-semibold text-gray-700">
+    <div className="rounded-lg border border-brand-border bg-white p-4">
+      <h3 className="mb-3 text-sm font-semibold text-brand-text">
         {title}
       </h3>
       {children}
@@ -118,12 +118,12 @@ function DataRow({
 }) {
   return (
     <div className="flex items-center justify-between py-1">
-      <span className="text-sm text-gray-600">
+      <span className="text-sm text-brand-text-secondary">
         {label}
       </span>
       <span
         className="text-sm font-medium"
-        style={{ color: color ?? "#111827" }}
+        style={{ color: color ?? "#045A82" }}
       >
         {value}
       </span>
@@ -140,7 +140,7 @@ function LoadingSkeleton() {
       {[1, 2, 3].map((i) => (
         <div
           key={i}
-          className="h-24 animate-pulse rounded-lg bg-gray-100"
+          className="h-24 animate-pulse rounded-lg bg-brand-surface-muted"
         />
       ))}
     </div>
@@ -151,9 +151,9 @@ function NoDataMessage() {
   return (
     <div
       data-testid="forecast-no-data"
-      className="rounded-lg border border-gray-200 bg-gray-50 p-6 text-center"
+      className="rounded-lg border border-brand-border bg-brand-surface-muted p-6 text-center"
     >
-      <p className="text-sm text-gray-600">
+      <p className="text-sm text-brand-text-secondary">
         Environmental data is not available. Please ensure your home location is
         set in your profile to receive local forecasts.
       </p>
@@ -229,8 +229,8 @@ export function EnvironmentalForecast({
               color={upiColor(data.pollen.upi_weed)}
             />
             {data.pollen.species.length > 0 && (
-              <div className="mt-2 border-t border-gray-100 pt-2">
-                <p className="mb-1 text-xs font-medium text-gray-500">
+              <div className="mt-2 border-t border-brand-border-light pt-2">
+                <p className="mb-1 text-xs font-medium text-brand-text-muted">
                   Active Species
                 </p>
                 {data.pollen.species
@@ -285,13 +285,13 @@ export function EnvironmentalForecast({
                   />
                 )}
                 {data.aqi.station && (
-                  <p className="mt-2 text-xs text-gray-400">
+                  <p className="mt-2 text-xs text-brand-text-faint">
                     Station: {data.aqi.station}
                   </p>
                 )}
               </>
             ) : (
-              <p className="text-sm text-gray-500">
+              <p className="text-sm text-brand-text-muted">
                 AQI data unavailable for your location.
               </p>
             )}
@@ -325,7 +325,7 @@ export function EnvironmentalForecast({
                 )}
               </>
             ) : (
-              <p className="text-sm text-gray-500">
+              <p className="text-sm text-brand-text-muted">
                 Weather data unavailable for your location.
               </p>
             )}
@@ -334,7 +334,7 @@ export function EnvironmentalForecast({
           {/* Region info */}
           {data.region && (
             <p
-              className="text-center text-xs text-gray-400"
+              className="text-center text-xs text-brand-text-faint"
               data-testid="forecast-region"
             >
               Region: {data.region}

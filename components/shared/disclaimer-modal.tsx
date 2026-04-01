@@ -59,7 +59,7 @@ export function DisclaimerModal({
       aria-modal="true"
       aria-labelledby="fda-modal-title"
       data-testid="disclaimer-modal"
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/50"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-brand-primary-dark/50"
     >
       <div className="mx-4 max-w-md rounded-lg bg-white p-6 shadow-xl">
         {/* Warning icon */}
@@ -69,7 +69,7 @@ export function DisclaimerModal({
           </span>
           <h2
             id="fda-modal-title"
-            className="text-lg font-bold text-gray-900"
+            className="text-lg font-bold text-brand-primary-dark"
           >
             Important Health Disclaimer
           </h2>
@@ -81,7 +81,7 @@ export function DisclaimerModal({
         </p>
 
         {/* Full disclaimer text */}
-        <p className="mb-6 text-sm leading-relaxed text-gray-600">
+        <p className="mb-6 text-sm leading-relaxed text-brand-text-secondary">
           {FDA_DISCLAIMER_FULL_TEXT}
         </p>
 

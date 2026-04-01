@@ -141,21 +141,21 @@ export default async function DashboardPage() {
       >
         <div>
           <h1
-            className="text-2xl font-bold text-gray-900"
+            className="text-2xl font-bold text-brand-primary-dark"
             style={{
               fontSize: "1.5rem",
               fontWeight: 700,
-              color: "#111827",
+              color: "#045A82",
               margin: 0,
             }}
           >
             Welcome to Allergy Madness
           </h1>
           <p
-            className="text-sm text-gray-600"
+            className="text-sm text-brand-text-secondary"
             style={{
               fontSize: "0.875rem",
-              color: "#4b5563",
+              color: "#056DA5",
               margin: "0.25rem 0 0 0",
             }}
           >

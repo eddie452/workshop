@@ -40,7 +40,7 @@ export function BlurOverlay({
           &#x1F512;
         </span>
         {!showUpgradeCta && (
-          <p className="text-sm font-medium text-gray-600">
+          <p className="text-sm font-medium text-brand-text-secondary">
             Upgrade to Madness+ to reveal
           </p>
         )}

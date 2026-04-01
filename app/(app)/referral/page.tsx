@@ -37,21 +37,21 @@ export default async function ReferralPage() {
     >
       <div>
         <h1
-          className="text-2xl font-bold text-gray-900"
+          className="text-2xl font-bold text-brand-primary-dark"
           style={{
             fontSize: "1.5rem",
             fontWeight: 700,
-            color: "#111827",
+            color: "#045A82",
             margin: 0,
           }}
         >
           Invite Friends
         </h1>
         <p
-          className="mt-1 text-sm text-gray-500"
+          className="mt-1 text-sm text-brand-text-muted"
           style={{
             fontSize: "0.875rem",
-            color: "#6b7280",
+            color: "#0682BB",
             marginTop: "0.25rem",
           }}
         >

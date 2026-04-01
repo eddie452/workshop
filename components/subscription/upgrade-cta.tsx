@@ -21,12 +21,12 @@ export function UpgradeCta({
   return (
     <div
       data-testid="upgrade-cta"
-      className="mx-auto max-w-md rounded-xl border border-purple-200 bg-gradient-to-br from-purple-50 to-white p-6 text-center shadow-md"
+      className="mx-auto max-w-md rounded-xl border border-brand-border bg-gradient-to-br from-brand-premium-light to-white p-6 text-center shadow-md"
     >
-      <h3 className="mb-2 text-lg font-bold text-purple-900">
+      <h3 className="mb-2 text-lg font-bold text-brand-premium-dark">
         Unlock {feature}
       </h3>
-      <p className="mb-4 text-sm text-gray-600">
+      <p className="mb-4 text-sm text-brand-text-secondary">
         Get the full picture of your allergen triggers with Madness+.
       </p>
 
@@ -34,7 +34,7 @@ export function UpgradeCta({
       <button
         type="button"
         data-testid="upgrade-cta-subscribe"
-        className="mb-3 w-full cursor-pointer rounded-lg border-none bg-purple-600 px-4 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-purple-700"
+        className="mb-3 w-full cursor-pointer rounded-lg border-none bg-brand-premium px-4 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-brand-premium-dark"
         onClick={() => {
           // Placeholder — will connect to RevenueCat paywall
         }}
@@ -46,7 +46,7 @@ export function UpgradeCta({
       {referralsNeeded > 0 && (
         <p
           data-testid="upgrade-cta-referral"
-          className="text-xs text-gray-500"
+          className="text-xs text-brand-text-muted"
         >
           Or invite {referralsNeeded} friend{referralsNeeded !== 1 ? "s" : ""}{" "}
           to unlock for free

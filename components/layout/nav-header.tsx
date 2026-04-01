@@ -2,7 +2,8 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
+import { createClient } from "@/lib/supabase/client";
 
 /**
  * Navigation header for authenticated pages.
@@ -25,10 +26,18 @@ const NAV_LINKS: NavLink[] = [
 
 export function NavHeader() {
   const pathname = usePathname();
+  const router = useRouter();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   function isActive(href: string): boolean {
     return pathname === href || pathname.startsWith(`${href}/`);
+  }
+
+  async function handleSignOut() {
+    const supabase = createClient();
+    await supabase.auth.signOut();
+    router.push("/");
+    router.refresh();
   }
 
   return (
@@ -61,6 +70,14 @@ export function NavHeader() {
               {link.label}
             </Link>
           ))}
+          <button
+            type="button"
+            onClick={handleSignOut}
+            data-testid="sign-out-button"
+            className="ml-2 rounded-button px-3 py-2 text-sm font-medium text-white/80 transition-colors hover:bg-white/10 hover:text-white"
+          >
+            Sign Out
+          </button>
         </div>
 
         {/* Mobile hamburger button */}
@@ -122,6 +139,14 @@ export function NavHeader() {
               {link.label}
             </Link>
           ))}
+          <button
+            type="button"
+            onClick={handleSignOut}
+            data-testid="sign-out-button-mobile"
+            className="mt-1 block w-full rounded-button border-t border-white/20 px-3 py-2 text-left text-sm font-medium text-white/80 transition-colors hover:bg-white/10 hover:text-white"
+          >
+            Sign Out
+          </button>
         </div>
       )}
     </header>

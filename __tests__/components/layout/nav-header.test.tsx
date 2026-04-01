@@ -3,8 +3,19 @@ import { render, screen, fireEvent } from "@testing-library/react";
 
 // Mock next/navigation
 let mockPathname = "/dashboard";
+const mockPush = vi.fn();
+const mockRefresh = vi.fn();
 vi.mock("next/navigation", () => ({
   usePathname: () => mockPathname,
+  useRouter: () => ({ push: mockPush, refresh: mockRefresh }),
+}));
+
+// Mock Supabase client
+const mockSignOut = vi.fn().mockResolvedValue({ error: null });
+vi.mock("@/lib/supabase/client", () => ({
+  createClient: () => ({
+    auth: { signOut: mockSignOut },
+  }),
 }));
 
 // Mock next/link
@@ -72,5 +83,47 @@ describe("NavHeader", () => {
 
     // After opening, the button label should change
     expect(screen.getByLabelText("Close menu")).toBeDefined();
+  });
+
+  it("renders a sign-out button in desktop nav", () => {
+    mockPathname = "/dashboard";
+    render(<NavHeader />);
+
+    const signOutButton = screen.getByTestId("sign-out-button");
+    expect(signOutButton).toBeDefined();
+    expect(signOutButton.textContent).toBe("Sign Out");
+  });
+
+  it("renders a sign-out button in mobile menu", () => {
+    mockPathname = "/dashboard";
+    render(<NavHeader />);
+
+    // Open mobile menu
+    const menuButton = screen.getByLabelText("Open menu");
+    fireEvent.click(menuButton);
+
+    const mobileSignOut = screen.getByTestId("sign-out-button-mobile");
+    expect(mobileSignOut).toBeDefined();
+    expect(mobileSignOut.textContent).toBe("Sign Out");
+  });
+
+  it("calls signOut and redirects to / when sign-out is clicked", async () => {
+    mockPathname = "/dashboard";
+    mockSignOut.mockClear();
+    mockPush.mockClear();
+    mockRefresh.mockClear();
+
+    render(<NavHeader />);
+
+    const signOutButton = screen.getByTestId("sign-out-button");
+    fireEvent.click(signOutButton);
+
+    // Wait for async signOut
+    await vi.waitFor(() => {
+      expect(mockSignOut).toHaveBeenCalledOnce();
+    });
+
+    expect(mockPush).toHaveBeenCalledWith("/");
+    expect(mockRefresh).toHaveBeenCalled();
   });
 });

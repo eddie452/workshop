@@ -56,7 +56,7 @@ export function ChildProfileCard({ child, onDelete, onEdit }: ChildProfileCardPr
             <button
               type="button"
               data-testid="confirm-delete-btn"
-              className="rounded-md bg-red-600 px-3 py-1.5 text-xs font-medium text-white hover:bg-red-700"
+              className="rounded-md bg-[#055A8C] px-3 py-1.5 text-xs font-medium text-white hover:bg-[#044A72]"
               onClick={() => {
                 onDelete(child.id);
                 setConfirmDelete(false);
@@ -76,7 +76,7 @@ export function ChildProfileCard({ child, onDelete, onEdit }: ChildProfileCardPr
           <button
             type="button"
             data-testid="delete-child-btn"
-            className="rounded-md border border-red-200 bg-white px-3 py-1.5 text-xs font-medium text-red-600 hover:bg-red-50"
+            className="rounded-md border border-brand-border bg-white px-3 py-1.5 text-xs font-medium text-[#055A8C] hover:bg-[#E0F0F8]"
             onClick={() => setConfirmDelete(true)}
           >
             Remove

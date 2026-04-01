@@ -37,19 +37,19 @@ const SEVERITY_COLORS: Record<
   { bg: string; text: string; border: string }
 > = {
   mild_oas: {
-    bg: "#fef9c3",
-    text: "#854d0e",
-    border: "#fde68a",
+    bg: "#E0F5FB",
+    text: "#0682BB",
+    border: "#B8E4F0",
   },
   moderate: {
-    bg: "#ffedd5",
-    text: "#9a3412",
-    border: "#fed7aa",
+    bg: "#D6F0F8",
+    text: "#056DA5",
+    border: "#B8E4F0",
   },
   systemic_risk: {
-    bg: "#fee2e2",
-    text: "#991b1b",
-    border: "#fecaca",
+    bg: "#0682BB",
+    text: "#FFFFFF",
+    border: "#056DA5",
   },
   none: {
     bg: "#D6F0F8",
@@ -79,7 +79,7 @@ function FoodTag({ food }: { food: string }) {
   return (
     <span
       data-testid="pfas-food-tag"
-      className="inline-block rounded-md border border-green-200 bg-green-50 px-2 py-1 text-xs font-medium text-green-800"
+      className="inline-block rounded-md border border-brand-border bg-brand-primary-light px-2 py-1 text-xs font-medium text-brand-primary-dark"
     >
       {food}
     </span>

@@ -54,7 +54,7 @@ export function FdaDisclaimer({
         role="status"
         aria-label="FDA disclaimer"
         data-testid="fda-disclaimer"
-        className={`text-xs font-medium text-amber-700 ${className}`.trim()}
+        className={`text-xs font-medium text-brand-primary-dark ${className}`.trim()}
       >
         {FDA_DISCLAIMER_LABEL}
       </p>
@@ -66,12 +66,12 @@ export function FdaDisclaimer({
       role="status"
       aria-label="FDA disclaimer"
       data-testid="fda-disclaimer"
-      className={`rounded-md border border-amber-200 bg-amber-50 px-4 py-3 ${className}`.trim()}
+      className={`rounded-md border border-brand-border bg-brand-primary-light px-4 py-3 ${className}`.trim()}
     >
-      <p className="text-sm font-semibold text-amber-800">
+      <p className="text-sm font-semibold text-brand-primary-dark">
         {FDA_DISCLAIMER_LABEL}
       </p>
-      <p className="mt-1 text-xs text-amber-700">
+      <p className="mt-1 text-xs text-brand-text-secondary">
         {FDA_DISCLAIMER_FULL_TEXT}
       </p>
     </div>

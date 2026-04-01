@@ -33,17 +33,17 @@ export function NavHeader() {
 
   return (
     <header
-      className="border-b border-brand-border bg-white"
+      className="border-b border-brand-border bg-brand-primary"
       data-testid="nav-header"
     >
       <nav className="mx-auto flex max-w-5xl items-center justify-between px-4 py-3 sm:px-6">
         {/* Logo */}
         <Link
           href="/dashboard"
-          className="text-lg font-bold text-brand-primary-dark"
-          style={{ fontFamily: "var(--font-title)" }}
+          className="flex items-center"
         >
-          Champ
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src="/champ-logo-alt.svg" alt="Champ Allergy" className="h-8 w-auto" />
         </Link>
 
         {/* Desktop nav links */}
@@ -54,8 +54,8 @@ export function NavHeader() {
               href={link.href}
               className={`rounded-button px-3 py-2 text-sm font-medium transition-colors ${
                 isActive(link.href)
-                  ? "bg-brand-primary-light text-brand-primary"
-                  : "text-brand-text-secondary hover:bg-brand-surface-muted hover:text-brand-text"
+                  ? "bg-white/20 text-white"
+                  : "text-white/80 hover:bg-white/10 hover:text-white"
               }`}
             >
               {link.label}
@@ -66,7 +66,7 @@ export function NavHeader() {
         {/* Mobile hamburger button */}
         <button
           type="button"
-          className="inline-flex items-center justify-center rounded-button p-2 text-brand-text-secondary transition-colors hover:bg-brand-surface-muted hover:text-brand-text sm:hidden"
+          className="inline-flex items-center justify-center rounded-button p-2 text-white/80 transition-colors hover:bg-white/10 hover:text-white sm:hidden"
           onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
           aria-expanded={mobileMenuOpen}
           aria-label={mobileMenuOpen ? "Close menu" : "Open menu"}
@@ -107,7 +107,7 @@ export function NavHeader() {
 
       {/* Mobile menu */}
       {mobileMenuOpen && (
-        <div className="border-t border-brand-border px-4 pb-3 pt-2 sm:hidden">
+        <div className="border-t border-white/20 bg-brand-primary px-4 pb-3 pt-2 sm:hidden">
           {NAV_LINKS.map((link) => (
             <Link
               key={link.href}
@@ -115,8 +115,8 @@ export function NavHeader() {
               onClick={() => setMobileMenuOpen(false)}
               className={`block rounded-button px-3 py-2 text-sm font-medium transition-colors ${
                 isActive(link.href)
-                  ? "bg-brand-primary-light text-brand-primary"
-                  : "text-brand-text-secondary hover:bg-brand-surface-muted hover:text-brand-text"
+                  ? "bg-white/20 text-white"
+                  : "text-white/80 hover:bg-white/10 hover:text-white"
               }`}
             >
               {link.label}

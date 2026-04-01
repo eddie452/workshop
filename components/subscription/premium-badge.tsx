@@ -24,7 +24,7 @@ export function PremiumBadge({
     return (
       <span
         data-testid="premium-badge"
-        className="inline-flex items-center gap-1 rounded-full bg-purple-100 px-2 py-0.5 text-xs font-medium text-purple-700"
+        className="inline-flex items-center gap-1 rounded-full bg-brand-primary-light px-2 py-0.5 text-xs font-medium text-brand-primary-dark"
       >
         {!compact && <span aria-hidden="true">&#x2B50;</span>}
         Madness+

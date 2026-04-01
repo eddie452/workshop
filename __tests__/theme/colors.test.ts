@@ -88,12 +88,12 @@ describe("BRAND_COLORS", () => {
 describe("PDF_COLORS", () => {
   it("exports all required PDF color tuples", () => {
     expect(PDF_COLORS.primary).toBeDefined();
-    expect(PDF_COLORS.gold).toBeDefined();
+    expect(PDF_COLORS.champion).toBeDefined();
     expect(PDF_COLORS.text).toBeDefined();
     expect(PDF_COLORS.textMuted).toBeDefined();
     expect(PDF_COLORS.border).toBeDefined();
-    expect(PDF_COLORS.amberBg).toBeDefined();
-    expect(PDF_COLORS.amberText).toBeDefined();
+    expect(PDF_COLORS.warningBg).toBeDefined();
+    expect(PDF_COLORS.warningText).toBeDefined();
   });
 
   it("all tuples are [R, G, B] with values 0-255", () => {

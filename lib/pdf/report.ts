@@ -33,13 +33,13 @@ const CONTENT_WIDTH = PAGE_WIDTH - MARGIN_LEFT - MARGIN_RIGHT;
 const FOOTER_Y = PAGE_HEIGHT - 25;
 
 const COLOR_PRIMARY = PDF_COLORS.primary;
-const COLOR_GOLD = PDF_COLORS.gold;
+const COLOR_CHAMPION = PDF_COLORS.champion;
 const COLOR_TEXT = PDF_COLORS.textSecondary;
 const COLOR_MUTED = PDF_COLORS.textMuted;
 const COLOR_BORDER = PDF_COLORS.border;
 const COLOR_BG_LIGHT = PDF_COLORS.bgLight;
-const COLOR_AMBER_BG = PDF_COLORS.amberBg;
-const COLOR_AMBER_TEXT = PDF_COLORS.amberText;
+const COLOR_WARNING_BG = PDF_COLORS.warningBg;
+const COLOR_WARNING_TEXT = PDF_COLORS.warningText;
 
 const TIER_LABELS: Record<string, string> = {
   very_high: "Very High",
@@ -102,7 +102,7 @@ function addFdaFooter(doc: jsPDF): void {
   // FDA disclaimer label
   doc.setFontSize(7);
   doc.setFont("helvetica", "bold");
-  doc.setTextColor(...COLOR_AMBER_TEXT);
+  doc.setTextColor(...COLOR_WARNING_TEXT);
   doc.text(sanitizeForPdf(FDA_DISCLAIMER_LABEL), MARGIN_LEFT, FOOTER_Y + 5);
 
   // FDA full text (wrapped)
@@ -184,11 +184,11 @@ export function generateReportPdf(input: PdfReportInput): Uint8Array {
 
   // ---- FDA Disclaimer Banner (inline, prominent) ----
   y += 10;
-  doc.setFillColor(...COLOR_AMBER_BG);
+  doc.setFillColor(...COLOR_WARNING_BG);
   doc.roundedRect(MARGIN_LEFT, y - 4, CONTENT_WIDTH, 14, 2, 2, "F");
   doc.setFontSize(10);
   doc.setFont("helvetica", "bold");
-  doc.setTextColor(...COLOR_AMBER_TEXT);
+  doc.setTextColor(...COLOR_WARNING_TEXT);
   doc.text(sanitizeForPdf(FDA_DISCLAIMER_LABEL), MARGIN_LEFT + 4, y + 1);
   doc.setFontSize(7);
   doc.setFont("helvetica", "normal");
@@ -208,13 +208,13 @@ export function generateReportPdf(input: PdfReportInput): Uint8Array {
 
     doc.setFontSize(14);
     doc.setFont("helvetica", "bold");
-    doc.setTextColor(...COLOR_GOLD);
+    doc.setTextColor(...COLOR_CHAMPION);
     doc.text("Trigger Champion", MARGIN_LEFT, y);
 
     y += 7;
     doc.setFillColor(255, 251, 235);
     doc.roundedRect(MARGIN_LEFT, y - 4, CONTENT_WIDTH, 16, 2, 2, "F");
-    doc.setDrawColor(...COLOR_GOLD);
+    doc.setDrawColor(...COLOR_CHAMPION);
     doc.setLineWidth(0.5);
     doc.roundedRect(MARGIN_LEFT, y - 4, CONTENT_WIDTH, 16, 2, 2, "S");
 

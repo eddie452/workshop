@@ -189,7 +189,7 @@ export function Leaderboard({
                     >
                       &#x1F512;
                     </span>
-                    <span className="text-xs font-medium text-purple-600">
+                    <span className="text-xs font-medium text-brand-primary">
                       Upgrade
                     </span>
                   </div>

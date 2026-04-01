@@ -50,11 +50,11 @@ function upiLabel(value: number | null): string {
 /** Map UPI (0-5) to a color */
 function upiColor(value: number | null): string {
   if (value === null) return "#0682BB";
-  if (value <= 1) return "#16a34a";
-  if (value <= 2) return "#65a30d";
-  if (value <= 3) return "#ca8a04";
-  if (value <= 4) return "#ea580c";
-  return "#dc2626";
+  if (value <= 1) return "#00B6E2";
+  if (value <= 2) return "#0898C8";
+  if (value <= 3) return "#0682BB";
+  if (value <= 4) return "#056DA5";
+  return "#055A8C";
 }
 
 /** Map AQI to a human-readable label */
@@ -71,11 +71,11 @@ function aqiLabel(value: number | null): string {
 /** Map AQI to a color */
 function aqiColor(value: number | null): string {
   if (value === null) return "#0682BB";
-  if (value <= 50) return "#16a34a";
-  if (value <= 100) return "#ca8a04";
-  if (value <= 150) return "#ea580c";
-  if (value <= 200) return "#dc2626";
-  return "#7c2d12";
+  if (value <= 50) return "#00B6E2";
+  if (value <= 100) return "#0682BB";
+  if (value <= 150) return "#056DA5";
+  if (value <= 200) return "#055A8C";
+  return "#044A72";
 }
 
 /** Wind direction degrees to compass label */
@@ -183,16 +183,16 @@ export function EnvironmentalForecast({
       className="space-y-4"
     >
       {/* Good news banner */}
-      <div className="rounded-xl border border-green-200 bg-green-50 p-5">
+      <div className="rounded-xl border border-brand-border bg-brand-primary-light p-5">
         <div className="flex items-center gap-3">
           <span className="text-2xl" aria-hidden="true">
             &#x2600;
           </span>
           <div>
-            <h2 className="text-base font-bold text-green-800">
+            <h2 className="text-base font-bold text-brand-primary-dark">
               No Symptoms Today
             </h2>
-            <p className="mt-1 text-sm text-green-700">
+            <p className="mt-1 text-sm text-brand-text-secondary">
               Great news! Here is what is currently in the air around you.
             </p>
           </div>

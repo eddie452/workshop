@@ -76,7 +76,7 @@ export function DisclaimerModal({
         </div>
 
         {/* Disclaimer label */}
-        <p className="mb-3 text-base font-semibold text-amber-800">
+        <p className="mb-3 text-base font-semibold text-brand-primary-dark">
           {FDA_DISCLAIMER_LABEL}
         </p>
 
@@ -89,7 +89,7 @@ export function DisclaimerModal({
         {error && (
           <p
             data-testid="disclaimer-error"
-            className="mb-3 text-sm text-red-600"
+            className="mb-3 text-sm text-[#055A8C]"
           >
             {error}
           </p>
@@ -100,7 +100,7 @@ export function DisclaimerModal({
           onClick={handleAcknowledge}
           disabled={loading}
           data-testid="acknowledge-button"
-          className="w-full rounded-md bg-amber-600 px-4 py-3 text-sm font-semibold text-white hover:bg-amber-700 disabled:opacity-50 disabled:cursor-not-allowed"
+          className="w-full rounded-md bg-brand-primary px-4 py-3 text-sm font-semibold text-white hover:bg-brand-primary-dark disabled:opacity-50 disabled:cursor-not-allowed"
         >
           {loading ? "Saving..." : "I Understand"}
         </button>

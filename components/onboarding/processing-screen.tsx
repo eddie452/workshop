@@ -96,11 +96,11 @@ export function ProcessingScreen({ formData }: ProcessingScreenProps) {
   if (error) {
     return (
       <div className="space-y-4 text-center">
-        <div className="rounded-md border border-red-200 bg-red-50 p-4">
-          <p className="text-sm font-medium text-red-800">
+        <div className="rounded-md border border-[#B8E4F0] bg-[#E0F0F8] p-4">
+          <p className="text-sm font-medium text-[#055A8C]">
             Something went wrong
           </p>
-          <p className="mt-1 text-sm text-red-600">
+          <p className="mt-1 text-sm text-[#056DA5]">
             {error}
           </p>
         </div>

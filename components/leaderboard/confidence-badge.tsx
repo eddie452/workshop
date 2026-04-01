@@ -21,15 +21,15 @@ const TIER_CONFIG: Record<
   },
   medium: {
     label: "Medium",
-    tailwind: "bg-yellow-100 text-yellow-800",
+    tailwind: "bg-[#D6F0F8] text-[#0682BB]",
   },
   high: {
     label: "High",
-    tailwind: "bg-orange-100 text-orange-800",
+    tailwind: "bg-[#0682BB] text-white",
   },
   very_high: {
     label: "Very High",
-    tailwind: "bg-red-100 text-red-800",
+    tailwind: "bg-[#055A8C] text-white",
   },
 };
 

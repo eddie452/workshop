@@ -28,12 +28,12 @@ export function ReferralProgress({
     return (
       <div
         data-testid="referral-progress"
-        className={`rounded-lg border border-green-200 bg-green-50 p-4 ${className}`.trim()}
+        className={`rounded-lg border border-brand-border bg-brand-primary-light p-4 ${className}`.trim()}
       >
-        <p className="text-sm font-semibold text-green-800">
+        <p className="text-sm font-semibold text-brand-primary-dark">
           All features unlocked!
         </p>
-        <p className="mt-1 text-xs text-green-600">
+        <p className="mt-1 text-xs text-brand-text-secondary">
           Thank you for sharing Allergy Madness with {referralCount} friend
           {referralCount !== 1 ? "s" : ""}. Your premium features are permanently active.
         </p>

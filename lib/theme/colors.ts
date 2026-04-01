@@ -26,15 +26,15 @@ export const BRAND_COLORS = {
   accentLight: "#F5F8D9",
   accentDark: "#B0C020",
 
-  /** FDA disclaimer amber — warnings, regulatory notices */
-  warning: "#d97706",
-  warningLight: "#fffbeb",
-  warningDark: "#92400e",
+  /** Dusty Denim — warnings, regulatory notices */
+  warning: "#0682BB",
+  warningLight: "#E0F0F8",
+  warningDark: "#055A8C",
 
-  /** Alert red — errors, destructive actions */
-  error: "#dc2626",
-  errorLight: "#fef2f2",
-  errorDark: "#991b1b",
+  /** Dark Dusty Denim — errors, destructive actions */
+  error: "#055A8C",
+  errorLight: "#E0F0F8",
+  errorDark: "#044A72",
 
   /**
    * Dusty Denim deep — premium features, upgrade prompts.
@@ -59,11 +59,11 @@ export const BRAND_COLORS = {
   textMuted: "#0678B1",
   textFaint: "#0776A8",
 
-  /** Champion gold — trigger champion card */
-  gold: "#eab308",
-  goldLight: "#fffbeb",
-  goldDark: "#b45309",
-  goldBorder: "#fbbf24",
+  /** Dusty Denim champion — trigger champion card */
+  champion: "#0682BB",
+  championLight: "#E0F0F8",
+  championDark: "#055A8C",
+  championBorder: "#0898C8",
 } as const;
 
 /* ------------------------------------------------------------------ */
@@ -72,14 +72,14 @@ export const BRAND_COLORS = {
 
 export const PDF_COLORS = {
   primary: [0, 182, 226] as const,       // Champ Blue #00B6E2
-  gold: [234, 179, 8] as const,
+  champion: [6, 130, 187] as const,      // Dusty Denim #0682BB
   text: [4, 90, 130] as const,             // #045A82
   textSecondary: [5, 109, 165] as const,  // #056DA5
   textMuted: [6, 120, 177] as const,      // Dusty Denim #0678B1
   border: [184, 228, 240] as const,       // #B8E4F0
   bgLight: [240, 249, 252] as const,      // #F0F9FC
-  amberBg: [255, 251, 235] as const,
-  amberText: [146, 64, 14] as const,
+  warningBg: [224, 240, 248] as const,    // #E0F0F8
+  warningText: [5, 90, 140] as const,     // #055A8C
   white: [255, 255, 255] as const,
 } as const;
 

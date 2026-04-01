@@ -129,7 +129,7 @@ export function ScanForm() {
           type="button"
           onClick={handleCapture}
           disabled={isScanning}
-          className="w-full cursor-pointer rounded-lg border-none bg-green-600 px-4 py-3 text-sm font-semibold text-white hover:bg-green-700 disabled:opacity-50"
+          className="w-full cursor-pointer rounded-lg border-none bg-brand-accent px-4 py-3 text-sm font-semibold text-brand-primary-dark hover:bg-brand-accent-dark disabled:opacity-50"
           data-testid="scout-capture-btn"
         >
           {isScanning ? "Scanning..." : "Take Photo or Upload"}
@@ -149,10 +149,10 @@ export function ScanForm() {
       {/* Error message */}
       {error && (
         <div
-          className="mt-3 rounded-md border border-red-200 bg-red-50 px-4 py-3"
+          className="mt-3 rounded-md border border-[#B8E4F0] bg-[#E0F0F8] px-4 py-3"
           data-testid="scout-error"
         >
-          <p className="text-sm text-red-700">
+          <p className="text-sm text-[#055A8C]">
             {error}
           </p>
         </div>
@@ -180,7 +180,7 @@ export function ScanForm() {
                   {results.matches.length === 1 ? "" : "s"} identified
                 </p>
                 {results.active_count > 0 && (
-                  <p className="text-xs text-green-700">
+                  <p className="text-xs text-brand-primary">
                     {results.active_count} active — {results.proximity_multiplier}x
                     proximity multiplier applied
                   </p>
@@ -222,8 +222,8 @@ function MatchCard({ match }: { match: ScanMatchResult }) {
     <div
       className={`rounded-md border px-4 py-3 ${
         isActive
-          ? "border-green-200 bg-green-50"
-          : "border-amber-200 bg-amber-50"
+          ? "border-brand-border bg-brand-primary-light"
+          : "border-brand-border-light bg-brand-surface-muted"
       }`}
       data-testid={`scout-match-${match.allergen_id}`}
     >
@@ -240,8 +240,8 @@ function MatchCard({ match }: { match: ScanMatchResult }) {
         <span
           className={`rounded-full px-2 py-1 text-xs font-medium ${
             isActive
-              ? "bg-green-100 text-green-700"
-              : "bg-amber-100 text-amber-700"
+              ? "bg-[#D6F0F8] text-[#0682BB]"
+              : "bg-brand-surface-muted text-brand-text-muted"
           }`}
           data-testid={`scout-badge-${match.allergen_id}`}
         >

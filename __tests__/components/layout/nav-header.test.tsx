@@ -27,12 +27,12 @@ vi.mock("next/link", () => ({
 import { NavHeader } from "@/components/layout/nav-header";
 
 describe("NavHeader", () => {
-  it("renders the Champ brand name as a link to dashboard", () => {
+  it("renders the Champ logo as a link to dashboard", () => {
     render(<NavHeader />);
 
-    const logoLink = screen.getByText("Champ");
-    expect(logoLink).toBeDefined();
-    expect(logoLink.closest("a")?.getAttribute("href")).toBe("/dashboard");
+    const logoImg = screen.getByAltText("Champ Allergy");
+    expect(logoImg).toBeDefined();
+    expect(logoImg.closest("a")?.getAttribute("href")).toBe("/dashboard");
   });
 
   it("renders all navigation links", () => {
@@ -54,7 +54,7 @@ describe("NavHeader", () => {
     // The checkin links (desktop + mobile) should have the active style
     const checkinLinks = screen.getAllByText("Check-in");
     for (const link of checkinLinks) {
-      expect(link.className).toContain("text-brand-primary");
+      expect(link.className).toContain("text-white");
     }
   });
 

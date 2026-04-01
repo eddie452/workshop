@@ -21,9 +21,9 @@ export function UpgradeCta({
   return (
     <div
       data-testid="upgrade-cta"
-      className="mx-auto max-w-md rounded-xl border border-purple-200 bg-gradient-to-br from-purple-50 to-white p-6 text-center shadow-md"
+      className="mx-auto max-w-md rounded-xl border border-brand-border bg-gradient-to-br from-brand-premium-light to-white p-6 text-center shadow-md"
     >
-      <h3 className="mb-2 text-lg font-bold text-purple-900">
+      <h3 className="mb-2 text-lg font-bold text-brand-premium-dark">
         Unlock {feature}
       </h3>
       <p className="mb-4 text-sm text-brand-text-secondary">
@@ -34,7 +34,7 @@ export function UpgradeCta({
       <button
         type="button"
         data-testid="upgrade-cta-subscribe"
-        className="mb-3 w-full cursor-pointer rounded-lg border-none bg-purple-600 px-4 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-purple-700"
+        className="mb-3 w-full cursor-pointer rounded-lg border-none bg-brand-premium px-4 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-brand-premium-dark"
         onClick={() => {
           // Placeholder — will connect to RevenueCat paywall
         }}

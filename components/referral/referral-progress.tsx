@@ -64,7 +64,7 @@ export function ReferralProgress({
         aria-label={`${progress} of ${REFERRAL_UNLOCK_THRESHOLD} referrals`}
       >
         <div
-          className="h-full rounded-full bg-indigo-500 transition-all duration-300"
+          className="h-full rounded-full bg-brand-primary-dark transition-all duration-300"
           style={{ width: `${progressPercent}%` }}
         />
       </div>
@@ -76,7 +76,7 @@ export function ReferralProgress({
             key={i}
             className={`flex h-6 w-6 items-center justify-center rounded-full text-xs font-medium ${
               i < progress
-                ? "bg-indigo-500 text-white"
+                ? "bg-brand-primary-dark text-white"
                 : "bg-brand-surface-muted text-brand-text-faint"
             }`}
           >

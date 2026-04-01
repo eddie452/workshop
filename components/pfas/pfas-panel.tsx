@@ -53,7 +53,7 @@ const SEVERITY_COLORS: Record<
   },
   none: {
     bg: "#D6F0F8",
-    text: "#374151",
+    text: "#056DA5",
     border: "#B8E4F0",
   },
 };

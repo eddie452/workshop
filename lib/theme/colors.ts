@@ -36,8 +36,12 @@ export const BRAND_COLORS = {
   errorLight: "#fef2f2",
   errorDark: "#991b1b",
 
-  /** Dusty Denim (Pantone 640 C) — premium features, upgrade prompts */
-  premium: "#0682BB",
+  /**
+   * Dusty Denim deep — premium features, upgrade prompts.
+   * Intentionally close to primaryDark (#0682BB → Dusty Denim family);
+   * per the brand guide, Dusty Denim IS the premium color palette.
+   */
+  premium: "#055A8C",
   premiumLight: "#E0F0F8",
   premiumDark: "#045A82",
 
@@ -52,8 +56,8 @@ export const BRAND_COLORS = {
   /** Text hierarchy — NO BLACK, Dusty Denim based (WCAG AA compliant) */
   text: "#045A82",
   textSecondary: "#056DA5",
-  textMuted: "#0682BB",
-  textFaint: "#0898C8",
+  textMuted: "#0678B1",
+  textFaint: "#0776A8",
 
   /** Champion gold — trigger champion card */
   gold: "#eab308",
@@ -71,7 +75,7 @@ export const PDF_COLORS = {
   gold: [234, 179, 8] as const,
   text: [4, 90, 130] as const,             // #045A82
   textSecondary: [5, 109, 165] as const,  // #056DA5
-  textMuted: [6, 130, 187] as const,      // Dusty Denim #0682BB
+  textMuted: [6, 120, 177] as const,      // Dusty Denim #0678B1
   border: [184, 228, 240] as const,       // #B8E4F0
   bgLight: [240, 249, 252] as const,      // #F0F9FC
   amberBg: [255, 251, 235] as const,

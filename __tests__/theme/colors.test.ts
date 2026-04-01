@@ -120,9 +120,16 @@ describe("WCAG 2.1 AA Contrast Requirements", () => {
     expect(ratio).toBeGreaterThanOrEqual(4.5);
   });
 
-  it("muted text on white meets 3:1 contrast (large text threshold)", () => {
+  it("muted text on white meets 4.5:1 contrast (normal text AA)", () => {
+    // textMuted is used at text-xs / text-sm sizes, so it must meet
+    // WCAG AA 4.5:1 for normal text, not just the 3:1 large-text threshold.
     const ratio = contrastRatio(BRAND_COLORS.textMuted, BRAND_COLORS.surface);
-    expect(ratio).toBeGreaterThanOrEqual(3);
+    expect(ratio).toBeGreaterThanOrEqual(4.5);
+  });
+
+  it("faint text on white meets 4.5:1 contrast (normal text AA)", () => {
+    const ratio = contrastRatio(BRAND_COLORS.textFaint, BRAND_COLORS.surface);
+    expect(ratio).toBeGreaterThanOrEqual(4.5);
   });
 
   it("warning dark text on warning light bg meets 4.5:1 contrast", () => {
@@ -135,12 +142,15 @@ describe("WCAG 2.1 AA Contrast Requirements", () => {
     expect(ratio).toBeGreaterThanOrEqual(4.5);
   });
 
-  it("white text on primary bg has sufficient contrast for decorative/hero use", () => {
-    // Champ Blue (#00B6E2) is a vibrant brand color used in hero sections
-    // with large bold text (18pt+). Per WCAG, incidental/decorative use and
-    // large text have relaxed requirements. Buttons use primaryDark instead.
+  it("white text on primary bg — informational only, NOT for interactive text", () => {
+    // Champ Blue (#00B6E2) with white text is 2.39:1, which does NOT meet
+    // WCAG AA for any text use. This color should only appear as a
+    // decorative background (e.g., illustrations, dividers). All interactive
+    // or readable white-on-blue elements MUST use primaryDark (#0682BB)
+    // which meets 3:1+ for large text. This test documents the known
+    // limitation — it is not a pass for accessibility.
     const ratio = contrastRatio("#ffffff", BRAND_COLORS.primary);
-    expect(ratio).toBeGreaterThanOrEqual(2);
+    expect(ratio).toBeGreaterThanOrEqual(2.3);
   });
 
   it("white text on primaryDark bg meets 3:1 contrast (large text — buttons, headings)", () => {

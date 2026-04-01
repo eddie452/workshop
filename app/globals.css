@@ -37,7 +37,7 @@
   --color-brand-error-dark: #991b1b;
 
   /* Premium — Dusty Denim (Pantone 640 C) */
-  --color-brand-premium: #0682BB;
+  --color-brand-premium: #055A8C;
   --color-brand-premium-light: #E0F0F8;
   --color-brand-premium-dark: #045A82;
 
@@ -50,8 +50,8 @@
   /* Text — NO BLACK, Dusty Denim hierarchy (WCAG AA compliant) */
   --color-brand-text: #045A82;
   --color-brand-text-secondary: #056DA5;
-  --color-brand-text-muted: #0682BB;
-  --color-brand-text-faint: #0898C8;
+  --color-brand-text-muted: #0678B1;
+  --color-brand-text-faint: #0776A8;
 
   /* ------------------------------------------------------------------ */
   /* Typography                                                          */
@@ -102,10 +102,10 @@
   --champ-error-rgb: 220, 38, 38;
 
   /* Premium — Dusty Denim */
-  --champ-premium: #0682BB;
+  --champ-premium: #055A8C;
   --champ-premium-light: #E0F0F8;
   --champ-premium-dark: #045A82;
-  --champ-premium-rgb: 6, 130, 187;
+  --champ-premium-rgb: 5, 90, 140;
 
   /* Surface — NO GRAY */
   --champ-surface: #ffffff;
@@ -116,8 +116,8 @@
   /* Text — NO BLACK, Dusty Denim hierarchy (WCAG AA compliant) */
   --champ-text: #045A82;
   --champ-text-secondary: #056DA5;
-  --champ-text-muted: #0682BB;
-  --champ-text-faint: #0898C8;
+  --champ-text-muted: #0678B1;
+  --champ-text-faint: #0776A8;
 }
 
 /* ------------------------------------------------------------------ */

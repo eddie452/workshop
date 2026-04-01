@@ -64,7 +64,7 @@ export function StepAddress({ formData, onUpdate, onNext }: StepProps) {
           />
           {error && (
             <p
-              className="mt-1 text-sm text-red-600"
+              className="mt-1 text-sm text-[#055A8C]"
               role="alert"
             >
               {error}

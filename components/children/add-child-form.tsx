@@ -42,7 +42,7 @@ export function AddChildForm({ onSubmit, onCancel, isLoading, error }: AddChildF
       {error && (
         <p
           data-testid="add-child-error"
-          className="mb-3 rounded-md bg-red-50 p-2 text-xs text-red-600"
+          className="mb-3 rounded-md bg-[#E0F0F8] p-2 text-xs text-[#055A8C]"
         >
           {error}
         </p>

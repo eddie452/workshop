@@ -85,7 +85,7 @@ describe("HomePage", () => {
       const Page = await HomePage();
       render(Page);
 
-      expect(screen.getByText("Champ")).toBeDefined();
+      expect(screen.getByAltText("Champ Allergy")).toBeDefined();
     });
 
     it('has a "Get Started Free" CTA linking to signup', async () => {

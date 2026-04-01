@@ -101,13 +101,13 @@ export function CheckinForm({ onSuccess, alreadyCheckedIn = false }: CheckinForm
   if (alreadyCheckedIn || submitted) {
     return (
       <div
-        className="rounded-lg border border-green-200 bg-green-50 p-6 text-center"
+        className="rounded-lg border border-brand-border bg-brand-primary-light p-6 text-center"
         data-testid="checkin-complete"
       >
-        <p className="text-lg font-semibold text-green-800">
+        <p className="text-lg font-semibold text-brand-primary-dark">
           {submitted ? "Check-in submitted!" : "Already checked in today"}
         </p>
-        <p className="mt-2 text-sm text-green-600">
+        <p className="mt-2 text-sm text-brand-text-secondary">
           {submitted
             ? "Your leaderboard is being updated."
             : "Come back tomorrow for your next check-in."}
@@ -126,7 +126,7 @@ export function CheckinForm({ onSuccess, alreadyCheckedIn = false }: CheckinForm
       {error && (
         <div
           role="alert"
-          className="rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700"
+          className="rounded-lg border border-[#B8E4F0] bg-[#E0F0F8] px-4 py-3 text-sm text-[#055A8C]"
           data-testid="checkin-error"
         >
           {error}

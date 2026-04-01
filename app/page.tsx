@@ -38,21 +38,16 @@ export default async function HomePage() {
   return (
     <div className="min-h-screen bg-brand-surface">
       {/* Navigation */}
-      <header className="border-b border-brand-border bg-white">
+      <header className="border-b border-white/20 bg-brand-primary-dark">
         <nav className="mx-auto flex max-w-5xl items-center justify-between px-4 py-4 sm:px-6">
           <div className="flex items-center gap-2">
-            <span
-              className="text-xl font-bold text-brand-primary-dark"
-              style={{ fontFamily: "var(--font-title)" }}
-              aria-label="Champ Allergy logo"
-            >
-              Champ
-            </span>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src="/champ-logo-alt.png" alt="Champ Allergy" className="h-8 w-auto" />
           </div>
           <div className="flex items-center gap-3">
             <Link
               href="/login"
-              className="rounded-button px-4 py-2 text-sm font-medium text-brand-text-secondary transition-colors hover:text-brand-primary"
+              className="rounded-button px-4 py-2 text-sm font-medium text-white/80 transition-colors hover:text-white"
             >
               Sign In
             </Link>
@@ -106,15 +101,15 @@ export default async function HomePage() {
       </section>
 
       {/* How It Works */}
-      <section className="bg-white px-4 py-16 sm:px-6">
+      <section className="bg-brand-primary-dark px-4 py-16 sm:px-6">
         <div className="mx-auto max-w-5xl">
           <h2
-            className="text-center text-2xl font-bold text-brand-primary-dark sm:text-3xl"
+            className="text-center text-2xl font-bold text-white sm:text-3xl"
             style={{ fontFamily: "var(--font-title)" }}
           >
             How It Works
           </h2>
-          <p className="mx-auto mt-2 max-w-lg text-center text-brand-text-secondary">
+          <p className="mx-auto mt-2 max-w-lg text-center text-white/80">
             Three simple steps to understanding your allergy triggers.
           </p>
           <div className="mt-12 grid gap-8 sm:grid-cols-3">
@@ -138,7 +133,7 @@ export default async function HomePage() {
       </section>
 
       {/* Features */}
-      <section className="bg-brand-surface-muted px-4 py-16 sm:px-6">
+      <section className="bg-brand-primary-light px-4 py-16 sm:px-6">
         <div className="mx-auto max-w-5xl">
           <h2
             className="text-center text-2xl font-bold text-brand-primary-dark sm:text-3xl"
@@ -201,11 +196,11 @@ export default async function HomePage() {
       <footer className="border-t border-brand-border bg-white px-4 py-8 sm:px-6">
         <div className="mx-auto max-w-5xl">
           {/* FDA Disclaimer */}
-          <div className="rounded-card border border-amber-200 bg-amber-50 px-4 py-3">
-            <p className="text-sm font-semibold text-amber-800">
+          <div className="rounded-card border border-brand-border bg-brand-primary-light px-4 py-3">
+            <p className="text-sm font-semibold text-brand-primary-dark">
               {FDA_DISCLAIMER_LABEL}
             </p>
-            <p className="mt-1 text-xs text-amber-700">
+            <p className="mt-1 text-xs text-brand-text-secondary">
               {FDA_DISCLAIMER_FULL_TEXT}
             </p>
           </div>
@@ -239,11 +234,11 @@ function StepCard({
 }) {
   return (
     <div className="flex flex-col items-center text-center">
-      <div className="flex h-10 w-10 items-center justify-center rounded-full bg-brand-primary text-sm font-bold text-white">
+      <div className="flex h-10 w-10 items-center justify-center rounded-full bg-white text-sm font-bold text-brand-primary">
         {step}
       </div>
-      <h3 className="mt-4 text-lg font-semibold text-brand-primary-dark">{title}</h3>
-      <p className="mt-2 text-sm text-brand-text-secondary">{description}</p>
+      <h3 className="mt-4 text-lg font-semibold text-white">{title}</h3>
+      <p className="mt-2 text-sm text-white/80">{description}</p>
     </div>
   );
 }

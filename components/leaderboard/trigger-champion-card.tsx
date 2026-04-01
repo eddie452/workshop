@@ -13,14 +13,14 @@ export function TriggerChampionCard({ allergen }: TriggerChampionCardProps) {
   return (
     <div
       data-testid="trigger-champion-card"
-      className="rounded-xl border-2 border-amber-400 bg-gradient-to-br from-amber-50 to-orange-50 p-6 shadow-lg"
+      className="rounded-xl border-2 border-brand-primary bg-gradient-to-br from-[#E0F5FB] to-[#D6F0F8] p-6 shadow-lg"
     >
       {/* Crown / header */}
       <div className="mb-3 flex items-center gap-2">
         <span className="text-2xl" aria-hidden="true">
           &#x1F451;
         </span>
-        <h2 className="text-sm font-bold uppercase tracking-wider text-amber-700">
+        <h2 className="text-sm font-bold uppercase tracking-wider text-brand-primary-dark">
           Trigger Champion
         </h2>
       </div>

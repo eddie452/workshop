@@ -95,8 +95,8 @@ export function ReferralShare({
           data-testid="referral-copy-btn"
           className={`flex-1 cursor-pointer rounded-md border-none px-4 py-2 text-sm font-medium text-white transition-colors ${
             copied
-              ? "bg-green-500"
-              : "bg-indigo-500 hover:bg-indigo-600"
+              ? "bg-brand-accent"
+              : "bg-brand-primary hover:bg-brand-primary-dark"
           }`}
         >
           {copied ? "Copied!" : "Copy Link"}
@@ -107,7 +107,7 @@ export function ReferralShare({
             type="button"
             onClick={handleShare}
             data-testid="referral-share-btn"
-            className="flex-1 cursor-pointer rounded-md border border-indigo-500 bg-white px-4 py-2 text-sm font-medium text-indigo-600 transition-colors hover:bg-indigo-50"
+            className="flex-1 cursor-pointer rounded-md border border-brand-primary bg-white px-4 py-2 text-sm font-medium text-brand-primary transition-colors hover:bg-brand-primary-light"
           >
             Share
           </button>

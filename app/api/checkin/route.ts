@@ -472,7 +472,7 @@ export async function POST(
         const currentPositive = existingRow?.positive_signals ?? 0;
         const currentNegative = existingRow?.negative_signals ?? 0;
 
-        await (supabase.from("user_allergen_elo") as unknown as EloUpdateQuery)
+        const { error: eloUpdateError } = await (supabase.from("user_allergen_elo") as unknown as EloUpdateQuery)
           .update({
             elo_score: update.new_elo,
             positive_signals:
@@ -484,6 +484,10 @@ export async function POST(
           .eq("user_id", user.id)
           .eq("allergen_id", update.allergen_id)
           .is("child_id", null);
+
+        if (eloUpdateError) {
+          console.error(`Elo update failed for ${update.allergen_id}:`, eloUpdateError.message);
+        }
       }
     }
 

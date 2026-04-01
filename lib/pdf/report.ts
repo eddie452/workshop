@@ -212,7 +212,7 @@ export function generateReportPdf(input: PdfReportInput): Uint8Array {
     doc.text("Trigger Champion", MARGIN_LEFT, y);
 
     y += 7;
-    doc.setFillColor(255, 251, 235);
+    doc.setFillColor(224, 245, 251);
     doc.roundedRect(MARGIN_LEFT, y - 4, CONTENT_WIDTH, 16, 2, 2, "F");
     doc.setDrawColor(...COLOR_CHAMPION);
     doc.setLineWidth(0.5);

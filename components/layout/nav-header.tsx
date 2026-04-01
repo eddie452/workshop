@@ -33,7 +33,7 @@ export function NavHeader() {
 
   return (
     <header
-      className="border-b border-brand-border bg-brand-primary"
+      className="border-b border-brand-border bg-brand-primary-dark"
       data-testid="nav-header"
     >
       <nav className="mx-auto flex max-w-5xl items-center justify-between px-4 py-3 sm:px-6">
@@ -43,7 +43,7 @@ export function NavHeader() {
           className="flex items-center"
         >
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/champ-logo-alt.svg" alt="Champ Allergy" className="h-8 w-auto" />
+          <img src="/champ-logo-alt.png" alt="Champ Allergy" className="h-8 w-auto" />
         </Link>
 
         {/* Desktop nav links */}
@@ -107,7 +107,7 @@ export function NavHeader() {
 
       {/* Mobile menu */}
       {mobileMenuOpen && (
-        <div className="border-t border-white/20 bg-brand-primary px-4 pb-3 pt-2 sm:hidden">
+        <div className="border-t border-white/20 bg-brand-primary-dark px-4 pb-3 pt-2 sm:hidden">
           {NAV_LINKS.map((link) => (
             <Link
               key={link.href}

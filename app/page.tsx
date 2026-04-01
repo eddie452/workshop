@@ -38,11 +38,11 @@ export default async function HomePage() {
   return (
     <div className="min-h-screen bg-brand-surface">
       {/* Navigation */}
-      <header className="border-b border-white/20 bg-brand-primary">
+      <header className="border-b border-white/20 bg-brand-primary-dark">
         <nav className="mx-auto flex max-w-5xl items-center justify-between px-4 py-4 sm:px-6">
           <div className="flex items-center gap-2">
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src="/champ-logo-alt.svg" alt="Champ Allergy" className="h-8 w-auto" />
+            <img src="/champ-logo-alt.png" alt="Champ Allergy" className="h-8 w-auto" />
           </div>
           <div className="flex items-center gap-3">
             <Link
@@ -101,7 +101,7 @@ export default async function HomePage() {
       </section>
 
       {/* How It Works */}
-      <section className="bg-brand-primary px-4 py-16 sm:px-6">
+      <section className="bg-brand-primary-dark px-4 py-16 sm:px-6">
         <div className="mx-auto max-w-5xl">
           <h2
             className="text-center text-2xl font-bold text-white sm:text-3xl"

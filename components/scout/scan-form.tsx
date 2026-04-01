@@ -112,7 +112,7 @@ export function ScanForm() {
 
       {/* Image preview */}
       {previewUrl && (
-        <div className="mb-4 overflow-hidden rounded-lg border border-gray-200">
+        <div className="mb-4 overflow-hidden rounded-lg border border-brand-border">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src={previewUrl}
@@ -139,7 +139,7 @@ export function ScanForm() {
       {/* Scanning spinner */}
       {isScanning && (
         <p
-          className="mt-3 text-center text-sm text-gray-500"
+          className="mt-3 text-center text-sm text-brand-text-muted"
           data-testid="scout-scanning"
         >
           Analyzing plant image with AI...
@@ -165,8 +165,8 @@ export function ScanForm() {
           data-testid="scout-results"
         >
           {results.matches.length === 0 ? (
-            <div className="rounded-md border border-gray-200 bg-gray-50 px-4 py-3">
-              <p className="text-sm text-gray-600">
+            <div className="rounded-md border border-brand-border bg-brand-surface-muted px-4 py-3">
+              <p className="text-sm text-brand-text-secondary">
                 No allergen-producing plants identified in this photo.
                 Try taking a closer photo of the plant.
               </p>
@@ -175,7 +175,7 @@ export function ScanForm() {
             <>
               {/* Summary */}
               <div className="mb-3">
-                <p className="text-sm font-medium text-gray-700">
+                <p className="text-sm font-medium text-brand-text">
                   {results.matches.length} plant
                   {results.matches.length === 1 ? "" : "s"} identified
                 </p>
@@ -200,7 +200,7 @@ export function ScanForm() {
           <button
             type="button"
             onClick={handleReset}
-            className="mt-4 w-full cursor-pointer rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
+            className="mt-4 w-full cursor-pointer rounded-lg border border-brand-border bg-white px-4 py-2 text-sm font-medium text-brand-text hover:bg-brand-surface-muted"
             data-testid="scout-reset-btn"
           >
             Scan Another Plant
@@ -229,10 +229,10 @@ function MatchCard({ match }: { match: ScanMatchResult }) {
     >
       <div className="flex items-center justify-between">
         <div>
-          <p className="text-sm font-semibold text-gray-900">
+          <p className="text-sm font-semibold text-brand-primary-dark">
             {match.common_name}
           </p>
-          <p className="mt-0.5 text-xs text-gray-500">
+          <p className="mt-0.5 text-xs text-brand-text-muted">
             {match.category} &middot; {Math.round(match.confidence * 100)}%
             confidence
           </p>

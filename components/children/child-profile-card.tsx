@@ -25,16 +25,16 @@ export function ChildProfileCard({ child, onDelete, onEdit }: ChildProfileCardPr
   return (
     <div
       data-testid="child-profile-card"
-      className="flex items-center justify-between rounded-lg border border-gray-200 bg-white p-4 shadow-sm"
+      className="flex items-center justify-between rounded-lg border border-brand-border bg-white p-4 shadow-sm"
     >
       <div className="flex items-center gap-3">
         <div className="flex h-10 w-10 items-center justify-center rounded-full bg-brand-primary-light text-sm font-bold text-brand-primary">
           {child.name.charAt(0).toUpperCase()}
         </div>
         <div>
-          <p className="text-sm font-semibold text-gray-900">{child.name}</p>
+          <p className="text-sm font-semibold text-brand-primary-dark">{child.name}</p>
           {age !== null && (
-            <p className="text-xs text-gray-500">
+            <p className="text-xs text-brand-text-muted">
               Age {age}
             </p>
           )}
@@ -45,7 +45,7 @@ export function ChildProfileCard({ child, onDelete, onEdit }: ChildProfileCardPr
         <button
           type="button"
           data-testid="edit-child-btn"
-          className="rounded-md border border-gray-300 bg-white px-3 py-1.5 text-xs font-medium text-gray-700 hover:bg-gray-50"
+          className="rounded-md border border-brand-border bg-white px-3 py-1.5 text-xs font-medium text-brand-text hover:bg-brand-surface-muted"
           onClick={() => onEdit(child.id)}
         >
           Edit
@@ -66,7 +66,7 @@ export function ChildProfileCard({ child, onDelete, onEdit }: ChildProfileCardPr
             </button>
             <button
               type="button"
-              className="rounded-md border border-gray-300 bg-white px-3 py-1.5 text-xs font-medium text-gray-700 hover:bg-gray-50"
+              className="rounded-md border border-brand-border bg-white px-3 py-1.5 text-xs font-medium text-brand-text hover:bg-brand-surface-muted"
               onClick={() => setConfirmDelete(false)}
             >
               Cancel

@@ -42,10 +42,11 @@ export default async function HomePage() {
         <nav className="mx-auto flex max-w-5xl items-center justify-between px-4 py-4 sm:px-6">
           <div className="flex items-center gap-2">
             <span
-              className="text-xl font-bold text-brand-primary"
-              aria-label="Allergy Madness logo"
+              className="text-xl font-bold text-brand-primary-dark"
+              style={{ fontFamily: "var(--font-title)" }}
+              aria-label="Champ Allergy logo"
             >
-              Allergy Madness
+              Champ
             </span>
           </div>
           <div className="flex items-center gap-3">
@@ -57,7 +58,7 @@ export default async function HomePage() {
             </Link>
             <Link
               href="/signup"
-              className="rounded-button bg-brand-primary px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-brand-primary-dark"
+              className="rounded-button bg-brand-accent px-4 py-2 text-sm font-semibold text-brand-primary-dark transition-colors hover:bg-brand-accent-dark"
             >
               Get Started
             </Link>
@@ -66,43 +67,55 @@ export default async function HomePage() {
       </header>
 
       {/* Hero Section */}
-      <section className="bg-gradient-to-b from-brand-primary-light to-white px-4 py-16 sm:px-6 sm:py-24">
+      <section className="bg-gradient-to-b from-brand-primary to-brand-primary-dark px-4 py-16 sm:px-6 sm:py-24">
         <div className="mx-auto max-w-3xl text-center">
-          <h1 className="text-3xl font-bold tracking-tight text-brand-text sm:text-5xl">
-            Predict Your Allergy Triggers
+          <h1
+            className="text-3xl font-bold tracking-tight text-white sm:text-5xl"
+            style={{ fontFamily: "var(--font-title)" }}
+          >
+            Allergy Madness
           </h1>
-          <p className="mx-auto mt-4 max-w-xl text-lg text-brand-text-secondary sm:mt-6 sm:text-xl">
+          <p className="mx-auto mt-2 text-base text-brand-primary-light">
+            by Champ Allergy
+          </p>
+          <p className="mx-auto mt-4 max-w-xl text-lg text-white/90 sm:mt-6 sm:text-xl">
+            Predict Your Allergy Triggers
+          </p>
+          <p className="mx-auto mt-2 max-w-xl text-base text-white/80">
             Track symptoms, discover patterns, and get personalized insights
             about what may be causing your allergies — all from your phone.
           </p>
           <div className="mt-8 flex flex-col items-center gap-3 sm:flex-row sm:justify-center sm:gap-4">
             <Link
               href="/signup"
-              className="w-full rounded-button bg-brand-primary px-8 py-3 text-center text-base font-semibold text-white shadow-sm transition-colors hover:bg-brand-primary-dark sm:w-auto"
+              className="w-full rounded-button bg-brand-accent px-8 py-3 text-center text-base font-semibold text-brand-primary-dark shadow-sm transition-colors hover:bg-brand-accent-dark sm:w-auto"
             >
               Get Started Free
             </Link>
             <Link
               href="/login"
-              className="w-full rounded-button border border-brand-border px-8 py-3 text-center text-base font-medium text-brand-text-secondary transition-colors hover:border-brand-primary hover:text-brand-primary sm:w-auto"
+              className="w-full rounded-button border border-white/40 px-8 py-3 text-center text-base font-medium text-white transition-colors hover:border-white hover:bg-white/10 sm:w-auto"
             >
               Sign In
             </Link>
           </div>
-          <p className="mt-3 text-sm text-brand-text-muted">
+          <p className="mt-3 text-sm text-white/70">
             No credit card required. Free plan available.
           </p>
         </div>
       </section>
 
       {/* How It Works */}
-      <section className="px-4 py-16 sm:px-6">
+      <section className="bg-white px-4 py-16 sm:px-6">
         <div className="mx-auto max-w-5xl">
-          <h2 className="text-center text-2xl font-bold text-brand-text sm:text-3xl">
+          <h2
+            className="text-center text-2xl font-bold text-brand-primary-dark sm:text-3xl"
+            style={{ fontFamily: "var(--font-title)" }}
+          >
             How It Works
           </h2>
           <p className="mx-auto mt-2 max-w-lg text-center text-brand-text-secondary">
-            Three simple steps to start understanding your allergy triggers.
+            Three simple steps to understanding your allergy triggers.
           </p>
           <div className="mt-12 grid gap-8 sm:grid-cols-3">
             <StepCard
@@ -127,7 +140,10 @@ export default async function HomePage() {
       {/* Features */}
       <section className="bg-brand-surface-muted px-4 py-16 sm:px-6">
         <div className="mx-auto max-w-5xl">
-          <h2 className="text-center text-2xl font-bold text-brand-text sm:text-3xl">
+          <h2
+            className="text-center text-2xl font-bold text-brand-primary-dark sm:text-3xl"
+            style={{ fontFamily: "var(--font-title)" }}
+          >
             Features
           </h2>
           <div className="mt-12 grid gap-6 sm:grid-cols-2">
@@ -160,18 +176,21 @@ export default async function HomePage() {
       </section>
 
       {/* CTA Section */}
-      <section className="px-4 py-16 sm:px-6">
+      <section className="bg-gradient-to-b from-brand-primary to-brand-primary-dark px-4 py-16 sm:px-6">
         <div className="mx-auto max-w-2xl text-center">
-          <h2 className="text-2xl font-bold text-brand-text sm:text-3xl">
+          <h2
+            className="text-2xl font-bold text-white sm:text-3xl"
+            style={{ fontFamily: "var(--font-title)" }}
+          >
             Ready to Understand Your Allergies?
           </h2>
-          <p className="mt-3 text-brand-text-secondary">
+          <p className="mt-3 text-white/80">
             Join thousands of families using Allergy Madness to track and
             predict allergy triggers.
           </p>
           <Link
             href="/signup"
-            className="mt-8 inline-block rounded-button bg-brand-primary px-8 py-3 text-base font-semibold text-white shadow-sm transition-colors hover:bg-brand-primary-dark"
+            className="mt-8 inline-block rounded-button bg-brand-accent px-8 py-3 text-base font-semibold text-brand-primary-dark shadow-sm transition-colors hover:bg-brand-accent-dark"
           >
             Get Started Free
           </Link>
@@ -192,10 +211,10 @@ export default async function HomePage() {
           </div>
           <div className="mt-6 flex flex-col items-center gap-2 text-center">
             <p className="text-sm font-medium text-brand-text-secondary">
-              Allergy Madness — The Digital Allergy Test by Champ Health
+              Allergy Madness — The Digital Allergy Test by Champ Allergy
             </p>
             <p className="text-xs text-brand-text-muted">
-              &copy; {new Date().getFullYear()} Champ Health. All rights
+              &copy; {new Date().getFullYear()} Champ Allergy. All rights
               reserved.
             </p>
           </div>
@@ -223,7 +242,7 @@ function StepCard({
       <div className="flex h-10 w-10 items-center justify-center rounded-full bg-brand-primary text-sm font-bold text-white">
         {step}
       </div>
-      <h3 className="mt-4 text-lg font-semibold text-brand-text">{title}</h3>
+      <h3 className="mt-4 text-lg font-semibold text-brand-primary-dark">{title}</h3>
       <p className="mt-2 text-sm text-brand-text-secondary">{description}</p>
     </div>
   );
@@ -238,7 +257,7 @@ function FeatureCard({
 }) {
   return (
     <div className="rounded-card border border-brand-border bg-white p-6">
-      <h3 className="text-base font-semibold text-brand-text">{title}</h3>
+      <h3 className="text-base font-semibold text-brand-primary-dark">{title}</h3>
       <p className="mt-2 text-sm text-brand-text-secondary">{description}</p>
     </div>
   );

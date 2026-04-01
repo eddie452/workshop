@@ -44,19 +44,19 @@ export function ReferralProgress({
   return (
     <div
       data-testid="referral-progress"
-      className={`rounded-lg border border-gray-200 bg-white p-4 ${className}`.trim()}
+      className={`rounded-lg border border-brand-border bg-white p-4 ${className}`.trim()}
     >
-      <p className="text-sm font-semibold text-gray-800">
+      <p className="text-sm font-semibold text-brand-text">
         {progress} of {REFERRAL_UNLOCK_THRESHOLD} friends invited
       </p>
-      <p className="mt-1 text-xs text-gray-500">
+      <p className="mt-1 text-xs text-brand-text-muted">
         Invite {REFERRAL_UNLOCK_THRESHOLD - progress} more friend
         {REFERRAL_UNLOCK_THRESHOLD - progress !== 1 ? "s" : ""} to unlock all features
       </p>
 
       {/* Progress bar */}
       <div
-        className="mt-3 h-2 w-full overflow-hidden rounded-full bg-gray-100"
+        className="mt-3 h-2 w-full overflow-hidden rounded-full bg-brand-surface-muted"
         role="progressbar"
         aria-valuenow={progress}
         aria-valuemin={0}
@@ -77,7 +77,7 @@ export function ReferralProgress({
             className={`flex h-6 w-6 items-center justify-center rounded-full text-xs font-medium ${
               i < progress
                 ? "bg-indigo-500 text-white"
-                : "bg-gray-100 text-gray-400"
+                : "bg-brand-surface-muted text-brand-text-faint"
             }`}
           >
             {i < progress ? "\u2713" : i + 1}

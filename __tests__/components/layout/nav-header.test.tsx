@@ -27,10 +27,10 @@ vi.mock("next/link", () => ({
 import { NavHeader } from "@/components/layout/nav-header";
 
 describe("NavHeader", () => {
-  it("renders the app name as a link to dashboard", () => {
+  it("renders the Champ brand name as a link to dashboard", () => {
     render(<NavHeader />);
 
-    const logoLink = screen.getByText("Allergy Madness");
+    const logoLink = screen.getByText("Champ");
     expect(logoLink).toBeDefined();
     expect(logoLink.closest("a")?.getAttribute("href")).toBe("/dashboard");
   });

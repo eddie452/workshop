@@ -46,21 +46,21 @@ export default async function ChildrenPage() {
     >
       <div className="mb-6">
         <h1
-          className="text-2xl font-bold text-gray-900"
+          className="text-2xl font-bold text-brand-primary-dark"
           style={{
             fontSize: "1.5rem",
             fontWeight: 700,
-            color: "#111827",
+            color: "#045A82",
             margin: 0,
           }}
         >
           Child Profiles
         </h1>
         <p
-          className="mt-1 text-sm text-gray-600"
+          className="mt-1 text-sm text-brand-text-secondary"
           style={{
             fontSize: "0.875rem",
-            color: "#4b5563",
+            color: "#056DA5",
             margin: "0.25rem 0 0 0",
           }}
         >

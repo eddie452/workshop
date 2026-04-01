@@ -34,16 +34,16 @@ export function StepConfirmation({
   return (
     <div className="space-y-6">
       <div>
-        <h2 className="text-xl font-bold text-gray-900">
+        <h2 className="text-xl font-bold text-brand-primary-dark">
           Confirm your information
         </h2>
-        <p className="mt-2 text-sm text-gray-600">
+        <p className="mt-2 text-sm text-brand-text-secondary">
           Review the details below. You can go back to make changes.
         </p>
       </div>
 
       {/* Summary card */}
-      <div className="rounded-md border border-gray-200 bg-gray-50 p-4">
+      <div className="rounded-md border border-brand-border bg-brand-surface-muted p-4">
         <dl className="space-y-3 text-sm">
           <SummaryRow label="Address" value={formData.address} />
           <SummaryRow
@@ -85,7 +85,7 @@ export function StepConfirmation({
         </dl>
       </div>
 
-      <p className="text-xs text-gray-500">
+      <p className="text-xs text-brand-text-muted">
         By continuing, we will analyze your regional allergen data and build your
         personalized prediction. This typically takes about 4 seconds.
       </p>
@@ -95,7 +95,7 @@ export function StepConfirmation({
         <button
           type="button"
           onClick={onBack}
-          className="flex-1 rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
+          className="flex-1 rounded-md border border-brand-border bg-white px-4 py-2 text-sm font-medium text-brand-text hover:bg-brand-surface-muted"
         >
           Back
         </button>
@@ -103,7 +103,7 @@ export function StepConfirmation({
           type="button"
           onClick={onNext}
           data-testid="submit-onboarding"
-          className="flex-1 rounded-md bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700"
+          className="flex-1 rounded-md bg-brand-primary px-4 py-2 text-sm font-medium text-white hover:bg-brand-primary-dark"
         >
           Build My Prediction
         </button>
@@ -120,11 +120,11 @@ function SummaryRow({ label, value }: { label: string; value: string }) {
   return (
     <div className="flex justify-between">
       {label && (
-        <dt className="font-medium text-gray-500">
+        <dt className="font-medium text-brand-text-muted">
           {label}
         </dt>
       )}
-      <dd className="text-right text-gray-900">
+      <dd className="text-right text-brand-primary-dark">
         {value}
       </dd>
     </div>

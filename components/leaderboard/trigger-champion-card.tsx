@@ -30,7 +30,7 @@ export function TriggerChampionCard({ allergen }: TriggerChampionCardProps) {
         <CategoryIcon category={allergen.category} />
         <h3
           data-testid="champion-name"
-          className="text-2xl font-bold text-gray-900"
+          className="text-2xl font-bold text-brand-primary-dark"
         >
           {allergen.common_name}
         </h3>
@@ -40,7 +40,7 @@ export function TriggerChampionCard({ allergen }: TriggerChampionCardProps) {
       <div className="flex items-center gap-3">
         <span
           data-testid="champion-elo"
-          className="text-lg font-semibold text-gray-700"
+          className="text-lg font-semibold text-brand-text"
         >
           Elo {allergen.elo_score}
         </span>

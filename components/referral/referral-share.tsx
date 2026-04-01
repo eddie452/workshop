@@ -71,17 +71,17 @@ export function ReferralShare({
   return (
     <div
       data-testid="referral-share"
-      className={`rounded-lg border border-gray-200 bg-white p-4 ${className}`.trim()}
+      className={`rounded-lg border border-brand-border bg-white p-4 ${className}`.trim()}
     >
-      <p className="text-sm font-semibold text-gray-800">
+      <p className="text-sm font-semibold text-brand-text">
         Your Referral Link
       </p>
 
       {/* Link display */}
-      <div className="mt-2 flex items-center gap-2 rounded-md border border-gray-100 bg-gray-50 px-3 py-2">
+      <div className="mt-2 flex items-center gap-2 rounded-md border border-brand-border-light bg-brand-surface-muted px-3 py-2">
         <code
           data-testid="referral-link-display"
-          className="flex-1 truncate text-xs text-gray-600"
+          className="flex-1 truncate text-xs text-brand-text-secondary"
         >
           {referralLink}
         </code>
@@ -114,7 +114,7 @@ export function ReferralShare({
         )}
       </div>
 
-      <p className="mt-2 text-xs text-gray-400">
+      <p className="mt-2 text-xs text-brand-text-faint">
         Share this link with friends. When 3 sign up, all features unlock permanently.
       </p>
     </div>

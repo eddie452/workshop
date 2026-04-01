@@ -26,7 +26,7 @@ export function UpgradeCta({
       <h3 className="mb-2 text-lg font-bold text-purple-900">
         Unlock {feature}
       </h3>
-      <p className="mb-4 text-sm text-gray-600">
+      <p className="mb-4 text-sm text-brand-text-secondary">
         Get the full picture of your allergen triggers with Madness+.
       </p>
 
@@ -46,7 +46,7 @@ export function UpgradeCta({
       {referralsNeeded > 0 && (
         <p
           data-testid="upgrade-cta-referral"
-          className="text-xs text-gray-500"
+          className="text-xs text-brand-text-muted"
         >
           Or invite {referralsNeeded} friend{referralsNeeded !== 1 ? "s" : ""}{" "}
           to unlock for free

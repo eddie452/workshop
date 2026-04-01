@@ -17,7 +17,7 @@ const TIER_CONFIG: Record<
 > = {
   low: {
     label: "Low",
-    tailwind: "bg-blue-100 text-blue-800",
+    tailwind: "bg-brand-primary-light text-brand-primary-dark",
   },
   medium: {
     label: "Medium",

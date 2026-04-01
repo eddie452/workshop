@@ -46,7 +46,7 @@ export function SymptomZones({ symptoms, onChange }: SymptomZonesProps) {
 
   return (
     <fieldset className="border-none p-0 m-0">
-      <legend className="mb-3 text-base font-semibold text-gray-900">
+      <legend className="mb-3 text-base font-semibold text-brand-primary-dark">
         Which areas are affected?
       </legend>
 
@@ -58,7 +58,7 @@ export function SymptomZones({ symptoms, onChange }: SymptomZonesProps) {
           return (
             <div
               key={zone.id}
-              className="overflow-hidden rounded-lg border border-gray-200"
+              className="overflow-hidden rounded-lg border border-brand-border"
               data-testid={`zone-${zone.id}`}
             >
               {/* Zone header — toggle expand */}
@@ -67,16 +67,16 @@ export function SymptomZones({ symptoms, onChange }: SymptomZonesProps) {
                 aria-expanded={isExpanded}
                 aria-controls={`zone-panel-${zone.id}`}
                 onClick={() => toggleZone(zone.id)}
-                className="flex w-full cursor-pointer items-center justify-between border-none bg-gray-50 px-4 py-3 transition-colors hover:bg-gray-100"
+                className="flex w-full cursor-pointer items-center justify-between border-none bg-brand-surface-muted px-4 py-3 transition-colors hover:bg-brand-surface-muted"
               >
                 <div className="flex items-center gap-3">
                   <span
-                    className="flex h-8 w-8 items-center justify-center rounded-full bg-blue-100 text-sm font-bold text-blue-700"
+                    className="flex h-8 w-8 items-center justify-center rounded-full bg-brand-primary-light text-sm font-bold text-brand-primary-dark"
                     aria-hidden="true"
                   >
                     {zone.icon}
                   </span>
-                  <span className="text-sm font-medium text-gray-900">
+                  <span className="text-sm font-medium text-brand-primary-dark">
                     {zone.label}
                   </span>
                 </div>
@@ -84,14 +84,14 @@ export function SymptomZones({ symptoms, onChange }: SymptomZonesProps) {
                 <div className="flex items-center gap-2">
                   {activeCount > 0 && (
                     <span
-                      className="rounded-full bg-blue-600 px-2 py-0.5 text-xs font-bold text-white"
+                      className="rounded-full bg-brand-primary px-2 py-0.5 text-xs font-bold text-white"
                       aria-label={`${activeCount} symptom${activeCount !== 1 ? "s" : ""} selected`}
                     >
                       {activeCount}
                     </span>
                   )}
                   <span
-                    className="text-sm text-gray-400 transition-transform"
+                    className="text-sm text-brand-text-faint transition-transform"
                     style={{
                       transform: isExpanded ? "rotate(180deg)" : "rotate(0deg)",
                     }}
@@ -122,9 +122,9 @@ export function SymptomZones({ symptoms, onChange }: SymptomZonesProps) {
                           checked={isChecked}
                           onChange={() => toggleSymptom(symptom.key)}
                           data-testid={`symptom-${symptom.key}`}
-                          className="h-5 w-5 rounded border-gray-300 accent-blue-600"
+                          className="h-5 w-5 rounded border-brand-border accent-brand-primary"
                         />
-                        <span className="text-sm text-gray-700">
+                        <span className="text-sm text-brand-text">
                           {symptom.label}
                         </span>
                       </label>

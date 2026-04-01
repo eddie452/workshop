@@ -15,13 +15,13 @@ function FinalFourCard({ allergen }: { allergen: RankedAllergen }) {
   return (
     <div
       data-testid="final-four-card"
-      className="rounded-lg border border-gray-200 bg-white p-4 shadow-sm"
+      className="rounded-lg border border-brand-border bg-white p-4 shadow-sm"
     >
       {/* Rank badge */}
       <div className="mb-2 flex items-center justify-between">
         <span
           data-testid="final-four-rank"
-          className="flex h-6 w-6 items-center justify-center rounded-full bg-gray-100 text-xs font-bold text-gray-600"
+          className="flex h-6 w-6 items-center justify-center rounded-full bg-brand-surface-muted text-xs font-bold text-brand-text-secondary"
         >
           #{allergen.rank}
         </span>
@@ -34,13 +34,13 @@ function FinalFourCard({ allergen }: { allergen: RankedAllergen }) {
         <div>
           <p
             data-testid="final-four-name"
-            className="text-sm font-semibold text-gray-900"
+            className="text-sm font-semibold text-brand-primary-dark"
           >
             {allergen.common_name}
           </p>
           <p
             data-testid="final-four-elo"
-            className="text-xs text-gray-500"
+            className="text-xs text-brand-text-muted"
           >
             Elo {allergen.elo_score}
           </p>

@@ -52,9 +52,9 @@ const SEVERITY_COLORS: Record<
     border: "#fecaca",
   },
   none: {
-    bg: "#f3f4f6",
+    bg: "#D6F0F8",
     text: "#374151",
-    border: "#e5e7eb",
+    border: "#B8E4F0",
   },
 };
 
@@ -104,13 +104,13 @@ function AllergenCrossReactivityCard({
   return (
     <div
       data-testid="pfas-allergen-card"
-      className="rounded-lg border border-gray-200 bg-white p-4"
+      className="rounded-lg border border-brand-border bg-white p-4"
     >
       {/* Allergen header — always visible */}
       <div className="mb-3 flex items-center justify-between">
         <div className="flex items-center gap-2">
           <CategoryIcon category={entry.category} />
-          <span className="text-sm font-semibold text-gray-900">
+          <span className="text-sm font-semibold text-brand-primary-dark">
             {entry.common_name}
           </span>
         </div>
@@ -119,7 +119,7 @@ function AllergenCrossReactivityCard({
 
       {/* Food list — blurred for free tier */}
       <div>
-        <p className="mb-2 text-xs font-medium text-gray-500">
+        <p className="mb-2 text-xs font-medium text-brand-text-muted">
           Cross-reactive foods
         </p>
         {isPremium ? (
@@ -147,10 +147,10 @@ export function PfasPanel({ entries, isPremium }: PfasPanelProps) {
     >
       {/* Section header */}
       <div>
-        <h2 className="text-lg font-semibold text-gray-800">
+        <h2 className="text-lg font-semibold text-brand-text">
           Food Cross-Reactivity (PFAS)
         </h2>
-        <p className="mt-1 text-xs text-gray-500">
+        <p className="mt-1 text-xs text-brand-text-muted">
           Foods that may trigger oral symptoms due to pollen-food allergy
           syndrome
         </p>

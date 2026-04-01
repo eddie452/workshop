@@ -95,7 +95,7 @@ export function ChildrenManager({
   if (!hasAccess) {
     return (
       <div data-testid="children-upgrade-gate" className="space-y-4">
-        <p className="text-sm text-gray-600">
+        <p className="text-sm text-brand-text-secondary">
           Track allergies for up to {maxChildren} children with independent
           leaderboards and check-ins.
         </p>
@@ -109,7 +109,7 @@ export function ChildrenManager({
   return (
     <div data-testid="children-manager" className="space-y-4">
       <div className="flex items-center justify-between">
-        <p className="text-sm text-gray-600">
+        <p className="text-sm text-brand-text-secondary">
           {childList.length} of {maxChildren} profiles used
         </p>
         {canAddMore && !showAddForm && (
@@ -144,12 +144,12 @@ export function ChildrenManager({
       {childList.length === 0 && !showAddForm ? (
         <div
           data-testid="empty-children-state"
-          className="rounded-lg border border-dashed border-gray-300 bg-gray-50 p-8 text-center"
+          className="rounded-lg border border-dashed border-brand-border bg-brand-surface-muted p-8 text-center"
         >
-          <p className="mb-2 text-sm font-medium text-gray-700">
+          <p className="mb-2 text-sm font-medium text-brand-text">
             No child profiles yet
           </p>
-          <p className="mb-4 text-xs text-gray-500">
+          <p className="mb-4 text-xs text-brand-text-muted">
             Add a child to track their allergy triggers independently.
           </p>
           <button
@@ -178,7 +178,7 @@ export function ChildrenManager({
       {!canAddMore && (
         <p
           data-testid="max-children-notice"
-          className="text-center text-xs text-gray-500"
+          className="text-center text-xs text-brand-text-muted"
         >
           Maximum of {maxChildren} child profiles reached.
         </p>

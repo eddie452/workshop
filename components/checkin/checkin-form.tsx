@@ -159,14 +159,14 @@ export function CheckinForm({ onSuccess, alreadyCheckedIn = false }: CheckinForm
         type="submit"
         disabled={isSubmitting}
         data-testid="checkin-submit"
-        className="w-full rounded-lg bg-blue-600 px-4 py-3 text-base font-semibold text-white transition-colors hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-50"
+        className="w-full rounded-lg bg-brand-primary px-4 py-3 text-base font-semibold text-white transition-colors hover:bg-brand-primary-dark disabled:cursor-not-allowed disabled:opacity-50"
       >
         {isSubmitting ? "Submitting..." : formData.severity === 0 ? "Log Symptom-Free Day" : "Submit Check-in"}
       </button>
 
       {/* Severity 0 hint */}
       {formData.severity === 0 && (
-        <p className="text-center text-xs text-gray-500">
+        <p className="text-center text-xs text-brand-text-muted">
           Logging a symptom-free day helps calibrate your Environmental Forecast.
         </p>
       )}

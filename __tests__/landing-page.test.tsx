@@ -69,7 +69,7 @@ describe("HomePage", () => {
 
       expect(
         screen.getByRole("heading", {
-          name: /predict your allergy triggers/i,
+          name: /allergy madness/i,
         }),
       ).toBeDefined();
     });
@@ -79,6 +79,13 @@ describe("HomePage", () => {
       render(Page);
 
       expect(screen.getByText("Allergy Madness")).toBeDefined();
+    });
+
+    it("shows Champ Allergy branding in nav", async () => {
+      const Page = await HomePage();
+      render(Page);
+
+      expect(screen.getByText("Champ")).toBeDefined();
     });
 
     it('has a "Get Started Free" CTA linking to signup', async () => {

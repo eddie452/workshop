@@ -16,15 +16,15 @@
 /* ------------------------------------------------------------------ */
 
 export const BRAND_COLORS = {
-  /** Health-forward blue — primary actions, links, active states */
-  primary: "#2563eb",
-  primaryLight: "#dbeafe",
-  primaryDark: "#1d4ed8",
+  /** Champ Blue (Pantone 306 C) — primary actions, links, active states */
+  primary: "#00B6E2",
+  primaryLight: "#E0F5FB",
+  primaryDark: "#0682BB",
 
-  /** Wellness green — success states, positive indicators */
-  accent: "#16a34a",
-  accentLight: "#dcfce7",
-  accentDark: "#15803d",
+  /** Nature Pop (Pantone 381 C) — CTAs, eye-catching contrast */
+  accent: "#CCDC29",
+  accentLight: "#F5F8D9",
+  accentDark: "#B0C020",
 
   /** FDA disclaimer amber — warnings, regulatory notices */
   warning: "#d97706",
@@ -36,24 +36,24 @@ export const BRAND_COLORS = {
   errorLight: "#fef2f2",
   errorDark: "#991b1b",
 
-  /** Madness+ purple — premium features, upgrade prompts */
-  premium: "#9333ea",
-  premiumLight: "#faf5ff",
-  premiumDark: "#581c87",
+  /** Dusty Denim (Pantone 640 C) — premium features, upgrade prompts */
+  premium: "#0682BB",
+  premiumLight: "#E0F0F8",
+  premiumDark: "#045A82",
 
-  /** Surface — backgrounds */
+  /** Surface — backgrounds, NO GRAY */
   surface: "#ffffff",
-  surfaceMuted: "#f9fafb",
+  surfaceMuted: "#F0F9FC",
 
-  /** Borders */
-  border: "#e5e7eb",
-  borderLight: "#f3f4f6",
+  /** Borders — light blue tints, NO GRAY */
+  border: "#B8E4F0",
+  borderLight: "#D6F0F8",
 
-  /** Text hierarchy */
-  text: "#111827",
-  textSecondary: "#4b5563",
-  textMuted: "#6b7280",
-  textFaint: "#9ca3af",
+  /** Text hierarchy — NO BLACK, Dusty Denim based (WCAG AA compliant) */
+  text: "#045A82",
+  textSecondary: "#056DA5",
+  textMuted: "#0682BB",
+  textFaint: "#0898C8",
 
   /** Champion gold — trigger champion card */
   gold: "#eab308",
@@ -67,13 +67,13 @@ export const BRAND_COLORS = {
 /* ------------------------------------------------------------------ */
 
 export const PDF_COLORS = {
-  primary: [37, 99, 235] as const,
+  primary: [0, 182, 226] as const,       // Champ Blue #00B6E2
   gold: [234, 179, 8] as const,
-  text: [17, 24, 39] as const,
-  textSecondary: [31, 41, 55] as const,
-  textMuted: [107, 114, 128] as const,
-  border: [209, 213, 219] as const,
-  bgLight: [249, 250, 251] as const,
+  text: [4, 90, 130] as const,             // #045A82
+  textSecondary: [5, 109, 165] as const,  // #056DA5
+  textMuted: [6, 130, 187] as const,      // Dusty Denim #0682BB
+  border: [184, 228, 240] as const,       // #B8E4F0
+  bgLight: [240, 249, 252] as const,      // #F0F9FC
   amberBg: [255, 251, 235] as const,
   amberText: [146, 64, 14] as const,
   white: [255, 255, 255] as const,

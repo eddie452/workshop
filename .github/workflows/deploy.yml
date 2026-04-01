@@ -115,3 +115,16 @@ jobs:
           fi
           echo "Running Supabase migrations..."
           npx supabase db push --db-url "$SUPABASE_DB_URL"
+
+      - name: Seed allergen reference data
+        if: steps.check_secrets.outputs.skip != 'true'
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+        run: |
+          if [ -z "$SUPABASE_URL" ] || [ -z "$SUPABASE_SERVICE_ROLE_KEY" ]; then
+            echo "SUPABASE_URL or SUPABASE_SERVICE_ROLE_KEY not configured — skipping seed."
+            exit 0
+          fi
+          echo "Seeding allergens and seasonal calendar..."
+          npx tsx scripts/seed-allergens.ts

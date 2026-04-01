@@ -292,7 +292,11 @@ export async function POST(
         .insert(eloInserts);
 
       if (eloError) {
-        console.error("Elo seeding warning:", eloError.message);
+        console.error("Elo seeding failed:", eloError.message);
+        return NextResponse.json(
+          { success: false, error: "Failed to initialize allergen data. Please try again." },
+          { status: 500 },
+        );
       }
     }
 

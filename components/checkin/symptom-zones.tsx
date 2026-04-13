@@ -91,10 +91,7 @@ export function SymptomZones({ symptoms, onChange }: SymptomZonesProps) {
                     </span>
                   )}
                   <span
-                    className="text-sm text-brand-text-faint transition-transform"
-                    style={{
-                      transform: isExpanded ? "rotate(180deg)" : "rotate(0deg)",
-                    }}
+                    className={`text-sm text-brand-text-faint transition-transform ${isExpanded ? "rotate-180" : ""}`}
                     aria-hidden="true"
                   >
                     &#9660;

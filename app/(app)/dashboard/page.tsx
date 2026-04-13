@@ -2,7 +2,6 @@ import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { getConfidenceTierBySignals } from "@/lib/engine";
 import type { RankedAllergen, CheckinSeverityQuery } from "@/components/leaderboard/types";
-import { SignOutButton } from "./sign-out-button";
 import { DashboardLeaderboard } from "./dashboard-leaderboard";
 import { PageContainer } from "@/components/layout";
 
@@ -107,16 +106,13 @@ export default async function DashboardPage() {
 
   return (
     <PageContainer>
-      <div className="mb-6 flex items-center justify-between">
-        <div>
-          <h1 className="m-0 text-2xl font-bold text-brand-primary-dark">
-            Welcome to Allergy Madness
-          </h1>
-          <p className="mt-1 mb-0 text-sm text-brand-text-secondary">
-            Signed in as {user.email}
-          </p>
-        </div>
-        <SignOutButton />
+      <div className="mb-6">
+        <h1 className="m-0 text-2xl font-bold text-brand-primary-dark">
+          Welcome to Allergy Madness
+        </h1>
+        <p className="mt-1 mb-0 text-sm text-brand-text-secondary">
+          Signed in as {user.email}
+        </p>
       </div>
 
       <DashboardLeaderboard

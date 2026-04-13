@@ -17,6 +17,7 @@
 import { useState, useEffect } from "react";
 import { FdaDisclaimer } from "@/components/shared/fda-disclaimer";
 import { DisclaimerModal } from "@/components/shared/disclaimer-modal";
+import { LockIcon } from "@/components/shared";
 import { TriggerChampionCard } from "./trigger-champion-card";
 import { FinalFour } from "./final-four";
 import { EnvironmentalForecast } from "./environmental-forecast";
@@ -187,10 +188,7 @@ export function Leaderboard({
                       aria-hidden="true"
                       className="inline-flex h-5 w-5 items-center justify-center rounded-full bg-brand-primary"
                     >
-                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth={2.5} strokeLinecap="round" strokeLinejoin="round">
-                        <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
-                        <path d="M7 11V7a5 5 0 0110 0v4" />
-                      </svg>
+                      <LockIcon size={12} stroke="white" strokeWidth={2.5} />
                     </span>
                     <span className="text-xs font-medium text-brand-primary">
                       Upgrade

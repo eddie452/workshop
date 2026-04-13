@@ -13,3 +13,6 @@ export type { FdaDisclaimerProps, FdaDisclaimerVariant } from "./fda-disclaimer"
 
 export { DisclaimerModal } from "./disclaimer-modal";
 export type { DisclaimerModalProps } from "./disclaimer-modal";
+
+export { LockIcon } from "./lock-icon";
+export type { LockIconProps } from "./lock-icon";

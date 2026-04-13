@@ -69,7 +69,7 @@ async function main(): Promise<void> {
     }
 
     // Filter allergens by regional presence
-    const regionField = `region_${region.toLowerCase().replace(" ", "_")}`;
+    const regionField = `region_${region.toLowerCase().replaceAll(" ", "_")}`;
     const regionalAllergens = allergenSeed.filter(
       (a: Record<string, unknown>) => (a[regionField] as number) > 0,
     );

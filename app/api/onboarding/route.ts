@@ -247,7 +247,7 @@ export async function POST(
     const effectiveRegion: Region = region ?? "Southeast";
 
     // Filter allergens to those with regional presence > 0
-    const regionField = `region_${effectiveRegion.toLowerCase().replace(" ", "_")}` as keyof (typeof allergenSeed)[0];
+    const regionField = `region_${effectiveRegion.toLowerCase().replaceAll(" ", "_")}` as keyof (typeof allergenSeed)[0];
     const regionalAllergens = allergenSeed.filter(
       (a) => (a[regionField] as number) > 0,
     );

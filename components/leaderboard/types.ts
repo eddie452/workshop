@@ -50,6 +50,27 @@ export interface AllergenRankRowProps {
   isBlurred: boolean;
 }
 
+/**
+ * Type-safe query chain for fetching the latest check-in severity.
+ * Used to determine Environmental Forecast mode (severity = 0).
+ */
+export type CheckinSeverityQuery = {
+  select: (cols: string) => {
+    eq: (col: string, val: string) => {
+      is: (col: string, val: null) => {
+        order: (col: string, opts: { ascending: boolean }) => {
+          limit: (n: number) => {
+            single: () => Promise<{
+              data: { severity: number } | null;
+              error: { message: string } | null;
+            }>;
+          };
+        };
+      };
+    };
+  };
+};
+
 /** Props for the blur overlay */
 export interface BlurOverlayProps {
   children: React.ReactNode;

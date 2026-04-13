@@ -1,7 +1,7 @@
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { getConfidenceTierBySignals } from "@/lib/engine";
-import type { RankedAllergen } from "@/components/leaderboard/types";
+import type { RankedAllergen, CheckinSeverityQuery } from "@/components/leaderboard/types";
 import { SignOutButton } from "./sign-out-button";
 import { DashboardLeaderboard } from "./dashboard-leaderboard";
 
@@ -89,23 +89,6 @@ export default async function DashboardPage() {
   // Forecast mode activates when the user's most recent check-in has severity = 0,
   // OR when they have no Elo data yet (first-time user).
   let isEnvironmentalForecast = eloRows.length === 0;
-
-  type CheckinSeverityQuery = {
-    select: (cols: string) => {
-      eq: (col: string, val: string) => {
-        is: (col: string, val: null) => {
-          order: (col: string, opts: { ascending: boolean }) => {
-            limit: (n: number) => {
-              single: () => Promise<{
-                data: { severity: number } | null;
-                error: { message: string } | null;
-              }>;
-            };
-          };
-        };
-      };
-    };
-  };
 
   const { data: latestCheckin } = await (
     supabase.from("symptom_checkins") as unknown as CheckinSeverityQuery

@@ -65,38 +65,17 @@ export default async function CheckinPage() {
   return (
     <PageContainer width="sm">
       {/* Header */}
-      <div
-        className="mb-6"
-        style={{ marginBottom: "1.5rem" }}
-      >
-        <h1
-          className="text-2xl font-bold text-brand-primary-dark"
-          style={{
-            fontSize: "1.5rem",
-            fontWeight: 700,
-            color: "#045A82",
-            margin: "0 0 0.25rem 0",
-          }}
-        >
+      <div className="mb-6">
+        <h1 className="m-0 mb-1 text-2xl font-bold text-brand-primary-dark">
           Daily Check-in
         </h1>
-        <p
-          className="text-sm text-brand-text-secondary"
-          style={{
-            fontSize: "0.875rem",
-            color: "#056DA5",
-            margin: 0,
-          }}
-        >
+        <p className="m-0 text-sm text-brand-text-secondary">
           How are your allergies today? Your response updates the leaderboard.
         </p>
       </div>
 
       {/* FDA Disclaimer */}
-      <div
-        className="mb-6"
-        style={{ marginBottom: "1.5rem" }}
-      >
+      <div className="mb-6">
         <FdaDisclaimer variant="compact" />
       </div>
 
@@ -104,18 +83,10 @@ export default async function CheckinPage() {
       <CheckinForm alreadyCheckedIn={alreadyCheckedIn} />
 
       {/* Navigation back to dashboard */}
-      <div
-        className="mt-6 text-center"
-        style={{ marginTop: "1.5rem", textAlign: "center" }}
-      >
+      <div className="mt-6 text-center">
         <a
           href="/dashboard"
-          className="text-sm text-brand-primary hover:text-brand-primary-dark hover:underline"
-          style={{
-            fontSize: "0.875rem",
-            color: "#00B6E2",
-            textDecoration: "none",
-          }}
+          className="text-sm text-brand-primary no-underline hover:text-brand-primary-dark hover:underline"
         >
           Back to Dashboard
         </a>

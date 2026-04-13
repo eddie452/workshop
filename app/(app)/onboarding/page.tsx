@@ -35,13 +35,7 @@ export default async function OnboardingPage() {
   }
 
   return (
-    <main
-      className="min-h-screen bg-white"
-      style={{
-        minHeight: "100vh",
-        backgroundColor: "#ffffff",
-      }}
-    >
+    <main className="min-h-screen bg-white">
       <OnboardingWizard />
     </main>
   );

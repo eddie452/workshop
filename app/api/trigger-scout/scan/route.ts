@@ -284,7 +284,10 @@ export async function POST(
       matches: responseMatches,
       active_count: scanResult.active_allergen_ids.length,
       dormant_count: scanResult.dormant_allergen_ids.length,
-      proximity_multiplier: TRIGGER_SCOUT_PROXIMITY_MULTIPLIER,
+      proximity_multiplier:
+        scanResult.active_allergen_ids.length > 0
+          ? TRIGGER_SCOUT_PROXIMITY_MULTIPLIER
+          : 1.0,
     });
   } catch (error) {
     console.error("Trigger Scout scan error:", error);

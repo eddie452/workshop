@@ -8,5 +8,5 @@
  */
 
 export { PAYWALL_ENABLED, TIER_FEATURES, PREMIUM_TIERS } from "./constants";
-export { getAccessStatus, isFeatureAvailable, hasFeatureAccess } from "./check";
+export { getAccessStatus, getCachedAccessStatus, isFeatureAvailable, hasFeatureAccess } from "./check";
 export type { AccessStatus, PremiumFeature, SubscriptionTier } from "./types";

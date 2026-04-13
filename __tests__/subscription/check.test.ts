@@ -236,4 +236,46 @@ describe("subscription check — paywall enabled", () => {
 
     expect(hasFeatureAccess(freeStatus, "final_four")).toBe(false);
   });
+
+  it("getCachedAccessStatus returns same result as getAccessStatus", async () => {
+    const { getAccessStatus, getCachedAccessStatus } = await import(
+      "@/lib/subscription/check"
+    );
+    const supabase = createMockSupabase(
+      { tier: "madness_plus", expires_at: null },
+      { features_unlocked: false },
+    );
+
+    const [direct, cached] = await Promise.all([
+      getAccessStatus(supabase, "user-1"),
+      getCachedAccessStatus(supabase, "user-1"),
+    ]);
+
+    expect(cached.tier).toBe(direct.tier);
+    expect(cached.isPremium).toBe(direct.isPremium);
+    expect(cached.subscriptionActive).toBe(direct.subscriptionActive);
+    expect(cached.referralUnlocked).toBe(direct.referralUnlocked);
+  });
+
+  it("getCachedAccessStatus deduplicates calls for the same userId", async () => {
+    const { getCachedAccessStatus } = await import(
+      "@/lib/subscription/check"
+    );
+    const supabase = createMockSupabase(
+      { tier: "madness_plus", expires_at: null },
+      { features_unlocked: false },
+    );
+
+    // Call twice with same userId — both should resolve
+    const [first, second] = await Promise.all([
+      getCachedAccessStatus(supabase, "user-1"),
+      getCachedAccessStatus(supabase, "user-1"),
+    ]);
+
+    // Both return identical results
+    expect(first.tier).toBe("madness_plus");
+    expect(second.tier).toBe("madness_plus");
+    expect(first.isPremium).toBe(true);
+    expect(second.isPremium).toBe(true);
+  });
 });

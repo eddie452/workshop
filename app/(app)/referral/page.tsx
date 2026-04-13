@@ -29,25 +29,10 @@ export default async function ReferralPage() {
   return (
     <PageContainer width="sm" className="space-y-6">
       <div>
-        <h1
-          className="text-2xl font-bold text-brand-primary-dark"
-          style={{
-            fontSize: "1.5rem",
-            fontWeight: 700,
-            color: "#045A82",
-            margin: 0,
-          }}
-        >
+        <h1 className="m-0 text-2xl font-bold text-brand-primary-dark">
           Invite Friends
         </h1>
-        <p
-          className="mt-1 text-sm text-brand-text-muted"
-          style={{
-            fontSize: "0.875rem",
-            color: "#0682BB",
-            marginTop: "0.25rem",
-          }}
-        >
+        <p className="mt-1 mb-0 text-sm text-brand-text-muted">
           Share Allergy Madness with friends and unlock all features for free.
         </p>
       </div>

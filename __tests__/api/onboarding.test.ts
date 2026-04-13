@@ -214,6 +214,92 @@ describe("POST /api/onboarding", () => {
     expect(body.profile.home_lng).toBeNull();
   });
 
+  it("succeeds when Census API fails (graceful degradation)", async () => {
+    const mockSupabase = createMockSupabase();
+    vi.mocked(createClient).mockResolvedValue(mockSupabase as never);
+
+    vi.mocked(geocodeAddress).mockResolvedValue({
+      lat: 36.16,
+      lng: -86.78,
+      formatted_address: "123 Main St, Nashville, TN 37203",
+      state: "TN",
+      zip: "37203",
+      is_continental_us: true,
+    });
+
+    vi.mocked(getPropertyData).mockResolvedValue(null);
+    vi.mocked(getBlockGroupIncome).mockRejectedValue(
+      new Error("Census API unavailable"),
+    );
+
+    const request = new Request("http://localhost/api/onboarding", {
+      method: "POST",
+      body: JSON.stringify({
+        address: "123 Main St, Nashville, TN 37203",
+        has_pets: false,
+        prior_allergy_diagnosis: false,
+        seasonal_pattern: "unknown",
+      }),
+    });
+
+    const response = await POST(request);
+    const body = await response.json();
+
+    expect(response.status).toBe(200);
+    expect(body.success).toBe(true);
+    expect(body.profile.home_region).toBe("Southeast");
+    expect(body.allergen_count).toBeGreaterThan(0);
+    // income_tier should not leak even when Census fails
+    const bodyStr = JSON.stringify(body);
+    expect(bodyStr).not.toContain("income_tier");
+  });
+
+  it("handles re-onboarding gracefully (upserts profile, re-seeds Elo)", async () => {
+    const mockDelete = vi.fn().mockReturnValue({
+      eq: vi.fn().mockReturnValue({
+        is: vi.fn().mockReturnValue({ error: null }),
+      }),
+    });
+
+    const mockSupabase = createMockSupabase({
+      delete: mockDelete,
+    });
+    vi.mocked(createClient).mockResolvedValue(mockSupabase as never);
+
+    vi.mocked(geocodeAddress).mockResolvedValue({
+      lat: 36.16,
+      lng: -86.78,
+      formatted_address: "123 Main St, Nashville, TN 37203",
+      state: "TN",
+      zip: "37203",
+      is_continental_us: true,
+    });
+
+    vi.mocked(getPropertyData).mockResolvedValue(null);
+    vi.mocked(getBlockGroupIncome).mockResolvedValue(null);
+
+    const request = new Request("http://localhost/api/onboarding", {
+      method: "POST",
+      body: JSON.stringify({
+        address: "123 Main St, Nashville, TN 37203",
+        has_pets: true,
+        prior_allergy_diagnosis: true,
+        seasonal_pattern: "spring",
+      }),
+    });
+
+    const response = await POST(request);
+    const body = await response.json();
+
+    expect(response.status).toBe(200);
+    expect(body.success).toBe(true);
+    // Upsert is used (not insert), so re-onboarding overwrites previous profile
+    expect(mockSupabase.from).toHaveBeenCalledWith("user_profiles");
+    // Elo records are re-seeded (delete + insert)
+    expect(mockSupabase.from).toHaveBeenCalledWith("user_allergen_elo");
+    expect(body.allergen_count).toBeGreaterThan(0);
+  });
+
   it("succeeds when BatchData fails (graceful degradation)", async () => {
     const mockSupabase = createMockSupabase();
     vi.mocked(createClient).mockResolvedValue(mockSupabase as never);

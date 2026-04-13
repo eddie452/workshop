@@ -150,5 +150,21 @@ describe("PfasPanel", () => {
       render(<PfasPanel entries={mildEntry} isPremium={true} />);
       expect(screen.getByText("Mild OAS")).toBeDefined();
     });
+
+    it("renders systemic_risk severity correctly", () => {
+      const systemicEntry: PfasCrossReactivity[] = [
+        {
+          allergen_id: "peanut_tree",
+          common_name: "Peanut (tree nut cross)",
+          category: "tree",
+          cross_reactive_foods: ["peanut", "soy", "lentil"],
+          pfas_severity: "systemic_risk",
+        },
+      ];
+      render(<PfasPanel entries={systemicEntry} isPremium={true} />);
+      expect(screen.getByText("Systemic Risk")).toBeDefined();
+      const badge = screen.getByTestId("pfas-severity-badge");
+      expect(badge).toBeDefined();
+    });
   });
 });

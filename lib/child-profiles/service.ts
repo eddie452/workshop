@@ -185,9 +185,17 @@ export async function createChild(
     .single();
 
   if (insertError || !child) {
+    // Handle DB-level max children constraint (defense-in-depth trigger)
+    const msg = insertError?.message ?? "unknown error";
+    if (msg.includes("Maximum of 5 child profiles")) {
+      return {
+        success: false,
+        error: `Maximum of ${MAX_CHILDREN} child profiles allowed`,
+      };
+    }
     return {
       success: false,
-      error: `Failed to create child profile: ${insertError?.message ?? "unknown error"}`,
+      error: `Failed to create child profile: ${msg}`,
     };
   }
 

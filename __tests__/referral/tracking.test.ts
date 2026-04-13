@@ -186,14 +186,16 @@ describe("getReferralStatus", () => {
 });
 
 describe("recordReferral", () => {
-  it("rejects invalid referral code", async () => {
+  function createRpcSupabase(rpcResult: { data: unknown; error: { message: string } | null }) {
     const supabase = createMockSupabase();
-    supabase.from.mockReturnValueOnce({
-      select: vi.fn().mockReturnValue({
-        eq: vi.fn().mockReturnValue({
-          single: vi.fn().mockResolvedValue({ data: null, error: null }),
-        }),
-      }),
+    (supabase as unknown as { rpc: ReturnType<typeof vi.fn> }).rpc = vi.fn().mockResolvedValue(rpcResult);
+    return supabase as typeof supabase & { rpc: ReturnType<typeof vi.fn> };
+  }
+
+  it("rejects invalid referral code", async () => {
+    const supabase = createRpcSupabase({
+      data: { success: false, error: "Invalid referral code" },
+      error: null,
     });
 
     const result = await recordReferral(supabase, "BADCODE1", "new-user");
@@ -202,16 +204,9 @@ describe("recordReferral", () => {
   });
 
   it("prevents self-referral", async () => {
-    const supabase = createMockSupabase();
-    supabase.from.mockReturnValueOnce({
-      select: vi.fn().mockReturnValue({
-        eq: vi.fn().mockReturnValue({
-          single: vi.fn().mockResolvedValue({
-            data: { id: "user-1", referral_count: 0, features_unlocked: false },
-            error: null,
-          }),
-        }),
-      }),
+    const supabase = createRpcSupabase({
+      data: { success: false, error: "Cannot refer yourself" },
+      error: null,
     });
 
     const result = await recordReferral(supabase, "TESTCODE", "user-1");
@@ -220,30 +215,9 @@ describe("recordReferral", () => {
   });
 
   it("prevents duplicate referral", async () => {
-    const supabase = createMockSupabase();
-    // Find referrer
-    supabase.from.mockReturnValueOnce({
-      select: vi.fn().mockReturnValue({
-        eq: vi.fn().mockReturnValue({
-          single: vi.fn().mockResolvedValue({
-            data: { id: "referrer-1", referral_count: 0, features_unlocked: false },
-            error: null,
-          }),
-        }),
-      }),
-    });
-    // Check existing referral — found one
-    supabase.from.mockReturnValueOnce({
-      select: vi.fn().mockReturnValue({
-        eq: vi.fn().mockReturnValue({
-          eq: vi.fn().mockReturnValue({
-            maybeSingle: vi.fn().mockResolvedValue({
-              data: { id: "existing-referral" },
-              error: null,
-            }),
-          }),
-        }),
-      }),
+    const supabase = createRpcSupabase({
+      data: { success: false, error: "Referral already recorded" },
+      error: null,
     });
 
     const result = await recordReferral(supabase, "TESTCODE", "new-user");
@@ -252,126 +226,50 @@ describe("recordReferral", () => {
   });
 
   it("records referral and increments count", async () => {
-    const supabase = createMockSupabase();
-    // Find referrer
-    supabase.from.mockReturnValueOnce({
-      select: vi.fn().mockReturnValue({
-        eq: vi.fn().mockReturnValue({
-          single: vi.fn().mockResolvedValue({
-            data: { id: "referrer-1", referral_count: 1, features_unlocked: false },
-            error: null,
-          }),
-        }),
-      }),
-    });
-    // Check existing — none
-    supabase.from.mockReturnValueOnce({
-      select: vi.fn().mockReturnValue({
-        eq: vi.fn().mockReturnValue({
-          eq: vi.fn().mockReturnValue({
-            maybeSingle: vi.fn().mockResolvedValue({ data: null, error: null }),
-          }),
-        }),
-      }),
-    });
-    // Insert referral
-    supabase.from.mockReturnValueOnce({
-      insert: vi.fn().mockResolvedValue({ error: null }),
-    });
-    // Update profile
-    supabase.from.mockReturnValueOnce({
-      update: vi.fn().mockReturnValue({
-        eq: vi.fn().mockResolvedValue({ error: null }),
-      }),
+    const supabase = createRpcSupabase({
+      data: { success: true, features_unlocked: false },
+      error: null,
     });
 
     const result = await recordReferral(supabase, "TESTCODE", "new-user");
     expect(result.success).toBe(true);
     expect(result.features_unlocked).toBe(false);
+    expect(supabase.rpc).toHaveBeenCalledWith("record_referral", {
+      p_referral_code: "TESTCODE",
+      p_referred_id: "new-user",
+    });
   });
 
   it("unlocks features at threshold (3 referrals)", async () => {
-    const supabase = createMockSupabase();
-    // Find referrer with 2 existing referrals
-    supabase.from.mockReturnValueOnce({
-      select: vi.fn().mockReturnValue({
-        eq: vi.fn().mockReturnValue({
-          single: vi.fn().mockResolvedValue({
-            data: { id: "referrer-1", referral_count: 2, features_unlocked: false },
-            error: null,
-          }),
-        }),
-      }),
+    const supabase = createRpcSupabase({
+      data: { success: true, features_unlocked: true },
+      error: null,
     });
-    // No existing referral
-    supabase.from.mockReturnValueOnce({
-      select: vi.fn().mockReturnValue({
-        eq: vi.fn().mockReturnValue({
-          eq: vi.fn().mockReturnValue({
-            maybeSingle: vi.fn().mockResolvedValue({ data: null, error: null }),
-          }),
-        }),
-      }),
-    });
-    // Insert
-    supabase.from.mockReturnValueOnce({
-      insert: vi.fn().mockResolvedValue({ error: null }),
-    });
-    // Update — should set features_unlocked = true
-    const updateMock = vi.fn().mockReturnValue({
-      eq: vi.fn().mockResolvedValue({ error: null }),
-    });
-    supabase.from.mockReturnValueOnce({ update: updateMock });
 
     const result = await recordReferral(supabase, "TESTCODE", "new-user");
     expect(result.success).toBe(true);
     expect(result.features_unlocked).toBe(true);
-    // Verify the update included features_unlocked: true
-    expect(updateMock).toHaveBeenCalledWith(
-      expect.objectContaining({
-        referral_count: 3,
-        features_unlocked: true,
-      }),
-    );
   });
 
-  it("unlock is permanent — does not revert features_unlocked", async () => {
-    const supabase = createMockSupabase();
-    // Referrer already unlocked with 4 referrals
-    supabase.from.mockReturnValueOnce({
-      select: vi.fn().mockReturnValue({
-        eq: vi.fn().mockReturnValue({
-          single: vi.fn().mockResolvedValue({
-            data: { id: "referrer-1", referral_count: 4, features_unlocked: true },
-            error: null,
-          }),
-        }),
-      }),
+  it("unlock is permanent — already unlocked referrer stays unlocked", async () => {
+    const supabase = createRpcSupabase({
+      data: { success: true, features_unlocked: true },
+      error: null,
     });
-    // No existing
-    supabase.from.mockReturnValueOnce({
-      select: vi.fn().mockReturnValue({
-        eq: vi.fn().mockReturnValue({
-          eq: vi.fn().mockReturnValue({
-            maybeSingle: vi.fn().mockResolvedValue({ data: null, error: null }),
-          }),
-        }),
-      }),
-    });
-    // Insert
-    supabase.from.mockReturnValueOnce({
-      insert: vi.fn().mockResolvedValue({ error: null }),
-    });
-    // Update — should NOT set features_unlocked (already true)
-    const updateMock = vi.fn().mockReturnValue({
-      eq: vi.fn().mockResolvedValue({ error: null }),
-    });
-    supabase.from.mockReturnValueOnce({ update: updateMock });
 
     const result = await recordReferral(supabase, "TESTCODE", "new-user-5");
     expect(result.success).toBe(true);
     expect(result.features_unlocked).toBe(true);
-    // Should only update count, not set features_unlocked again
-    expect(updateMock).toHaveBeenCalledWith({ referral_count: 5 });
+  });
+
+  it("returns error when RPC call fails (transaction rollback)", async () => {
+    const supabase = createRpcSupabase({
+      data: null,
+      error: { message: "database connection lost" },
+    });
+
+    const result = await recordReferral(supabase, "TESTCODE", "new-user");
+    expect(result.success).toBe(false);
+    expect(result.error).toContain("Transaction failed");
   });
 });

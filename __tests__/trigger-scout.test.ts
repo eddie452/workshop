@@ -335,6 +335,54 @@ describe("TRIGGER_SCOUT_PROXIMITY_MULTIPLIER", () => {
 });
 
 /* ------------------------------------------------------------------ */
+/* proximity_multiplier guard (#86)                                    */
+/* ------------------------------------------------------------------ */
+
+describe("proximity_multiplier guard", () => {
+  const oakMatch: ScoutMatch = {
+    allergen_id: "oak",
+    common_name: "Oak",
+    category: "tree",
+    matched_label: "oak tree",
+    confidence: 0.92,
+  };
+
+  it("returns 2.5 when active allergens exist", () => {
+    const conditions = new Map<string, ScoutConditions>([
+      ["oak", { symptoms_present: true, seasonal_active: true }],
+    ]);
+    const result = analyzeScan([oakMatch], conditions);
+    const multiplier =
+      result.active_allergen_ids.length > 0
+        ? TRIGGER_SCOUT_PROXIMITY_MULTIPLIER
+        : 1.0;
+    expect(multiplier).toBe(2.5);
+  });
+
+  it("returns 1.0 (neutral) when no allergens are active", () => {
+    const conditions = new Map<string, ScoutConditions>([
+      ["oak", { symptoms_present: false, seasonal_active: true }],
+    ]);
+    const result = analyzeScan([oakMatch], conditions);
+    const multiplier =
+      result.active_allergen_ids.length > 0
+        ? TRIGGER_SCOUT_PROXIMITY_MULTIPLIER
+        : 1.0;
+    expect(multiplier).toBe(1.0);
+  });
+
+  it("returns 1.0 (neutral) when there are no matches at all", () => {
+    const conditions = new Map<string, ScoutConditions>();
+    const result = analyzeScan([], conditions);
+    const multiplier =
+      result.active_allergen_ids.length > 0
+        ? TRIGGER_SCOUT_PROXIMITY_MULTIPLIER
+        : 1.0;
+    expect(multiplier).toBe(1.0);
+  });
+});
+
+/* ------------------------------------------------------------------ */
 /* No raw image data stored (type safety)                              */
 /* ------------------------------------------------------------------ */
 

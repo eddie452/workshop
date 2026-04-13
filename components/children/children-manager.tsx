@@ -10,6 +10,7 @@
 import { useState, useCallback } from "react";
 import { ChildProfileCard } from "./child-profile-card";
 import { AddChildForm } from "./add-child-form";
+import { EditChildForm } from "./edit-child-form";
 import { UpgradeCta } from "@/components/subscription/upgrade-cta";
 import type { ChildProfileSummary } from "@/lib/child-profiles/types";
 import { MAX_CHILDREN } from "@/lib/child-profiles/types";
@@ -88,8 +89,47 @@ export function ChildrenManager({
 
   const handleEdit = useCallback((childId: string) => {
     setEditingId(childId);
-    void childId;
+    setShowAddForm(false);
+    setError(null);
   }, []);
+
+  const handleEditSubmit = useCallback(
+    async (childId: string, data: { name: string; birth_year?: number | null }) => {
+      setIsLoading(true);
+      setError(null);
+
+      try {
+        const res = await fetch(
+          `${window.location.origin}/api/children?id=${childId}`,
+          {
+            method: "PATCH",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(data),
+          },
+        );
+
+        const result = await res.json();
+
+        if (!result.success) {
+          setError(result.error ?? "Failed to update child");
+          return;
+        }
+
+        setChildList((prev) =>
+          prev.map((c) =>
+            c.id === childId ? { ...c, name: data.name, birth_year: data.birth_year ?? null } : c,
+          ),
+        );
+        setEditingId(null);
+        setError(null);
+      } catch {
+        setError("An unexpected error occurred");
+      } finally {
+        setIsLoading(false);
+      }
+    },
+    [],
+  );
 
   // Gate: show upgrade CTA if no family tier access
   if (!hasAccess) {
@@ -163,14 +203,28 @@ export function ChildrenManager({
         </div>
       ) : (
         <div className="space-y-3">
-          {childList.map((child) => (
-            <ChildProfileCard
-              key={child.id}
-              child={child}
-              onDelete={handleDelete}
-              onEdit={handleEdit}
-            />
-          ))}
+          {childList.map((child) =>
+            editingId === child.id ? (
+              <EditChildForm
+                key={child.id}
+                child={child}
+                onSubmit={handleEditSubmit}
+                onCancel={() => {
+                  setEditingId(null);
+                  setError(null);
+                }}
+                isLoading={isLoading}
+                error={error}
+              />
+            ) : (
+              <ChildProfileCard
+                key={child.id}
+                child={child}
+                onDelete={handleDelete}
+                onEdit={handleEdit}
+              />
+            ),
+          )}
         </div>
       )}
 
@@ -184,8 +238,6 @@ export function ChildrenManager({
         </p>
       )}
 
-      {/* Suppress unused state for future edit form */}
-      {editingId && null}
     </div>
   );
 }

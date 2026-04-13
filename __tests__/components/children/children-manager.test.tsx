@@ -5,7 +5,7 @@
  */
 
 import { describe, it, expect, vi } from "vitest";
-import { render, screen } from "@testing-library/react";
+import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import { ChildrenManager } from "@/components/children/children-manager";
 import type { ChildProfileSummary } from "@/lib/child-profiles/types";
 
@@ -118,5 +118,73 @@ describe("ChildrenManager", () => {
 
     expect(screen.getByTestId("max-children-notice")).toBeTruthy();
     expect(screen.queryByTestId("add-child-trigger")).toBeNull();
+  });
+
+  it("shows edit form when edit button is clicked", () => {
+    render(
+      <ChildrenManager
+        initialChildren={mockChildren}
+        hasAccess={true}
+      />,
+    );
+
+    const editButtons = screen.getAllByTestId("edit-child-btn");
+    fireEvent.click(editButtons[0]);
+
+    expect(screen.getByTestId("edit-child-form")).toBeTruthy();
+    expect(screen.getByTestId("edit-child-name-input")).toBeTruthy();
+  });
+
+  it("cancels edit and returns to card view", () => {
+    render(
+      <ChildrenManager
+        initialChildren={mockChildren}
+        hasAccess={true}
+      />,
+    );
+
+    const editButtons = screen.getAllByTestId("edit-child-btn");
+    fireEvent.click(editButtons[0]);
+
+    expect(screen.getByTestId("edit-child-form")).toBeTruthy();
+
+    fireEvent.click(screen.getByTestId("edit-child-cancel-btn"));
+
+    expect(screen.queryByTestId("edit-child-form")).toBeNull();
+    expect(screen.getAllByTestId("child-profile-card")).toHaveLength(2);
+  });
+
+  it("submits edit and updates child in list", async () => {
+    const mockFetch = vi.fn().mockResolvedValue({
+      json: () => Promise.resolve({ success: true }),
+    });
+    vi.stubGlobal("fetch", mockFetch);
+
+    render(
+      <ChildrenManager
+        initialChildren={mockChildren}
+        hasAccess={true}
+      />,
+    );
+
+    const editButtons = screen.getAllByTestId("edit-child-btn");
+    fireEvent.click(editButtons[0]);
+
+    const nameInput = screen.getByTestId("edit-child-name-input");
+    fireEvent.change(nameInput, { target: { value: "Alicia" } });
+
+    fireEvent.click(screen.getByTestId("edit-child-save-btn"));
+
+    await waitFor(() => {
+      expect(mockFetch).toHaveBeenCalledWith(
+        expect.stringContaining("/api/children?id=child-1"),
+        expect.objectContaining({ method: "PATCH" }),
+      );
+    });
+
+    await waitFor(() => {
+      expect(screen.queryByTestId("edit-child-form")).toBeNull();
+      expect(screen.getByText("Alicia")).toBeTruthy();
+    });
   });
 });

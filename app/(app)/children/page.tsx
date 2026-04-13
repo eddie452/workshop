@@ -3,6 +3,7 @@ import { createClient } from "@/lib/supabase/server";
 import { isFeatureAvailable } from "@/lib/subscription";
 import { listChildren } from "@/lib/child-profiles";
 import { ChildrenManager } from "@/components/children";
+import { PageContainer } from "@/components/layout";
 
 /**
  * /children — Child Profiles Management Page
@@ -36,14 +37,7 @@ export default async function ChildrenPage() {
   }
 
   return (
-    <div
-      className="mx-auto max-w-2xl px-4 py-8"
-      style={{
-        maxWidth: "42rem",
-        margin: "0 auto",
-        padding: "2rem 1rem",
-      }}
-    >
+    <PageContainer>
       <div className="mb-6">
         <h1
           className="text-2xl font-bold text-brand-primary-dark"
@@ -72,6 +66,6 @@ export default async function ChildrenPage() {
         initialChildren={children}
         hasAccess={hasAccess}
       />
-    </div>
+    </PageContainer>
   );
 }

@@ -2,6 +2,7 @@ import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { FdaDisclaimer } from "@/components/shared/fda-disclaimer";
 import { CheckinForm } from "@/components/checkin/checkin-form";
+import { PageContainer } from "@/components/layout";
 
 /**
  * /checkin — Daily Check-in Page
@@ -62,14 +63,7 @@ export default async function CheckinPage() {
   const alreadyCheckedIn = (count ?? 0) > 0;
 
   return (
-    <div
-      className="mx-auto max-w-md px-4 py-8"
-      style={{
-        maxWidth: "28rem",
-        margin: "0 auto",
-        padding: "2rem 1rem",
-      }}
-    >
+    <PageContainer width="sm">
       {/* Header */}
       <div
         className="mb-6"
@@ -126,6 +120,6 @@ export default async function CheckinPage() {
           Back to Dashboard
         </a>
       </div>
-    </div>
+    </PageContainer>
   );
 }

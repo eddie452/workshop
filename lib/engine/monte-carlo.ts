@@ -124,7 +124,7 @@ export function createSeededRng(seed: number): () => number {
  * Normalized to 0-1 range with diminishing returns above 20 mph.
  */
 export function windDispersionFactor(wind_mph: number): number {
-  // Sigmoid-like curve: low wind = low exposure, plateaus at high wind
+  // Linear clamp: scales 0→1 over 0–20 mph, capped at 1.0 above 20 mph
   return Math.min(1.0, wind_mph / 20.0);
 }
 

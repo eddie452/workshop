@@ -6,6 +6,7 @@
  */
 
 import type { SubscriptionTier } from "@/lib/subscription/types";
+import { LockIcon } from "@/components/shared";
 
 export interface PremiumBadgeProps {
   /** The user's current tier (affects badge display) */
@@ -45,10 +46,7 @@ export function PremiumBadge({
     >
       {!compact && (
         <span aria-hidden="true" className="inline-flex h-4 w-4 items-center justify-center rounded-full bg-brand-surface-muted">
-          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5} strokeLinecap="round" strokeLinejoin="round">
-            <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
-            <path d="M7 11V7a5 5 0 0110 0v4" />
-          </svg>
+          <LockIcon size={10} strokeWidth={2.5} />
         </span>
       )}
       Premium

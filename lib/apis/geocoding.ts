@@ -74,8 +74,13 @@ export async function geocodeAddress(
   let response: Response;
   try {
     response = await fetchWithTimeout(url.toString());
-  } catch {
-    throw new Error("Geocoding API timeout");
+  } catch (error) {
+    if (error instanceof DOMException && error.name === "AbortError") {
+      throw new Error("Geocoding API timeout");
+    }
+    throw new Error(
+      `Geocoding API error: ${error instanceof Error ? error.message : String(error)}`,
+    );
   }
   if (!response.ok) {
     throw new Error(`Geocoding API HTTP error: ${response.status}`);

@@ -31,6 +31,7 @@ import type {
   UserAllergenEloInsert,
 } from "@/lib/supabase/types";
 import type { Allergen } from "@/lib/engine/types";
+import { logger } from "@/lib/logger";
 
 /* ------------------------------------------------------------------ */
 /* Request body type                                                    */
@@ -238,7 +239,7 @@ export async function POST(
 
     if (locationError) {
       // Non-fatal — profile was saved, location can be recreated
-      console.error("Location save warning:", locationError.message);
+      logger.warn("Location save failed", { error: locationError.message });
     }
 
     // ----------------------------------------------------------------
@@ -292,7 +293,7 @@ export async function POST(
         .insert(eloInserts);
 
       if (eloError) {
-        console.error("Elo seeding failed:", eloError.message);
+        logger.error("Elo seeding failed", { error: eloError.message });
         return NextResponse.json(
           { success: false, error: "Failed to initialize allergen data. Please try again." },
           { status: 500 },
@@ -315,7 +316,7 @@ export async function POST(
       allergen_count: eloInserts.length,
     });
   } catch (error) {
-    console.error("Onboarding error:", error);
+    logger.error("Onboarding error", { error: error instanceof Error ? error.message : String(error) });
     return NextResponse.json(
       {
         success: false as const,

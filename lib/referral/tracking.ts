@@ -14,6 +14,12 @@ import type { Database } from "@/lib/supabase/types";
 
 type SupabaseDB = SupabaseClient<Database>;
 
+/** Type for supabase.rpc() calls */
+type RpcCall = (
+  fn: string,
+  params: Record<string, unknown>,
+) => Promise<{ data: unknown; error: { message: string } | null }>;
+
 export interface ReferralStatus {
   referral_code: string;
   referral_count: number;
@@ -32,16 +38,6 @@ interface ProfileCodeRow {
 interface ProfileCountRow {
   referral_count: number;
   features_unlocked: boolean;
-}
-
-interface ReferrerRow {
-  id: string;
-  referral_count: number;
-  features_unlocked: boolean;
-}
-
-interface ReferralIdRow {
-  id: string;
 }
 
 /* ------------------------------------------------------------------ */
@@ -149,12 +145,9 @@ export async function getReferralStatus(
 /**
  * Record a referral and update the referrer's count.
  *
- * This function:
- * 1. Validates the referral code belongs to a real user
- * 2. Ensures the referred user is not self-referring
- * 3. Creates the referral record
- * 4. Increments the referrer's referral_count
- * 5. Checks if the threshold is met and unlocks features if so
+ * Uses a Postgres RPC function (`record_referral`) to execute all 3 operations
+ * (insert referral, increment count, conditionally unlock) in a single
+ * atomic transaction. If any step fails, the entire operation rolls back.
  *
  * @param supabase - Authenticated Supabase client (service role or with appropriate RLS)
  * @param referralCode - The referral code used during signup
@@ -166,69 +159,20 @@ export async function recordReferral(
   referralCode: string,
   referredUserId: string,
 ): Promise<{ success: boolean; error?: string; features_unlocked?: boolean }> {
-  // Find the referrer by code
-  const referrerQuery = supabase.from("user_profiles") as unknown as QueryChain<ReferrerRow>;
-  const { data: referrer } = await referrerQuery
-    .select("id, referral_count, features_unlocked")
-    .eq("referral_code", referralCode)
-    .single();
-
-  if (!referrer) {
-    return { success: false, error: "Invalid referral code" };
-  }
-
-  // Prevent self-referral
-  if (referrer.id === referredUserId) {
-    return { success: false, error: "Cannot refer yourself" };
-  }
-
-  // Check for duplicate referral
-  const dupQuery = supabase.from("referrals") as unknown as QueryChain<ReferralIdRow>;
-  const { data: existing } = await dupQuery
-    .select("id")
-    .eq("referrer_id", referrer.id)
-    .eq("referred_id", referredUserId)
-    .maybeSingle();
-
-  if (existing) {
-    return { success: false, error: "Referral already recorded" };
-  }
-
-  // Insert the referral record
-  const insertQuery = supabase.from("referrals") as unknown as QueryChain<ReferralIdRow>;
-  const { error: insertError } = await insertQuery.insert({
-    referrer_id: referrer.id,
-    referred_id: referredUserId,
+  const { data, error } = await (supabase.rpc as unknown as RpcCall)("record_referral", {
+    p_referral_code: referralCode,
+    p_referred_id: referredUserId,
   });
 
-  if (insertError) {
-    return { success: false, error: `Failed to record referral: ${insertError.message}` };
+  if (error) {
+    return { success: false, error: `Transaction failed: ${error.message}` };
   }
 
-  // Increment referral count
-  const newCount = (referrer.referral_count ?? 0) + 1;
-  const shouldUnlock = newCount >= REFERRAL_UNLOCK_THRESHOLD;
-
-  const updateData: Record<string, unknown> = {
-    referral_count: newCount,
-  };
-
-  // Unlock is permanent — only set to true, never revert
-  if (shouldUnlock && !referrer.features_unlocked) {
-    updateData.features_unlocked = true;
-  }
-
-  const profileUpdateQuery = supabase.from("user_profiles") as unknown as QueryChain<ReferrerRow>;
-  const { error: updateError } = await profileUpdateQuery
-    .update(updateData)
-    .eq("id", referrer.id);
-
-  if (updateError) {
-    return { success: false, error: `Failed to update referral count: ${updateError.message}` };
-  }
+  const result = data as { success: boolean; error?: string; features_unlocked?: boolean };
 
   return {
-    success: true,
-    features_unlocked: shouldUnlock || (referrer.features_unlocked ?? false),
+    success: result.success,
+    error: result.error,
+    features_unlocked: result.features_unlocked,
   };
 }

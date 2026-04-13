@@ -223,7 +223,10 @@ export interface AllergenSeedData {
   region_south_central: number;
   region_southeast: number;
   region_southwest: number;
-  /** Mean particle size in micrometers */
+  /**
+   * Mean particle size in micrometers.
+   * Metadata only — settling_velocity_cm_s encodes size via Stokes' Law.
+   */
   particle_size_um: number;
   /** Stokes' Law settling velocity in cm/s */
   settling_velocity_cm_s: number;

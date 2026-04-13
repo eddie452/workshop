@@ -12,6 +12,7 @@
  * IMPORTANT: income_tier is NEVER included in any output.
  */
 
+import { cache } from "react";
 import { PAYWALL_ENABLED, PREMIUM_TIERS, TIER_FEATURES } from "./constants";
 import type { AccessStatus, PremiumFeature, SubscriptionTier } from "./types";
 import type { SupabaseClient } from "@supabase/supabase-js";
@@ -106,11 +107,44 @@ export async function getAccessStatus(
   };
 }
 
+/* ------------------------------------------------------------------ */
+/* Per-request cache                                                    */
+/* ------------------------------------------------------------------ */
+
+/**
+ * Request-scoped cache for getAccessStatus results.
+ *
+ * React `cache()` creates a new Map per server request in Next.js,
+ * so results are never shared across users or requests. Within a
+ * single request, multiple calls with the same userId skip the DB.
+ */
+const getRequestCache = cache(
+  () => new Map<string, Promise<AccessStatus>>(),
+);
+
+/**
+ * Cached version of getAccessStatus — deduplicates DB queries within
+ * the same server request. Safe because React `cache()` is request-scoped.
+ */
+export function getCachedAccessStatus(
+  supabase: SupabaseDB,
+  userId: string,
+): Promise<AccessStatus> {
+  const requestCache = getRequestCache();
+  const existing = requestCache.get(userId);
+  if (existing) return existing;
+
+  const promise = getAccessStatus(supabase, userId);
+  requestCache.set(userId, promise);
+  return promise;
+}
+
 /**
  * Check if a specific premium feature is available to the user.
  *
  * This is the primary API for gating features. It encapsulates the
  * PAYWALL_ENABLED check, subscription tier, and referral status.
+ * Uses per-request caching to avoid redundant DB queries.
  *
  * @param supabase - Authenticated Supabase client
  * @param userId - The authenticated user's ID
@@ -127,7 +161,7 @@ export async function isFeatureAvailable(
     return true;
   }
 
-  const status = await getAccessStatus(supabase, userId);
+  const status = await getCachedAccessStatus(supabase, userId);
 
   // Referral unlock grants all premium features
   if (status.referralUnlocked) {

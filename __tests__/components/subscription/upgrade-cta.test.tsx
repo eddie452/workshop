@@ -45,4 +45,26 @@ describe("UpgradeCta", () => {
 
     expect(screen.queryByTestId("upgrade-cta-referral")).toBeNull();
   });
+
+  it("defaults tier name to Madness+", () => {
+    render(<UpgradeCta />);
+
+    expect(
+      screen.getByText(/with Madness\+/),
+    ).toBeTruthy();
+    expect(
+      screen.getByText("Upgrade to Madness+"),
+    ).toBeTruthy();
+  });
+
+  it("renders custom tier name when provided", () => {
+    render(<UpgradeCta tierName="Madness Family" />);
+
+    expect(
+      screen.getByText(/with Madness Family/),
+    ).toBeTruthy();
+    expect(
+      screen.getByText("Upgrade to Madness Family"),
+    ).toBeTruthy();
+  });
 });

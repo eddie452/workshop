@@ -99,7 +99,7 @@ export function ChildrenManager({
           Track allergies for up to {maxChildren} children with independent
           leaderboards and check-ins.
         </p>
-        <UpgradeCta feature="child profiles" />
+        <UpgradeCta feature="child profiles" tierName="Madness Family" />
       </div>
     );
   }

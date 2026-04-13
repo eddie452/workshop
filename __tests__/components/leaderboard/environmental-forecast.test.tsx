@@ -147,9 +147,9 @@ describe("EnvironmentalForecast", () => {
     it("renders PM2.5 and PM10 values", () => {
       render(<EnvironmentalForecast data={fullForecastData} />);
       expect(screen.getByText("PM2.5")).toBeDefined();
-      expect(screen.getByText("12 ug/m3")).toBeDefined();
+      expect(screen.getByText("12 \u00B5g/m\u00B3")).toBeDefined();
       expect(screen.getByText("PM10")).toBeDefined();
-      expect(screen.getByText("18 ug/m3")).toBeDefined();
+      expect(screen.getByText("18 \u00B5g/m\u00B3")).toBeDefined();
     });
 
     it("renders weather data", () => {

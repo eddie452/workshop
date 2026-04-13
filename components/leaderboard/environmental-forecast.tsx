@@ -238,6 +238,8 @@ export function EnvironmentalForecast({
               value={upiLabel(data.pollen.upi_weed)}
               color={upiColor(data.pollen.upi_weed)}
             />
+            {/* Species filter: show only species with UPI > 0 (active),
+                capped at 5 to avoid overwhelming the display */}
             {data.pollen.species.length > 0 && (
               <div className="mt-2 border-t border-brand-border-light pt-2">
                 <p className="mb-1 text-xs font-medium text-brand-text-muted">
@@ -279,13 +281,13 @@ export function EnvironmentalForecast({
                 {data.aqi.pm25 !== null && (
                   <DataRow
                     label="PM2.5"
-                    value={`${data.aqi.pm25} ug/m3`}
+                    value={`${data.aqi.pm25} \u00B5g/m\u00B3`}
                   />
                 )}
                 {data.aqi.pm10 !== null && (
                   <DataRow
                     label="PM10"
-                    value={`${data.aqi.pm10} ug/m3`}
+                    value={`${data.aqi.pm10} \u00B5g/m\u00B3`}
                   />
                 )}
                 {data.aqi.dominant_pollutant && (

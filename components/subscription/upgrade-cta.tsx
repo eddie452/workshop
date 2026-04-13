@@ -1,7 +1,7 @@
 /**
  * Upgrade CTA (Call to Action)
  *
- * Prompts free-tier users to upgrade to Madness+ or unlock via referrals.
+ * Prompts free-tier users to upgrade or unlock via referrals.
  * Shown alongside the blur overlay on gated content.
  */
 
@@ -10,12 +10,15 @@
 export interface UpgradeCtaProps {
   /** The feature being gated (for contextual messaging) */
   feature?: string;
+  /** Tier name shown in copy (default: "Madness+") */
+  tierName?: string;
   /** Number of referrals still needed to unlock (0 if already unlocked) */
   referralsNeeded?: number;
 }
 
 export function UpgradeCta({
   feature = "premium features",
+  tierName = "Madness+",
   referralsNeeded = 3,
 }: UpgradeCtaProps) {
   return (
@@ -27,7 +30,7 @@ export function UpgradeCta({
         Unlock {feature}
       </h3>
       <p className="mb-4 text-sm text-brand-text-secondary">
-        Get the full picture of your allergen triggers with Madness+.
+        Get the full picture of your allergen triggers with {tierName}.
       </p>
 
       {/* Primary CTA — Madness+ */}
@@ -39,7 +42,7 @@ export function UpgradeCta({
           // Placeholder — will connect to RevenueCat paywall
         }}
       >
-        Upgrade to Madness+
+        Upgrade to {tierName}
       </button>
 
       {/* Secondary CTA — Referral unlock */}

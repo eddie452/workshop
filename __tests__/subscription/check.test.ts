@@ -16,6 +16,27 @@
 
 import { describe, it, expect, vi, beforeEach } from "vitest";
 
+/**
+ * Mock React's cache() to behave like the real RSC version:
+ * memoize the factory so the same Map is returned within a test.
+ * In production, Next.js scopes cache() per request.
+ */
+vi.mock("react", async () => {
+  const actual = await vi.importActual<typeof import("react")>("react");
+  return {
+    ...actual,
+    cache: <T extends (...args: unknown[]) => unknown>(fn: T): T => {
+      let result: ReturnType<T> | undefined;
+      return ((...args: unknown[]) => {
+        if (result === undefined) {
+          result = fn(...args) as ReturnType<T>;
+        }
+        return result;
+      }) as unknown as T;
+    },
+  };
+});
+
 /* ------------------------------------------------------------------ */
 /* Mock Supabase client factory                                        */
 /* ------------------------------------------------------------------ */
@@ -261,21 +282,43 @@ describe("subscription check — paywall enabled", () => {
     const { getCachedAccessStatus } = await import(
       "@/lib/subscription/check"
     );
-    const supabase = createMockSupabase(
-      { tier: "madness_plus", expires_at: null },
-      { features_unlocked: false },
-    );
+    const mockFrom = vi.fn((table: string) => ({
+      select: () => ({
+        eq: (_col: string, _val: string) => ({
+          eq: () => ({
+            single: async () => ({
+              data: table === "user_profiles" ? { features_unlocked: false } : null,
+              error: null,
+            }),
+            maybeSingle: async () => ({
+              data: table === "user_subscriptions" ? { tier: "madness_plus", expires_at: null } : null,
+              error: null,
+            }),
+          }),
+          single: async () => ({
+            data: table === "user_profiles" ? { features_unlocked: false } : null,
+            error: null,
+          }),
+          maybeSingle: async () => ({
+            data: table === "user_subscriptions" ? { tier: "madness_plus", expires_at: null } : null,
+            error: null,
+          }),
+        }),
+      }),
+    }));
+    const supabase = { from: mockFrom } as never;
 
-    // Call twice with same userId — both should resolve
-    const [first, second] = await Promise.all([
-      getCachedAccessStatus(supabase, "user-1"),
-      getCachedAccessStatus(supabase, "user-1"),
-    ]);
+    // Call twice with same userId — second call should hit cache
+    const first = await getCachedAccessStatus(supabase, "user-1");
+    const second = await getCachedAccessStatus(supabase, "user-1");
 
-    // Both return identical results
+    // Both return correct results
     expect(first.tier).toBe("madness_plus");
     expect(second.tier).toBe("madness_plus");
     expect(first.isPremium).toBe(true);
     expect(second.isPremium).toBe(true);
+
+    // DB was only queried once (2 tables per call = 2 from() calls)
+    expect(mockFrom).toHaveBeenCalledTimes(2);
   });
 });

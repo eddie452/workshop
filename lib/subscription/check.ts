@@ -9,6 +9,11 @@
  * - PAYWALL_ENABLED=true: checks subscription + referral status
  * - Referral unlock is permanent and independent of subscription
  *
+ * Preferred entry point for server components: `getCachedAccessStatus`.
+ * It deduplicates DB queries within a single Next.js request via
+ * React `cache()`. Use `getAccessStatus` only when you need a fresh
+ * (uncached) query.
+ *
  * IMPORTANT: income_tier is NEVER included in any output.
  */
 

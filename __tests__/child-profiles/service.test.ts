@@ -217,6 +217,29 @@ describe("child-profiles service", () => {
       }
     });
 
+    it("returns user-friendly error when DB constraint fires", async () => {
+      const client = makeMockClientSequential((table, callIndex) => {
+        if (table === "child_profiles" && callIndex === 1) {
+          // getChildCount — race condition: returns 4 (under limit)
+          return { count: 4, error: null };
+        }
+        if (table === "child_profiles" && callIndex === 2) {
+          // insert — DB trigger rejects (another insert snuck in)
+          return {
+            data: null,
+            error: { message: "Maximum of 5 child profiles per parent" },
+          };
+        }
+        return { data: null, error: null };
+      });
+
+      const result = await createChild(client, "parent-1", { name: "Sixth" });
+      expect(result.success).toBe(false);
+      if (!result.success) {
+        expect(result.error).toBe(`Maximum of ${MAX_CHILDREN} child profiles allowed`);
+      }
+    });
+
     it("creates child profile when under limit", async () => {
       const mockChild = {
         id: "new-child-1",

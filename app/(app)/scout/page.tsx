@@ -2,6 +2,7 @@ import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { FdaDisclaimer } from "@/components/shared/fda-disclaimer";
 import { ScanForm } from "@/components/scout/scan-form";
+import { PageContainer } from "@/components/layout";
 
 /**
  * /scout — Trigger Scout Page
@@ -27,14 +28,7 @@ export default async function ScoutPage() {
   }
 
   return (
-    <div
-      className="mx-auto max-w-md px-4 py-8"
-      style={{
-        maxWidth: "28rem",
-        margin: "0 auto",
-        padding: "2rem 1rem",
-      }}
-    >
+    <PageContainer width="sm">
       {/* Header */}
       <div
         className="mb-6"
@@ -92,6 +86,6 @@ export default async function ScoutPage() {
           Back to Dashboard
         </a>
       </div>
-    </div>
+    </PageContainer>
   );
 }

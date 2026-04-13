@@ -4,6 +4,7 @@ import { getConfidenceTierBySignals } from "@/lib/engine";
 import type { RankedAllergen, CheckinSeverityQuery } from "@/components/leaderboard/types";
 import { SignOutButton } from "./sign-out-button";
 import { DashboardLeaderboard } from "./dashboard-leaderboard";
+import { PageContainer } from "@/components/layout";
 
 /**
  * Shape returned by the Supabase join query.
@@ -105,14 +106,7 @@ export default async function DashboardPage() {
   }
 
   return (
-    <div
-      className="mx-auto max-w-2xl px-4 py-8"
-      style={{
-        maxWidth: "42rem",
-        margin: "0 auto",
-        padding: "2rem 1rem",
-      }}
-    >
+    <PageContainer>
       <div
         className="mb-6 flex items-center justify-between"
         style={{
@@ -155,6 +149,6 @@ export default async function DashboardPage() {
         fdaAcknowledged={fdaAcknowledged}
         userId={user.id}
       />
-    </div>
+    </PageContainer>
   );
 }

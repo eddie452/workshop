@@ -12,6 +12,7 @@ import { createClient } from "@/lib/supabase/server";
 import { getReferralStatus } from "@/lib/referral";
 import { ReferralProgress } from "@/components/referral/referral-progress";
 import { ReferralPageClient } from "./referral-page-client";
+import { PageContainer } from "@/components/layout";
 
 export default async function ReferralPage() {
   const supabase = await createClient();
@@ -26,15 +27,7 @@ export default async function ReferralPage() {
   const status = await getReferralStatus(supabase, user.id);
 
   return (
-    <div
-      className="mx-auto max-w-md space-y-6 px-4 py-8"
-      style={{
-        maxWidth: "28rem",
-        marginLeft: "auto",
-        marginRight: "auto",
-        padding: "2rem 1rem",
-      }}
-    >
+    <PageContainer width="sm" className="space-y-6">
       <div>
         <h1
           className="text-2xl font-bold text-brand-primary-dark"
@@ -65,6 +58,6 @@ export default async function ReferralPage() {
       />
 
       <ReferralPageClient referralCode={status.referral_code} />
-    </div>
+    </PageContainer>
   );
 }

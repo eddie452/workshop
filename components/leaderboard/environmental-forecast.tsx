@@ -122,8 +122,8 @@ function DataRow({
         {label}
       </span>
       <span
-        className="text-sm font-medium"
-        style={{ color: color ?? "#045A82" }}
+        className={`text-sm font-medium ${color ? "" : "text-brand-text"}`}
+        style={color ? { color } : undefined}
       >
         {value}
       </span>

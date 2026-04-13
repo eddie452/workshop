@@ -25,7 +25,14 @@ import type { PollenResult } from "@/lib/apis/pollen";
 /** Allergen data needed for Monte Carlo simulation */
 export interface MCAllergenInput {
   allergen_id: string;
-  /** Mean particle size in micrometers */
+  /**
+   * Mean particle size in micrometers.
+   *
+   * Not used directly in the simulation formula — settling_velocity_cm_s
+   * already encodes particle size physics via Stokes' Law, so using both
+   * would double-count. Retained as metadata for display (PDF reports,
+   * leaderboard tooltips) and potential future inhalation-depth modeling.
+   */
   particle_size_um: number;
   /** Stokes' Law settling velocity in cm/s */
   settling_velocity_cm_s: number;

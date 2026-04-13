@@ -121,6 +121,29 @@ describe("geocodeAddress", () => {
     );
   });
 
+  it("throws timeout error for AbortError", async () => {
+    vi.stubEnv("GOOGLE_MAPS_API_KEY", "test-key");
+
+    const abortError = new DOMException("The operation was aborted", "AbortError");
+    vi.spyOn(globalThis, "fetch").mockRejectedValueOnce(abortError);
+
+    await expect(geocodeAddress("123 Main St")).rejects.toThrow(
+      "Geocoding API timeout",
+    );
+  });
+
+  it("throws descriptive error for non-timeout failures", async () => {
+    vi.stubEnv("GOOGLE_MAPS_API_KEY", "test-key");
+
+    vi.spyOn(globalThis, "fetch").mockRejectedValueOnce(
+      new TypeError("Failed to fetch"),
+    );
+
+    await expect(geocodeAddress("123 Main St")).rejects.toThrow(
+      "Geocoding API error: Failed to fetch",
+    );
+  });
+
   it("flags non-continental US coordinates", async () => {
     vi.stubEnv("GOOGLE_MAPS_API_KEY", "test-key");
 

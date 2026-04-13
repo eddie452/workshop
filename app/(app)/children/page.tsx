@@ -39,25 +39,10 @@ export default async function ChildrenPage() {
   return (
     <PageContainer>
       <div className="mb-6">
-        <h1
-          className="text-2xl font-bold text-brand-primary-dark"
-          style={{
-            fontSize: "1.5rem",
-            fontWeight: 700,
-            color: "#045A82",
-            margin: 0,
-          }}
-        >
+        <h1 className="m-0 text-2xl font-bold text-brand-primary-dark">
           Child Profiles
         </h1>
-        <p
-          className="mt-1 text-sm text-brand-text-secondary"
-          style={{
-            fontSize: "0.875rem",
-            color: "#056DA5",
-            margin: "0.25rem 0 0 0",
-          }}
-        >
+        <p className="mt-1 mb-0 text-sm text-brand-text-secondary">
           Track allergies independently for each child in your family.
         </p>
       </div>

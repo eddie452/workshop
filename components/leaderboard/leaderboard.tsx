@@ -28,11 +28,30 @@ import { CategoryIcon } from "./category-icon";
 import { UpgradeCta } from "@/components/subscription/upgrade-cta";
 import { PfasPanel } from "@/components/pfas/pfas-panel";
 import type { PfasCrossReactivity } from "@/lib/pfas/types";
-import type { RankedAllergen } from "./types";
+import type { RankedAllergen, GatedRankedAllergen } from "./types";
 
 export interface LeaderboardClientProps {
-  /** Ranked allergens sorted by Elo descending */
+  /** Ranked allergens sorted by Elo descending. */
   allergens: RankedAllergen[];
+  /**
+   * Optional server-redacted Final Four payload (ranks #2-#4). When
+   * provided, these entries are used in place of `allergens[1..4]` for
+   * the Final Four section — any `locked: true` entries render as
+   * silhouettes because the server stripped their common_name, elo_score,
+   * and confidence_tier before serialization. Defense in depth: free
+   * users with < 3 referral credits never receive the raw values over
+   * the wire. When omitted, the component falls back to deriving the
+   * Final Four from `allergens` (backward compatible, used in tests).
+   */
+  finalFourGated?: GatedRankedAllergen[];
+  /**
+   * Whether the Final Four reveal is unlocked. True for Pro users or
+   * free users with >= 3 referral credits. When undefined, falls back
+   * to `isPremium` (backward compatible).
+   */
+  isFinalFourUnlocked?: boolean;
+  /** Current successful referral invite count (0, 1, 2, or 3+). */
+  referralCount?: number;
   /** Whether the user has premium access */
   isPremium: boolean;
   /** Whether severity is 0 (Environmental Forecast mode) */
@@ -47,6 +66,9 @@ export interface LeaderboardClientProps {
 
 export function Leaderboard({
   allergens,
+  finalFourGated,
+  isFinalFourUnlocked,
+  referralCount = 0,
   isPremium,
   isEnvironmentalForecast,
   fdaAcknowledged,
@@ -114,7 +136,34 @@ export function Leaderboard({
   }
 
   const champion = allergens[0] ?? null;
-  const finalFour = allergens.slice(1, 4);
+
+  // If the server provided a gated payload, use it — it may contain
+  // redacted entries. Otherwise derive from the full `allergens` list and
+  // mark every entry as unlocked (backward-compatible path for tests and
+  // legacy callers).
+  const finalFour: GatedRankedAllergen[] =
+    finalFourGated ??
+    allergens.slice(1, 4).map((a) => ({
+      allergen_id: a.allergen_id,
+      rank: a.rank,
+      category: a.category,
+      common_name: a.common_name,
+      elo_score: a.elo_score,
+      confidence_tier: a.confidence_tier,
+      locked: false,
+    }));
+
+  // Full Rankings (ranks #5+). When a gated payload is supplied, the
+  // server stripped ranks #2-#4 from `allergens` to prevent raw values
+  // from crossing the wire — in that case, anything past rank 1 is
+  // already "#5+". When no gated payload is supplied (legacy/tests), we
+  // slice off the first 4 entries (champion + Final Four).
+  const fullRankings = finalFourGated
+    ? allergens.filter((a) => a.rank >= 5)
+    : allergens.slice(4);
+
+  // Unlock gate: explicit server value wins; fall back to premium.
+  const finalFourUnlocked = isFinalFourUnlocked ?? isPremium;
 
   return (
     <div
@@ -141,12 +190,16 @@ export function Leaderboard({
           <h2 className="mb-3 text-lg font-semibold text-brand-text-accent">
             Final Four
           </h2>
-          <FinalFour allergens={finalFour} isBlurred={!isPremium} />
+          <FinalFour
+            allergens={finalFour}
+            isUnlocked={finalFourUnlocked}
+            referralCount={referralCount}
+          />
         </div>
       )}
 
       {/* Full Ranked List (beyond top 4) */}
-      {allergens.length > 4 && (
+      {fullRankings.length > 0 && (
         <div className="mt-6">
           <h2 className="mb-3 text-lg font-semibold text-brand-text-accent">
             Full Rankings
@@ -155,7 +208,7 @@ export function Leaderboard({
             data-testid="full-rankings"
             className="divide-y divide-brand-border-light rounded-lg border border-brand-border bg-white"
           >
-            {allergens.slice(4).map((allergen) => (
+            {fullRankings.map((allergen) => (
               <div
                 key={allergen.allergen_id}
                 data-testid="ranked-allergen-row"

@@ -19,6 +19,27 @@ export interface RankedAllergen {
   rank: number;
 }
 
+/**
+ * A ranked allergen entry that may be redacted server-side for gated tiers.
+ * When `locked` is true, `common_name`, `elo_score`, and `confidence_tier`
+ * are stripped before the payload is serialized to the client, so the
+ * browser never receives the underlying values (defense in depth against
+ * view-source reveal). Used for Final Four ranks #2-#4 on the free tier.
+ */
+export interface GatedRankedAllergen {
+  allergen_id: string;
+  rank: number;
+  category: AllergenCategory;
+  /** null when locked — client must render a placeholder */
+  common_name: string | null;
+  /** null when locked */
+  elo_score: number | null;
+  /** null when locked */
+  confidence_tier: ConfidenceTier | null;
+  /** true means the entry is server-redacted and should render as a silhouette */
+  locked: boolean;
+}
+
 /** Props for the full leaderboard container */
 export interface LeaderboardProps {
   /** Ranked allergens sorted by Elo descending */
@@ -37,10 +58,29 @@ export interface TriggerChampionCardProps {
 
 /** Props for the Final Four bracket display */
 export interface FinalFourProps {
-  /** Allergens ranked #2-#4 */
-  allergens: RankedAllergen[];
-  /** Whether to blur for free-tier users */
-  isBlurred: boolean;
+  /**
+   * Allergens ranked #2-#4. May be fully revealed (common_name, elo_score,
+   * confidence_tier all present) or server-redacted for free users with
+   * fewer than 3 referral credits (values set to null, `locked: true`).
+   */
+  allergens: GatedRankedAllergen[];
+  /**
+   * Whether the Final Four reveal is unlocked. When false, the entire
+   * bracket renders behind a BlurOverlay plus the unlock CTA card.
+   * This is independent of `locked` on individual entries: `isUnlocked`
+   * controls chrome (blur, CTA); `locked` controls whether the card's
+   * data is redacted.
+   */
+  isUnlocked: boolean;
+  /** Number of successful referral invites the user has. 0-3+. */
+  referralCount?: number;
+  /**
+   * Optional tracking callbacks fired from the unlock CTA. Callers can
+   * wire these to analytics; default is a no-op.
+   */
+  onUnlockCtaImpression?: () => void;
+  onInviteClick?: () => void;
+  onUpgradeClick?: () => void;
 }
 
 /** Props for a single allergen row in the ranked list */

@@ -179,12 +179,12 @@ export function Leaderboard({
                       {allergen.elo_score}
                     </span>
                     <ConfidenceBadge tier={allergen.confidence_tier} />
-                    {/* TODO(#156): wire real confidence from engine when available */}
-                    <span
-                      data-placeholder="true"
-                      data-testid="row-confidence-score"
-                    >
-                      <SharedConfidenceBadge score={0.5} variant="compact" />
+                    {/* Confidence score will render when RankedAllergen carries a numeric confidence field (see issue #160) */}
+                    <span data-testid="row-confidence-score">
+                      <SharedConfidenceBadge
+                        score={null}
+                        variant="compact"
+                      />
                     </span>
                   </div>
                 ) : (

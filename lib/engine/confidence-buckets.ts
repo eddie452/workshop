@@ -9,10 +9,12 @@
  * mapping in `./confidence.ts` (which uses low/medium/high/very_high
  * tiers derived from Elo scores).
  *
- * Bucket thresholds:
- *   high   : pct >= 75
- *   medium : 50 <= pct < 75
- *   low    : pct < 50
+ * Bucket thresholds (applied to the RAW score, not the rounded
+ * percent — so a score of 0.499 displays as "50%" but is bucketed
+ * as low, since 0.499 < 0.5):
+ *   high   : score >= 0.75
+ *   medium : 0.5 <= score < 0.75
+ *   low    : score < 0.5
  */
 
 export type ConfidenceBucket = "high" | "medium" | "low";
@@ -41,11 +43,14 @@ export function getConfidenceInfo(score: number): ConfidenceInfo {
   let label: string;
   let tagline: string;
 
-  if (pct >= 75) {
+  // Bucket boundaries are on the RAW score, not the rounded percent.
+  // This ensures e.g. 0.499 (displays as "50%") is still bucketed as
+  // low, matching the underlying threshold semantics.
+  if (score >= 0.75) {
     bucket = "high";
     label = "High Confidence";
     tagline = "We're highly confident this is a trigger.";
-  } else if (pct >= 50) {
+  } else if (score >= 0.5) {
     bucket = "medium";
     label = "Medium Confidence";
     tagline = "This looks likely — keep tracking to confirm.";

@@ -1,10 +1,21 @@
 /**
- * Shared Confidence Badge
+ * Shared ConfidenceBadge — numeric-score variant.
+ *
+ * This is the canonical confidence UI per ticket #156. It consumes a
+ * numeric score (0-1) from the engine. When the engine begins emitting
+ * numeric confidence on RankedAllergen, this replaces
+ * components/leaderboard/confidence-badge.tsx (tier-string variant).
+ *
+ * Migration is tracked in issue #160.
  *
  * Displays a numeric confidence score (0-1) as a rounded percentage
  * with a layperson label. Uses the Nature Pop accent color for the
  * percent / bar fill only; labels use brand-text-secondary for AA
  * compliance.
+ *
+ * When `score` is null or undefined, the component renders nothing
+ * (returns null) — call sites should pass the real value from the
+ * engine, or null when no numeric confidence is available.
  *
  * Bucket intensity (no red/green — Nature Pop opacity tiers):
  *   high   : text-brand-accent
@@ -25,8 +36,12 @@ import {
 export type ConfidenceBadgeVariant = "compact" | "full" | "bar";
 
 export interface ConfidenceBadgeProps {
-  /** Confidence score in the range [0, 1]. */
-  score: number;
+  /**
+   * Confidence score in the range [0, 1], or null/undefined when no
+   * numeric confidence is available. When null/undefined, the
+   * component renders nothing.
+   */
+  score: number | null | undefined;
   /** Display variant. Defaults to "compact". */
   variant?: ConfidenceBadgeVariant;
 }
@@ -47,6 +62,12 @@ export function ConfidenceBadge({
   score,
   variant = "compact",
 }: ConfidenceBadgeProps) {
+  // Render nothing when no numeric score is available. Call sites
+  // should pass null until the engine emits numeric confidence.
+  if (score === null || score === undefined) {
+    return null;
+  }
+
   const info = getConfidenceInfo(score);
   const ariaLabel = `${parseInt(info.percent, 10)} percent confidence, ${BUCKET_SPOKEN[info.bucket]}`;
 

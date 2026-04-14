@@ -10,12 +10,6 @@ import { getConfidenceInfo } from "@/lib/engine/confidence-buckets";
 
 describe("getConfidenceInfo", () => {
   describe("bucket thresholds", () => {
-    it("classifies 0.499 as low (pct = 50 rounds from 49.9? check)", () => {
-      // 0.499 * 100 = 49.9 → Math.round = 50 → medium.
-      // Use 0.494 to guarantee rounding to 49.
-      expect(getConfidenceInfo(0.494).bucket).toBe("low");
-    });
-
     it("classifies just under the low/medium boundary as low", () => {
       expect(getConfidenceInfo(0.49).bucket).toBe("low");
     });
@@ -24,18 +18,35 @@ describe("getConfidenceInfo", () => {
       expect(getConfidenceInfo(0.5).bucket).toBe("medium");
     });
 
-    it("classifies 0.749 as medium (rounds to 75? check)", () => {
-      // 0.749 * 100 = 74.9 → rounds to 75 → high.
-      // Use 0.744 to guarantee rounding to 74.
-      expect(getConfidenceInfo(0.744).bucket).toBe("medium");
-    });
-
     it("classifies just under the medium/high boundary as medium", () => {
-      expect(getConfidenceInfo(0.74).bucket).toBe("medium");
+      expect(getConfidenceInfo(0.749).bucket).toBe("medium");
     });
 
     it("classifies 0.75 as high", () => {
       expect(getConfidenceInfo(0.75).bucket).toBe("high");
+    });
+
+    it("classifies 1.0 as high", () => {
+      expect(getConfidenceInfo(1.0).bucket).toBe("high");
+    });
+  });
+
+  describe("rounding boundary — percent and bucket may diverge", () => {
+    it("buckets 0.499 as low while displaying '50%'", () => {
+      // Math.round(0.499 * 100) = 50, but 0.499 < 0.5, so bucket = low.
+      // Bucket thresholds apply to the raw score, not the rounded
+      // percent — prevents fake "50% Medium" at the low/medium edge.
+      const info = getConfidenceInfo(0.499);
+      expect(info.percent).toBe("50%");
+      expect(info.bucket).toBe("low");
+      expect(info.label).toBe("Low Confidence");
+    });
+
+    it("buckets 0.749 as medium while displaying '75%'", () => {
+      // Math.round(0.749 * 100) = 75, but 0.749 < 0.75, so bucket = medium.
+      const info = getConfidenceInfo(0.749);
+      expect(info.percent).toBe("75%");
+      expect(info.bucket).toBe("medium");
     });
   });
 

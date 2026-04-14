@@ -137,7 +137,7 @@ export function Leaderboard({
       {/* Final Four (#2-#4) */}
       {finalFour.length > 0 && (
         <div className="mt-6">
-          <h2 className="mb-3 text-lg font-semibold text-brand-text">
+          <h2 className="mb-3 text-lg font-semibold text-brand-text-accent">
             Final Four
           </h2>
           <FinalFour allergens={finalFour} isBlurred={!isPremium} />
@@ -147,7 +147,7 @@ export function Leaderboard({
       {/* Full Ranked List (beyond top 4) */}
       {allergens.length > 4 && (
         <div className="mt-6">
-          <h2 className="mb-3 text-lg font-semibold text-brand-text">
+          <h2 className="mb-3 text-lg font-semibold text-brand-text-accent">
             Full Rankings
           </h2>
           <div

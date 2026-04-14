@@ -1,6 +1,7 @@
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import Link from "next/link";
+import { NavBar } from "@/components/layout";
 import {
   FDA_DISCLAIMER_LABEL,
   FDA_DISCLAIMER_FULL_TEXT,
@@ -37,29 +38,8 @@ export default async function HomePage() {
 
   return (
     <div className="min-h-screen bg-brand-surface">
-      {/* Navigation */}
-      <header className="border-b border-white/20 bg-brand-primary-dark">
-        <nav className="mx-auto flex max-w-5xl items-center justify-between px-4 py-4 sm:px-6">
-          <div className="flex items-center gap-2">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src="/champ-logo-alt.png" alt="Champ Allergy" className="h-10 w-auto" />
-          </div>
-          <div className="flex items-center gap-3">
-            <Link
-              href="/login"
-              className="rounded-button px-4 py-2 text-sm font-medium text-white/80 transition-colors hover:text-white"
-            >
-              Sign In
-            </Link>
-            <Link
-              href="/signup"
-              className="rounded-button bg-brand-accent px-4 py-2 text-sm font-semibold text-brand-primary-dark transition-colors hover:bg-brand-accent-dark"
-            >
-              Get Started
-            </Link>
-          </div>
-        </nav>
-      </header>
+      {/* Unified navigation (unauthenticated variant) */}
+      <NavBar authState="unauthenticated" />
 
       {/* Hero Section */}
       <section className="bg-gradient-to-b from-brand-primary to-brand-primary-dark px-4 py-16 sm:px-6 sm:py-24">

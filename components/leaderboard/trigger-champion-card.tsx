@@ -7,6 +7,7 @@
 
 import type { TriggerChampionCardProps } from "./types";
 import { ConfidenceBadge } from "./confidence-badge";
+import { ConfidenceBadge as SharedConfidenceBadge } from "@/components/shared/confidence-badge";
 import { CategoryIcon } from "./category-icon";
 
 export function TriggerChampionCard({ allergen }: TriggerChampionCardProps) {
@@ -50,6 +51,10 @@ export function TriggerChampionCard({ allergen }: TriggerChampionCardProps) {
           Elo {allergen.elo_score}
         </span>
         <ConfidenceBadge tier={allergen.confidence_tier} />
+        {/* TODO(#156): wire real confidence from engine when available */}
+        <span data-placeholder="true" data-testid="champion-confidence-score">
+          <SharedConfidenceBadge score={0.5} variant="full" />
+        </span>
       </div>
     </div>
   );

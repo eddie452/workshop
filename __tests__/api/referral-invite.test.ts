@@ -106,11 +106,35 @@ describe("POST /api/referral/invite", () => {
   it("returns rate limit headers on success", async () => {
     mockAuthenticatedUser();
 
+    // Capture time bounds around the request so we can assert the
+    // reset timestamp falls within the configured 1-hour window.
+    const nowSecBefore = Math.floor(Date.now() / 1000);
     const res = await POST(createMockRequest());
+    const nowSecAfter = Math.floor(Date.now() / 1000);
+
     expect(res.status).toBe(200);
     expect(res.headers.get("X-RateLimit-Limit")).toBe("10");
-    expect(res.headers.get("X-RateLimit-Remaining")).toBeTruthy();
-    expect(res.headers.get("X-RateLimit-Reset")).toBeTruthy();
+    // First request of a fresh limiter -> exactly 9 remaining
+    expect(res.headers.get("X-RateLimit-Remaining")).toBe("9");
+
+    // Reset is a unix-seconds timestamp ~1 hour (3600s) from now.
+    // Allow ±2s slack for Math.ceil rounding and test scheduler jitter.
+    const reset = Number(res.headers.get("X-RateLimit-Reset"));
+    expect(Number.isInteger(reset)).toBe(true);
+    expect(reset).toBeGreaterThanOrEqual(nowSecBefore + 3600 - 2);
+    expect(reset).toBeLessThanOrEqual(nowSecAfter + 3600 + 2);
+  });
+
+  it("decrements X-RateLimit-Remaining on each successive request", async () => {
+    mockAuthenticatedUser();
+
+    // Remaining should count down from 9 to 0 across the 10-request window
+    const expectedRemaining = ["9", "8", "7", "6", "5", "4", "3", "2", "1", "0"];
+    for (const expected of expectedRemaining) {
+      const res = await POST(createMockRequest());
+      expect(res.status).toBe(200);
+      expect(res.headers.get("X-RateLimit-Remaining")).toBe(expected);
+    }
   });
 
   it("returns 429 when rate limit exceeded", async () => {
@@ -128,8 +152,17 @@ describe("POST /api/referral/invite", () => {
 
     const body = await res.json();
     expect(body.error).toContain("Too many requests");
-    expect(res.headers.get("Retry-After")).toBeTruthy();
+
+    // Retry-After must be a positive integer no larger than the 1-hour window.
+    const retryAfter = Number(res.headers.get("Retry-After"));
+    expect(Number.isInteger(retryAfter)).toBe(true);
+    expect(retryAfter).toBeGreaterThanOrEqual(1);
+    expect(retryAfter).toBeLessThanOrEqual(3600);
+
+    // Rejected response advertises the full limit and zero remaining
+    expect(res.headers.get("X-RateLimit-Limit")).toBe("10");
     expect(res.headers.get("X-RateLimit-Remaining")).toBe("0");
+    expect(Number.isInteger(Number(res.headers.get("X-RateLimit-Reset")))).toBe(true);
   });
 
   it("rate limits are per-user, not global", async () => {

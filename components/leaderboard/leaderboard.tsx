@@ -54,6 +54,16 @@ export interface LeaderboardClientProps {
   referralCount?: number;
   /** Whether the user has premium access */
   isPremium: boolean;
+  /**
+   * Granular gate for the Full Rankings section (ranks #5+). When
+   * provided, it overrides `isPremium` for the ranks #5+ score reveal
+   * and the "Upgrade" CTA below that section. This allows the
+   * `full_rankings` feature to be gated independently of other
+   * premium features in the future. When omitted, falls back to
+   * `isPremium` for backward compatibility with tests and legacy
+   * callers.
+   */
+  hasFullRankings?: boolean;
   /** Whether severity is 0 (Environmental Forecast mode) */
   isEnvironmentalForecast: boolean;
   /** Whether the user has already acknowledged the FDA disclaimer */
@@ -70,6 +80,7 @@ export function Leaderboard({
   isFinalFourUnlocked,
   referralCount = 0,
   isPremium,
+  hasFullRankings,
   isEnvironmentalForecast,
   fdaAcknowledged,
   userId,
@@ -165,6 +176,11 @@ export function Leaderboard({
   // Unlock gate: explicit server value wins; fall back to premium.
   const finalFourUnlocked = isFinalFourUnlocked ?? isPremium;
 
+  // Full Rankings gate (ranks #5+). Explicit granular check wins; fall
+  // back to the blanket `isPremium` flag so existing callers (and the
+  // test suite) continue to behave identically until they migrate.
+  const fullRankingsUnlocked = hasFullRankings ?? isPremium;
+
   return (
     <div
       data-testid="leaderboard"
@@ -223,7 +239,7 @@ export function Leaderboard({
                     {allergen.common_name}
                   </span>
                 </div>
-                {isPremium ? (
+                {fullRankingsUnlocked ? (
                   <div
                     data-testid="ranking-score-details"
                     className="flex items-center gap-2"
@@ -261,7 +277,7 @@ export function Leaderboard({
           </div>
 
           {/* Upgrade CTA for free users */}
-          {!isPremium && (
+          {!fullRankingsUnlocked && (
             <div
               data-testid="rankings-upgrade-cta"
               className="mt-4"

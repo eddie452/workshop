@@ -269,6 +269,101 @@ describe("Leaderboard", () => {
     });
   });
 
+  describe("edge case — exactly 5 allergens (single gated row)", () => {
+    const fiveAllergens: RankedAllergen[] = mockAllergens.slice(0, 5);
+
+    it("shows name but hides score for the single #5 row (free tier)", () => {
+      render(
+        <Leaderboard
+          {...defaultProps}
+          allergens={fiveAllergens}
+          isPremium={false}
+        />
+      );
+      // Name visible
+      expect(screen.getByText("Dust Mites")).toBeDefined();
+      // Exactly one locked row
+      const lockedElements = screen.getAllByTestId("ranking-score-locked");
+      expect(lockedElements.length).toBe(1);
+      // Exactly one visible row (not two — confirms only rank #5 is here)
+      const rows = screen.getAllByTestId("ranked-allergen-row");
+      expect(rows.length).toBe(1);
+      // Score hidden
+      expect(screen.queryByText("1350")).toBeNull();
+    });
+
+    it("shows the upgrade CTA even when only a single #5 row exists (free tier)", () => {
+      render(
+        <Leaderboard
+          {...defaultProps}
+          allergens={fiveAllergens}
+          isPremium={false}
+        />
+      );
+      expect(screen.getByTestId("rankings-upgrade-cta")).toBeDefined();
+      expect(screen.getByTestId("upgrade-cta")).toBeDefined();
+    });
+
+    it("shows score details for the single #5 row when premium", () => {
+      render(
+        <Leaderboard
+          {...defaultProps}
+          allergens={fiveAllergens}
+          isPremium={true}
+        />
+      );
+      expect(screen.getByText("1350")).toBeDefined();
+      const scoreDetails = screen.getAllByTestId("ranking-score-details");
+      expect(scoreDetails.length).toBe(1);
+      expect(screen.queryByTestId("rankings-upgrade-cta")).toBeNull();
+    });
+  });
+
+  describe("granular hasFullRankings gate (overrides isPremium for ranks #5+)", () => {
+    it("unlocks ranks #5+ when hasFullRankings=true even if isPremium=false", () => {
+      render(
+        <Leaderboard
+          {...defaultProps}
+          isPremium={false}
+          hasFullRankings={true}
+        />
+      );
+      // Scores visible despite free-tier isPremium
+      expect(screen.getByText("1350")).toBeDefined();
+      expect(screen.getByText("1300")).toBeDefined();
+      // No lock icons, no upgrade CTA under Full Rankings
+      expect(screen.queryByTestId("ranking-score-locked")).toBeNull();
+      expect(screen.queryByTestId("rankings-upgrade-cta")).toBeNull();
+    });
+
+    it("locks ranks #5+ when hasFullRankings=false even if isPremium=true", () => {
+      render(
+        <Leaderboard
+          {...defaultProps}
+          isPremium={true}
+          hasFullRankings={false}
+        />
+      );
+      // Scores hidden despite premium-tier isPremium
+      expect(screen.queryByText("1350")).toBeNull();
+      const lockedElements = screen.getAllByTestId("ranking-score-locked");
+      expect(lockedElements.length).toBe(2);
+      expect(screen.getByTestId("rankings-upgrade-cta")).toBeDefined();
+    });
+
+    it("falls back to isPremium when hasFullRankings is undefined", () => {
+      render(
+        <Leaderboard
+          {...defaultProps}
+          isPremium={true}
+        />
+      );
+      // Behaves as premium since isPremium=true and no explicit override
+      expect(screen.getByText("1350")).toBeDefined();
+      expect(screen.queryByTestId("ranking-score-locked")).toBeNull();
+    });
+  });
+
   describe("with only champion (no Final Four)", () => {
     it("renders champion without Final Four section", () => {
       render(

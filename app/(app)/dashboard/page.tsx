@@ -7,6 +7,11 @@ import type {
   CheckinSeverityQuery,
 } from "@/components/leaderboard/types";
 import { gateFinalFour } from "@/lib/leaderboard/gate-final-four";
+import { hasFeatureAccess } from "@/lib/subscription";
+import type {
+  AccessStatus,
+  SubscriptionTier,
+} from "@/lib/subscription";
 import { DashboardLeaderboard } from "./dashboard-leaderboard";
 import { PageContainer } from "@/components/layout";
 
@@ -54,7 +59,7 @@ export default async function DashboardPage() {
     .single();
 
   const subscription = subscriptionData as { tier: string } | null;
-  const tier = subscription?.tier ?? "free";
+  const tier = (subscription?.tier ?? "free") as SubscriptionTier;
   const isPremium = tier === "madness_plus" || tier === "madness_family";
 
   // Fetch referral status — drives the Final Four gated reveal (#157).
@@ -74,6 +79,17 @@ export default async function DashboardPage() {
 
   const referralCount = referralRow?.referral_count ?? 0;
   const referralUnlocked = referralRow?.features_unlocked ?? false;
+
+  // Granular feature check for the Full Rankings section (ranks #5+).
+  // Uses the centralized `hasFeatureAccess` helper so the gate can
+  // evolve independently of other premium features in the future.
+  const accessStatus: AccessStatus = {
+    tier,
+    subscriptionActive: isPremium,
+    referralUnlocked,
+    isPremium: isPremium || referralUnlocked,
+  };
+  const hasFullRankings = hasFeatureAccess(accessStatus, "full_rankings");
 
   // Fetch allergen Elo rankings
   const { data: rawEloRows } = await supabase
@@ -154,6 +170,7 @@ export default async function DashboardPage() {
         isFinalFourUnlocked={finalFourView.isUnlocked}
         referralCount={referralCount}
         isPremium={isPremium}
+        hasFullRankings={hasFullRankings}
         isEnvironmentalForecast={isEnvironmentalForecast}
         fdaAcknowledged={fdaAcknowledged}
         userId={user.id}

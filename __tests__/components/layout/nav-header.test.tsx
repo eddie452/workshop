@@ -127,3 +127,40 @@ describe("NavHeader", () => {
     expect(mockRefresh).toHaveBeenCalled();
   });
 });
+
+/* ------------------------------------------------------------------ */
+/* Unauthenticated state                                               */
+/* ------------------------------------------------------------------ */
+
+describe("NavHeader — unauthenticated", () => {
+  it("renders Sign In and Get Started links", () => {
+    render(<NavHeader isAuthenticated={false} />);
+
+    expect(screen.getByTestId("nav-sign-in")).toBeDefined();
+    expect(screen.getByTestId("nav-sign-in").getAttribute("href")).toBe("/login");
+    expect(screen.getByTestId("nav-get-started")).toBeDefined();
+    expect(screen.getByTestId("nav-get-started").getAttribute("href")).toBe("/signup");
+  });
+
+  it("does not render authenticated nav links or sign-out", () => {
+    render(<NavHeader isAuthenticated={false} />);
+
+    expect(screen.queryByText("Dashboard")).toBeNull();
+    expect(screen.queryByText("Check-in")).toBeNull();
+    expect(screen.queryByText("Sign Out")).toBeNull();
+    expect(screen.queryByTestId("sign-out-button")).toBeNull();
+  });
+
+  it("links logo to / instead of /dashboard", () => {
+    render(<NavHeader isAuthenticated={false} />);
+
+    const logoImg = screen.getByAltText("Champ Allergy");
+    expect(logoImg.closest("a")?.getAttribute("href")).toBe("/");
+  });
+
+  it("does not render mobile hamburger menu", () => {
+    render(<NavHeader isAuthenticated={false} />);
+
+    expect(screen.queryByLabelText("Open menu")).toBeNull();
+  });
+});

@@ -11,6 +11,8 @@ vi.mock("next/navigation", () => ({
     // redirect throws in Next.js to halt rendering
     throw new Error("NEXT_REDIRECT");
   },
+  usePathname: () => "/",
+  useRouter: () => ({ push: vi.fn(), refresh: vi.fn() }),
 }));
 
 // Mock next/link as a simple anchor
@@ -28,6 +30,13 @@ vi.mock("next/link", () => ({
       {children}
     </a>
   ),
+}));
+
+// Mock Supabase browser client (used by NavHeader)
+vi.mock("@/lib/supabase/client", () => ({
+  createClient: () => ({
+    auth: { signOut: vi.fn().mockResolvedValue({ error: null }) },
+  }),
 }));
 
 // Default: unauthenticated user

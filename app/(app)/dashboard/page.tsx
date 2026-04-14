@@ -1,7 +1,12 @@
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { getConfidenceTierBySignals } from "@/lib/engine";
-import type { RankedAllergen, CheckinSeverityQuery } from "@/components/leaderboard/types";
+import type {
+  RankedAllergen,
+  GatedRankedAllergen,
+  CheckinSeverityQuery,
+} from "@/components/leaderboard/types";
+import { gateFinalFour } from "@/lib/leaderboard/gate-final-four";
 import { DashboardLeaderboard } from "./dashboard-leaderboard";
 import { PageContainer } from "@/components/layout";
 
@@ -51,6 +56,24 @@ export default async function DashboardPage() {
   const subscription = subscriptionData as { tier: string } | null;
   const tier = subscription?.tier ?? "free";
   const isPremium = tier === "madness_plus" || tier === "madness_family";
+
+  // Fetch referral status — drives the Final Four gated reveal (#157).
+  // The user_profiles row carries both the referral count and a
+  // permanent `features_unlocked` flag that the record_referral RPC
+  // flips once the threshold (3) is crossed.
+  const { data: referralProfile } = await supabase
+    .from("user_profiles")
+    .select("referral_count, features_unlocked")
+    .eq("id", user.id)
+    .single();
+
+  const referralRow = referralProfile as {
+    referral_count: number | null;
+    features_unlocked: boolean | null;
+  } | null;
+
+  const referralCount = referralRow?.referral_count ?? 0;
+  const referralUnlocked = referralRow?.features_unlocked ?? false;
 
   // Fetch allergen Elo rankings
   const { data: rawEloRows } = await supabase
@@ -104,6 +127,16 @@ export default async function DashboardPage() {
     isEnvironmentalForecast = true;
   }
 
+  // Compute the client-facing payload. The Final Four (ranks #2-#4) is
+  // redacted for free users without the required referral credits. The
+  // champion (#1) and rows beyond #4 are passed through unchanged.
+  const finalFourView = gateFinalFour({
+    allergens,
+    isPremium,
+    referralCount,
+    referralUnlocked,
+  });
+
   return (
     <PageContainer>
       <div className="mb-6">
@@ -116,7 +149,10 @@ export default async function DashboardPage() {
       </div>
 
       <DashboardLeaderboard
-        allergens={allergens}
+        allergens={finalFourView.allergensForClient}
+        finalFourGated={finalFourView.gated}
+        isFinalFourUnlocked={finalFourView.isUnlocked}
+        referralCount={referralCount}
         isPremium={isPremium}
         isEnvironmentalForecast={isEnvironmentalForecast}
         fdaAcknowledged={fdaAcknowledged}

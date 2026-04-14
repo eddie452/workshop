@@ -6,13 +6,23 @@
  * Client component that receives server-computed ranked allergens
  * and renders the Leaderboard component. Confidence tiers are
  * computed server-side via the engine module and passed as props.
+ *
+ * The gated Final Four payload (#157) is also prepared server-side
+ * to prevent raw ranks #2-#4 values from leaking to free users who
+ * have not yet unlocked the reveal.
  */
 
 import { Leaderboard } from "@/components/leaderboard";
-import type { RankedAllergen } from "@/components/leaderboard/types";
+import type {
+  RankedAllergen,
+  GatedRankedAllergen,
+} from "@/components/leaderboard/types";
 
 interface DashboardLeaderboardProps {
   allergens: RankedAllergen[];
+  finalFourGated?: GatedRankedAllergen[];
+  isFinalFourUnlocked?: boolean;
+  referralCount?: number;
   isPremium: boolean;
   isEnvironmentalForecast: boolean;
   fdaAcknowledged: boolean;
@@ -21,6 +31,9 @@ interface DashboardLeaderboardProps {
 
 export function DashboardLeaderboard({
   allergens,
+  finalFourGated,
+  isFinalFourUnlocked,
+  referralCount,
   isPremium,
   isEnvironmentalForecast,
   fdaAcknowledged,
@@ -29,6 +42,9 @@ export function DashboardLeaderboard({
   return (
     <Leaderboard
       allergens={allergens}
+      finalFourGated={finalFourGated}
+      isFinalFourUnlocked={isFinalFourUnlocked}
+      referralCount={referralCount}
       isPremium={isPremium}
       isEnvironmentalForecast={isEnvironmentalForecast}
       fdaAcknowledged={fdaAcknowledged}

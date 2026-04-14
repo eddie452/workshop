@@ -4,13 +4,25 @@ import { render, screen } from "@testing-library/react";
 // Track redirect calls
 const redirectMock = vi.fn();
 
-// Mock next/navigation
+// Mock next/navigation — redirect for server-side nav, plus the client
+// hooks used by the unified NavBar (usePathname, useRouter).
 vi.mock("next/navigation", () => ({
   redirect: (...args: unknown[]) => {
     redirectMock(...args);
     // redirect throws in Next.js to halt rendering
     throw new Error("NEXT_REDIRECT");
   },
+  usePathname: () => "/",
+  useRouter: () => ({ push: vi.fn(), refresh: vi.fn() }),
+}));
+
+// NavBar imports the Supabase browser client for sign-out. The landing
+// page renders the unauthenticated variant (no sign-out), but the
+// module is still imported, so provide a minimal mock.
+vi.mock("@/lib/supabase/client", () => ({
+  createClient: () => ({
+    auth: { signOut: vi.fn().mockResolvedValue({ error: null }) },
+  }),
 }));
 
 // Mock next/link as a simple anchor

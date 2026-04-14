@@ -24,6 +24,7 @@ interface DashboardLeaderboardProps {
   isFinalFourUnlocked?: boolean;
   referralCount?: number;
   isPremium: boolean;
+  hasFullRankings?: boolean;
   isEnvironmentalForecast: boolean;
   fdaAcknowledged: boolean;
   userId: string;
@@ -35,6 +36,7 @@ export function DashboardLeaderboard({
   isFinalFourUnlocked,
   referralCount,
   isPremium,
+  hasFullRankings,
   isEnvironmentalForecast,
   fdaAcknowledged,
   userId,
@@ -46,6 +48,7 @@ export function DashboardLeaderboard({
       isFinalFourUnlocked={isFinalFourUnlocked}
       referralCount={referralCount}
       isPremium={isPremium}
+      hasFullRankings={hasFullRankings}
       isEnvironmentalForecast={isEnvironmentalForecast}
       fdaAcknowledged={fdaAcknowledged}
       userId={userId}

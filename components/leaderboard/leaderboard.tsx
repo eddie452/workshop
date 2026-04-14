@@ -23,6 +23,7 @@ import { FinalFour } from "./final-four";
 import { EnvironmentalForecast } from "./environmental-forecast";
 import type { ForecastData } from "./environmental-forecast";
 import { ConfidenceBadge } from "./confidence-badge";
+import { ConfidenceBadge as SharedConfidenceBadge } from "@/components/shared/confidence-badge";
 import { CategoryIcon } from "./category-icon";
 import { UpgradeCta } from "@/components/subscription/upgrade-cta";
 import { PfasPanel } from "@/components/pfas/pfas-panel";
@@ -178,6 +179,13 @@ export function Leaderboard({
                       {allergen.elo_score}
                     </span>
                     <ConfidenceBadge tier={allergen.confidence_tier} />
+                    {/* Confidence score will render when RankedAllergen carries a numeric confidence field (see issue #160) */}
+                    <span data-testid="row-confidence-score">
+                      <SharedConfidenceBadge
+                        score={null}
+                        variant="compact"
+                      />
+                    </span>
                   </div>
                 ) : (
                   <div

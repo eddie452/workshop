@@ -16,3 +16,9 @@ export type { DisclaimerModalProps } from "./disclaimer-modal";
 
 export { LockIcon } from "./lock-icon";
 export type { LockIconProps } from "./lock-icon";
+
+export { ConfidenceBadge } from "./confidence-badge";
+export type {
+  ConfidenceBadgeProps,
+  ConfidenceBadgeVariant,
+} from "./confidence-badge";

@@ -47,11 +47,15 @@
   --color-brand-border: #B8E4F0;
   --color-brand-border-light: #D6F0F8;
 
-  /* Text — NO BLACK, Dusty Denim hierarchy (WCAG AA compliant) */
-  --color-brand-text: #045A82;
-  --color-brand-text-secondary: #056DA5;
-  --color-brand-text-muted: #0678B1;
-  --color-brand-text-faint: #0776A8;
+  /* Text — NO BLACK, Dusty Denim hierarchy
+     Primary tier is Dusty Denim (#0682BB) per Champ Health Design System.
+     Secondary is kept darker (#045A82) so body copy still clears WCAG AA
+     (4.5:1) on white; Dusty Denim passes AA Large only (3:1+), so use
+     `brand-text` for headings and large/prominent lettering. */
+  --color-brand-text: #0682BB;
+  --color-brand-text-secondary: #045A82;
+  --color-brand-text-muted: #056DA5;
+  --color-brand-text-faint: #0678B1;
 
   /* ------------------------------------------------------------------ */
   /* Typography                                                          */
@@ -113,11 +117,13 @@
   --champ-border: #B8E4F0;
   --champ-border-light: #D6F0F8;
 
-  /* Text — NO BLACK, Dusty Denim hierarchy (WCAG AA compliant) */
-  --champ-text: #045A82;
-  --champ-text-secondary: #056DA5;
-  --champ-text-muted: #0678B1;
-  --champ-text-faint: #0776A8;
+  /* Text — NO BLACK, Dusty Denim hierarchy
+     Mirrors the @theme --color-brand-text* tokens. Primary is Dusty
+     Denim; secondary stays darker for AA-compliant body copy. */
+  --champ-text: #0682BB;
+  --champ-text-secondary: #045A82;
+  --champ-text-muted: #056DA5;
+  --champ-text-faint: #0678B1;
 }
 
 /* ------------------------------------------------------------------ */

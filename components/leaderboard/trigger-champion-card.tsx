@@ -45,7 +45,7 @@ export function TriggerChampionCard({ allergen }: TriggerChampionCardProps) {
       <div className="flex items-center gap-3">
         <span
           data-testid="champion-elo"
-          className="text-lg font-semibold text-brand-text"
+          className="text-lg font-semibold text-brand-text-accent"
         >
           Elo {allergen.elo_score}
         </span>

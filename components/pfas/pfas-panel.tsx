@@ -147,7 +147,7 @@ export function PfasPanel({ entries, isPremium }: PfasPanelProps) {
     >
       {/* Section header */}
       <div>
-        <h2 className="text-lg font-semibold text-brand-text">
+        <h2 className="text-lg font-semibold text-brand-text-accent">
           Food Cross-Reactivity (PFAS)
         </h2>
         <p className="mt-1 text-xs text-brand-text-muted">

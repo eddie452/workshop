@@ -47,11 +47,15 @@
   --color-brand-border: #B8E4F0;
   --color-brand-border-light: #D6F0F8;
 
-  /* Text — NO BLACK, Dusty Denim hierarchy (WCAG AA compliant) */
+  /* Text — NO BLACK, Dusty Denim hierarchy
+     Primary tier stays darker (#045A82) so body copy clears WCAG AA
+     normal (4.5:1) on white. For opt-in Dusty Denim on headings /
+     font-semibold callers, use `brand-text-accent` (#0682BB, AA Large). */
   --color-brand-text: #045A82;
   --color-brand-text-secondary: #056DA5;
   --color-brand-text-muted: #0678B1;
   --color-brand-text-faint: #0776A8;
+  --color-brand-text-accent: #0682BB;
 
   /* ------------------------------------------------------------------ */
   /* Typography                                                          */
@@ -113,11 +117,14 @@
   --champ-border: #B8E4F0;
   --champ-border-light: #D6F0F8;
 
-  /* Text — NO BLACK, Dusty Denim hierarchy (WCAG AA compliant) */
+  /* Text — NO BLACK, Dusty Denim hierarchy
+     Mirrors the @theme --color-brand-text* tokens. Primary stays darker
+     for AA-compliant body copy; accent is opt-in Dusty Denim for headings. */
   --champ-text: #045A82;
   --champ-text-secondary: #056DA5;
   --champ-text-muted: #0678B1;
   --champ-text-faint: #0776A8;
+  --champ-text-accent: #0682BB;
 }
 
 /* ------------------------------------------------------------------ */

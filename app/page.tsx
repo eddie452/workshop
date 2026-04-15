@@ -81,7 +81,7 @@ export default async function HomePage() {
       </section>
 
       {/* How It Works */}
-      <section className="bg-brand-primary-dark px-4 py-16 sm:px-6">
+      <section className="bg-brand-primary px-4 py-16 sm:px-6">
         <div className="mx-auto max-w-5xl">
           <h2
             className="text-center text-2xl font-bold text-white sm:text-3xl"

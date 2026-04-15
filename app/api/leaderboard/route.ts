@@ -1,6 +1,9 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
-import { getConfidenceTierBySignals } from "@/lib/engine";
+import {
+  getConfidenceTierBySignals,
+  getConfidenceScoreBySignals,
+} from "@/lib/engine";
 import type { RankedAllergen } from "@/components/leaderboard/types";
 
 /**
@@ -102,17 +105,21 @@ export async function GET() {
   // (no Elo data means no symptoms have been processed)
   const isEnvironmentalForecast = eloRows.length === 0;
 
-  // Map to ranked allergens with confidence tiers
-  const allergens: RankedAllergen[] = eloRows.map((row, index) => ({
-    allergen_id: row.allergen_id,
-    common_name: row.allergens.common_name,
-    category: row.allergens.category as RankedAllergen["category"],
-    elo_score: row.elo_score,
-    confidence_tier: getConfidenceTierBySignals(
-      row.positive_signals + row.negative_signals
-    ),
-    rank: index + 1,
-  }));
+  // Map to ranked allergens with confidence tiers + numeric score
+  const allergens: RankedAllergen[] = eloRows.map((row, index) => {
+    const totalSignals = row.positive_signals + row.negative_signals;
+    return {
+      allergen_id: row.allergen_id,
+      common_name: row.allergens.common_name,
+      category: row.allergens.category as RankedAllergen["category"],
+      elo_score: row.elo_score,
+      confidence_tier: getConfidenceTierBySignals(totalSignals),
+      // Numeric 0–1 confidence emitted per issue #160. Clamped by the
+      // helper; anchored so 7 signals = 0.5, 14 signals = 0.75.
+      score: getConfidenceScoreBySignals(totalSignals),
+      rank: index + 1,
+    };
+  });
 
   return NextResponse.json({
     allergens,

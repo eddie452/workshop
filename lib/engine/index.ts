@@ -69,6 +69,9 @@ export {
   getConfidenceLabel,
 } from "./confidence";
 
+// Confidence score (numeric 0–1 companion to the tier string, issue #160)
+export { getConfidenceScoreBySignals } from "./confidence-score";
+
 // Monte Carlo exposure simulation
 export type {
   MCAllergenInput,

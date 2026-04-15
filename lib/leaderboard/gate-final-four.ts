@@ -80,6 +80,7 @@ export function gateFinalFour(input: GateFinalFourInput): GateFinalFourResult {
         common_name: a.common_name,
         elo_score: a.elo_score,
         confidence_tier: a.confidence_tier,
+        score: a.score,
         locked: false,
       };
     }
@@ -91,6 +92,7 @@ export function gateFinalFour(input: GateFinalFourInput): GateFinalFourResult {
       common_name: null,
       elo_score: null,
       confidence_tier: null,
+      score: null,
       locked: true,
     };
   });

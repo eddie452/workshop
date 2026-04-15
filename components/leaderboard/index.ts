@@ -12,7 +12,9 @@ export { FinalFour } from "./final-four";
 export { FinalFourUnlockCta } from "./final-four-unlock-cta";
 export type { FinalFourUnlockCtaProps } from "./final-four-unlock-cta";
 export { BlurOverlay } from "./blur-overlay";
-export { ConfidenceBadge } from "./confidence-badge";
+// Legacy tier-string ConfidenceBadge removed in #160 — import
+// `ConfidenceBadge` from `@/components/shared/confidence-badge` for the
+// numeric 0–1 variant.
 export { CategoryIcon } from "./category-icon";
 export { EnvironmentalForecast } from "./environmental-forecast";
 export type { ForecastData, EnvironmentalForecastProps } from "./environmental-forecast";

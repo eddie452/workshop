@@ -22,8 +22,7 @@ import { TriggerChampionCard } from "./trigger-champion-card";
 import { FinalFour } from "./final-four";
 import { EnvironmentalForecast } from "./environmental-forecast";
 import type { ForecastData } from "./environmental-forecast";
-import { ConfidenceBadge } from "./confidence-badge";
-import { ConfidenceBadge as SharedConfidenceBadge } from "@/components/shared/confidence-badge";
+import { ConfidenceBadge } from "@/components/shared/confidence-badge";
 import { CategoryIcon } from "./category-icon";
 import { UpgradeCta } from "@/components/subscription/upgrade-cta";
 import { PfasPanel } from "@/components/pfas/pfas-panel";
@@ -161,6 +160,7 @@ export function Leaderboard({
       common_name: a.common_name,
       elo_score: a.elo_score,
       confidence_tier: a.confidence_tier,
+      score: a.score,
       locked: false,
     }));
 
@@ -247,11 +247,10 @@ export function Leaderboard({
                     <span className="text-xs text-brand-text-muted">
                       {allergen.elo_score}
                     </span>
-                    <ConfidenceBadge tier={allergen.confidence_tier} />
-                    {/* Confidence score will render when RankedAllergen carries a numeric confidence field (see issue #160) */}
+                    {/* Numeric confidence badge — emitted by the engine per #160. */}
                     <span data-testid="row-confidence-score">
-                      <SharedConfidenceBadge
-                        score={null}
+                      <ConfidenceBadge
+                        score={allergen.score}
                         variant="compact"
                       />
                     </span>

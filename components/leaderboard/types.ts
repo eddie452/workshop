@@ -24,6 +24,24 @@ export interface RankedAllergen {
    * changes through the gated Final Four and PDF report code paths.
    */
   score: number;
+  /**
+   * Discriminative confidence in [0, 1] — Elo-separation sigmoid
+   * from `lib/engine/confidence-score#getDiscriminativeConfidence`.
+   * Answers "how far is this allergen's Elo from the pack?". By
+   * construction #1 is high, #N is low (see issue #193).
+   * Optional during rollout: older payloads (and some test fixtures)
+   * may still omit it; new server code should populate it.
+   */
+  discriminative?: number;
+  /**
+   * Posterior confidence in [0, 1] — Monte Carlo top-K frequency
+   * from `lib/engine/confidence-score#getPosteriorConfidence`.
+   * Answers "probability this allergen is actually top-K in
+   * repeated tournaments under bounded noise." This is the
+   * tier-driving number going forward (issue #193).
+   * Optional during rollout (see `discriminative`).
+   */
+  posterior?: number;
   rank: number;
 }
 

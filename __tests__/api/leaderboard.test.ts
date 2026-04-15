@@ -228,7 +228,13 @@ describe("GET /api/leaderboard", () => {
     expect(json.isPremium).toBe(true);
   });
 
-  it("computes confidence tiers correctly", async () => {
+  it("populates the two-layer confidence fields (#193) with per-allergen separation", async () => {
+    // Post-#193 the leaderboard emits two new numeric surfaces:
+    //   - `discriminative` — Elo-separation sigmoid (varies between #1 and #N)
+    //   - `posterior`      — Monte Carlo top-K frequency (drives tier string)
+    // The legacy `score` now maps to `discriminative` for back-compat, so
+    // #1 and #N must have visibly different scores (the core DoD — the
+    // 21% flat-line bug the ticket was filed for).
     setupAuth({ id: "user-123" });
 
     const profileMock = setupProfile({ fda_acknowledged: true });
@@ -238,28 +244,28 @@ describe("GET /api/leaderboard", () => {
         allergen_id: "a",
         elo_score: 1800,
         positive_signals: 25,
-        negative_signals: 10, // 35 total -> very_high
+        negative_signals: 10,
         allergens: { common_name: "A", category: "tree" },
       },
       {
         allergen_id: "b",
         elo_score: 1600,
         positive_signals: 10,
-        negative_signals: 5, // 15 total -> high
+        negative_signals: 5,
         allergens: { common_name: "B", category: "grass" },
       },
       {
         allergen_id: "c",
         elo_score: 1400,
         positive_signals: 5,
-        negative_signals: 3, // 8 total -> medium
+        negative_signals: 3,
         allergens: { common_name: "C", category: "weed" },
       },
       {
         allergen_id: "d",
         elo_score: 1200,
         positive_signals: 2,
-        negative_signals: 1, // 3 total -> low
+        negative_signals: 1,
         allergens: { common_name: "D", category: "mold" },
       },
     ]);
@@ -274,22 +280,37 @@ describe("GET /api/leaderboard", () => {
     const response = await GET();
     const json = await response.json();
 
-    expect(json.allergens[0].confidence_tier).toBe("very_high");
-    expect(json.allergens[1].confidence_tier).toBe("high");
-    expect(json.allergens[2].confidence_tier).toBe("medium");
-    expect(json.allergens[3].confidence_tier).toBe("low");
-
-    // #160: numeric score is populated alongside the tier string.
-    // All four are in [0, 1] and non-null.
+    // All four numeric surfaces are populated and in [0, 1].
     for (const a of json.allergens) {
       expect(typeof a.score).toBe("number");
       expect(a.score).toBeGreaterThanOrEqual(0);
       expect(a.score).toBeLessThanOrEqual(1);
+      expect(typeof a.discriminative).toBe("number");
+      expect(typeof a.posterior).toBe("number");
     }
-    // 15 signals sits between the 14-anchor (0.75) and 30-anchor (0.9)
-    // inclusive-left, so rank #2 (15 signals) should be >= 0.75.
-    expect(json.allergens[1].score).toBeGreaterThanOrEqual(0.75);
-    // 3 signals is below the first boundary (7 -> 0.5).
-    expect(json.allergens[3].score).toBeLessThan(0.5);
+
+    // Core DoD: #1 and #N differ on the discriminative layer.
+    expect(json.allergens[0].discriminative).not.toBe(
+      json.allergens[3].discriminative,
+    );
+    expect(json.allergens[0].discriminative).toBeGreaterThan(
+      json.allergens[3].discriminative,
+    );
+
+    // `score` is back-compat alias for `discriminative`.
+    expect(json.allergens[0].score).toBe(json.allergens[0].discriminative);
+
+    // Posterior is in [0, 1] and every allergen in a 4-entry leaderboard
+    // with topK=4 deterministically finishes top-4, so posterior=1 for all.
+    for (const a of json.allergens) {
+      expect(a.posterior).toBe(1);
+    }
+
+    // Tier strings are valid enum values.
+    for (const a of json.allergens) {
+      expect(["low", "medium", "high", "very_high"]).toContain(
+        a.confidence_tier,
+      );
+    }
   });
 });

@@ -60,7 +60,7 @@ export function StepHomeDetails({
                 home_type: (e.target.value || null) as HomeType | null,
               })
             }
-            className="mt-1 block w-full rounded-md border border-brand-border bg-white px-3 py-2 text-sm"
+            className="mt-1 block w-full rounded-button border border-brand-border bg-white px-3 py-2 text-sm"
           >
             <option value="">Select home type...</option>
             {HOME_TYPE_OPTIONS.map((opt) => (
@@ -91,7 +91,7 @@ export function StepHomeDetails({
               })
             }
             placeholder="e.g. 1985"
-            className="mt-1 block w-full rounded-md border border-brand-border px-3 py-2 text-sm"
+            className="mt-1 block w-full rounded-button border border-brand-border px-3 py-2 text-sm"
           />
         </div>
 
@@ -115,7 +115,7 @@ export function StepHomeDetails({
               })
             }
             placeholder="e.g. 1500"
-            className="mt-1 block w-full rounded-md border border-brand-border px-3 py-2 text-sm"
+            className="mt-1 block w-full rounded-button border border-brand-border px-3 py-2 text-sm"
           />
         </div>
 
@@ -129,13 +129,13 @@ export function StepHomeDetails({
           <button
             type="button"
             onClick={onBack}
-            className="flex-1 rounded-md border border-brand-border bg-white px-4 py-2 text-sm font-medium text-brand-text hover:bg-brand-surface-muted"
+            className="flex-1 rounded-button border border-brand-border bg-white px-4 py-2 text-sm font-medium text-brand-text hover:bg-brand-surface-muted"
           >
             Back
           </button>
           <button
             type="submit"
-            className="flex-1 rounded-md bg-brand-primary px-4 py-2 text-sm font-medium text-white hover:bg-brand-primary-dark"
+            className="flex-1 rounded-button bg-brand-primary px-4 py-2 text-sm font-medium text-white hover:bg-brand-primary-dark"
           >
             Continue
           </button>

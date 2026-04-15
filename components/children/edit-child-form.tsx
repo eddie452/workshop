@@ -37,7 +37,7 @@ export function EditChildForm({ child, onSubmit, onCancel, isLoading, error }: E
     <form
       data-testid="edit-child-form"
       onSubmit={handleSubmit}
-      className="rounded-lg border border-brand-primary-light bg-white p-4 shadow-sm"
+      className="rounded-card border border-brand-primary-light bg-white p-4 shadow-sm"
     >
       <h3 className="mb-3 text-sm font-semibold text-brand-primary-dark">Edit Child</h3>
 
@@ -56,7 +56,7 @@ export function EditChildForm({ child, onSubmit, onCancel, isLoading, error }: E
           onClick={onCancel}
           disabled={isLoading}
           data-testid="edit-child-cancel-btn"
-          className="rounded-md border border-brand-border bg-white px-4 py-2 text-xs font-medium text-brand-text hover:bg-brand-surface-muted disabled:opacity-50"
+          className="rounded-button border border-brand-border bg-white px-4 py-2 text-xs font-medium text-brand-text hover:bg-brand-surface-muted disabled:opacity-50"
         >
           Cancel
         </button>
@@ -64,7 +64,7 @@ export function EditChildForm({ child, onSubmit, onCancel, isLoading, error }: E
           type="submit"
           data-testid="edit-child-save-btn"
           disabled={isLoading || !name.trim()}
-          className="rounded-md bg-brand-primary px-4 py-2 text-xs font-semibold text-white hover:bg-brand-primary-dark disabled:opacity-50"
+          className="rounded-button bg-brand-primary px-4 py-2 text-xs font-semibold text-white hover:bg-brand-primary-dark disabled:opacity-50"
         >
           {isLoading ? "Saving..." : "Save"}
         </button>

@@ -71,14 +71,14 @@ export function ReferralShare({
   return (
     <div
       data-testid="referral-share"
-      className={`rounded-lg border border-brand-border bg-white p-4 ${className}`.trim()}
+      className={`rounded-card border border-brand-border bg-white p-4 ${className}`.trim()}
     >
       <p className="text-sm font-semibold text-brand-text">
         Your Referral Link
       </p>
 
       {/* Link display */}
-      <div className="mt-2 flex items-center gap-2 rounded-md border border-brand-border-light bg-brand-surface-muted px-3 py-2">
+      <div className="mt-2 flex items-center gap-2 rounded-card border border-brand-border-light bg-brand-surface-muted px-3 py-2">
         <code
           data-testid="referral-link-display"
           className="flex-1 truncate text-xs text-brand-text-secondary"
@@ -93,7 +93,7 @@ export function ReferralShare({
           type="button"
           onClick={handleCopy}
           data-testid="referral-copy-btn"
-          className={`flex-1 cursor-pointer rounded-md border-none px-4 py-2 text-sm font-medium text-white transition-colors ${
+          className={`flex-1 cursor-pointer rounded-button border-none px-4 py-2 text-sm font-medium text-white transition-colors ${
             copied
               ? "bg-brand-primary-dark"
               : "bg-brand-primary hover:bg-brand-primary-dark"
@@ -107,7 +107,7 @@ export function ReferralShare({
             type="button"
             onClick={handleShare}
             data-testid="referral-share-btn"
-            className="flex-1 cursor-pointer rounded-md border border-brand-primary bg-white px-4 py-2 text-sm font-medium text-brand-primary transition-colors hover:bg-brand-primary-light"
+            className="flex-1 cursor-pointer rounded-button border border-brand-primary bg-white px-4 py-2 text-sm font-medium text-brand-primary transition-colors hover:bg-brand-primary-light"
           >
             Share
           </button>

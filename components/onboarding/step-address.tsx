@@ -60,7 +60,7 @@ export function StepAddress({ formData, onUpdate, onNext }: StepProps) {
             placeholder="123 Main St, City, State ZIP"
             autoFocus
             autoComplete="street-address"
-            className="mt-1 block w-full rounded-md border border-brand-border px-3 py-2 text-sm shadow-sm focus:border-brand-primary focus:outline-none focus:ring-1 focus:ring-brand-primary"
+            className="mt-1 block w-full rounded-button border border-brand-border px-3 py-2 text-sm shadow-sm focus:border-brand-primary focus:outline-none focus:ring-1 focus:ring-brand-primary"
           />
           {error && (
             <p
@@ -79,7 +79,7 @@ export function StepAddress({ formData, onUpdate, onNext }: StepProps) {
 
         <button
           type="submit"
-          className="w-full rounded-md bg-brand-primary px-4 py-2 text-sm font-medium text-white hover:bg-brand-primary-dark focus:outline-none focus:ring-2 focus:ring-brand-primary focus:ring-offset-2"
+          className="w-full rounded-button bg-brand-primary px-4 py-2 text-sm font-medium text-white hover:bg-brand-primary-dark focus:outline-none focus:ring-2 focus:ring-brand-primary focus:ring-offset-2"
         >
           Continue
         </button>

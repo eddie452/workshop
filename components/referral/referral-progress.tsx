@@ -28,7 +28,7 @@ export function ReferralProgress({
     return (
       <div
         data-testid="referral-progress"
-        className={`rounded-lg border border-brand-border bg-brand-primary-light p-4 ${className}`.trim()}
+        className={`rounded-card border border-brand-border bg-brand-primary-light p-4 ${className}`.trim()}
       >
         <p className="text-sm font-semibold text-brand-primary-dark">
           All features unlocked!
@@ -44,7 +44,7 @@ export function ReferralProgress({
   return (
     <div
       data-testid="referral-progress"
-      className={`rounded-lg border border-brand-border bg-white p-4 ${className}`.trim()}
+      className={`rounded-card border border-brand-border bg-white p-4 ${className}`.trim()}
     >
       <p className="text-sm font-semibold text-brand-text">
         {progress} of {REFERRAL_UNLOCK_THRESHOLD} friends invited

@@ -160,7 +160,7 @@ export function ChildrenManager({
               setShowAddForm(true);
               setError(null);
             }}
-            className="rounded-md bg-brand-primary px-4 py-2 text-xs font-semibold text-white hover:bg-brand-primary-dark"
+            className="rounded-button bg-brand-primary px-4 py-2 text-xs font-semibold text-white hover:bg-brand-primary-dark"
           >
             + Add Child
           </button>
@@ -184,7 +184,7 @@ export function ChildrenManager({
       {childList.length === 0 && !showAddForm ? (
         <div
           data-testid="empty-children-state"
-          className="rounded-lg border border-dashed border-brand-border bg-brand-surface-muted p-8 text-center"
+          className="rounded-card border border-dashed border-brand-border bg-brand-surface-muted p-8 text-center"
         >
           <p className="mb-2 text-sm font-medium text-brand-text">
             No child profiles yet
@@ -196,7 +196,7 @@ export function ChildrenManager({
             type="button"
             data-testid="empty-state-add-btn"
             onClick={() => setShowAddForm(true)}
-            className="rounded-md bg-brand-primary px-4 py-2 text-xs font-semibold text-white hover:bg-brand-primary-dark"
+            className="rounded-button bg-brand-primary px-4 py-2 text-xs font-semibold text-white hover:bg-brand-primary-dark"
           >
             + Add Your First Child
           </button>

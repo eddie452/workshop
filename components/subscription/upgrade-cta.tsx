@@ -37,7 +37,7 @@ export function UpgradeCta({
       <button
         type="button"
         data-testid="upgrade-cta-subscribe"
-        className="mb-3 w-full cursor-pointer rounded-lg border-none bg-brand-premium px-4 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-brand-premium-dark"
+        className="mb-3 w-full cursor-pointer rounded-button border-none bg-brand-premium px-4 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-brand-premium-dark"
         onClick={() => {
           // Placeholder — will connect to RevenueCat paywall
         }}

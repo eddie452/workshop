@@ -61,7 +61,7 @@ export function DisclaimerModal({
       data-testid="disclaimer-modal"
       className="fixed inset-0 z-50 flex items-center justify-center bg-brand-primary-dark/50"
     >
-      <div className="mx-4 max-w-md rounded-lg bg-white p-6 shadow-xl">
+      <div className="mx-4 max-w-md rounded-card bg-white p-6 shadow-xl">
         {/* Warning icon */}
         <div className="mb-4 flex items-center gap-2">
           <span className="text-2xl" aria-hidden="true">
@@ -100,7 +100,7 @@ export function DisclaimerModal({
           onClick={handleAcknowledge}
           disabled={loading}
           data-testid="acknowledge-button"
-          className="w-full rounded-md bg-brand-primary px-4 py-3 text-sm font-semibold text-white hover:bg-brand-primary-dark disabled:opacity-50 disabled:cursor-not-allowed"
+          className="w-full rounded-button bg-brand-primary px-4 py-3 text-sm font-semibold text-white hover:bg-brand-primary-dark disabled:opacity-50 disabled:cursor-not-allowed"
         >
           {loading ? "Saving..." : "I Understand"}
         </button>

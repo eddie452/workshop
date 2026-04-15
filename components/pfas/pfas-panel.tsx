@@ -79,7 +79,7 @@ function FoodTag({ food }: { food: string }) {
   return (
     <span
       data-testid="pfas-food-tag"
-      className="inline-block rounded-md border border-brand-border bg-brand-primary-light px-2 py-1 text-xs font-medium text-brand-primary-dark"
+      className="inline-block rounded-button border border-brand-border bg-brand-primary-light px-2 py-1 text-xs font-medium text-brand-primary-dark"
     >
       {food}
     </span>
@@ -104,7 +104,7 @@ function AllergenCrossReactivityCard({
   return (
     <div
       data-testid="pfas-allergen-card"
-      className="rounded-lg border border-brand-border bg-white p-4"
+      className="rounded-card border border-brand-border bg-white p-4"
     >
       {/* Allergen header — always visible */}
       <div className="mb-3 flex items-center justify-between">

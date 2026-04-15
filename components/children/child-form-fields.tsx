@@ -31,7 +31,7 @@ export interface ChildFormFieldsProps {
 }
 
 const INPUT_CLASS =
-  "w-full rounded-md border border-brand-border px-3 py-2 text-sm text-brand-primary-dark placeholder-brand-text-faint focus:border-brand-primary focus:outline-none focus:ring-1 focus:ring-brand-primary";
+  "w-full rounded-button border border-brand-border px-3 py-2 text-sm text-brand-primary-dark placeholder-brand-text-faint focus:border-brand-primary focus:outline-none focus:ring-1 focus:ring-brand-primary";
 const LABEL_CLASS = "mb-1 block text-xs font-medium text-brand-text";
 
 export function ChildFormFields({
@@ -57,7 +57,7 @@ export function ChildFormFields({
       {error && (
         <p
           data-testid={errorTestId}
-          className="mb-3 rounded-md bg-[#E0F0F8] p-2 text-xs text-[#055A8C]"
+          className="mb-3 rounded-card bg-[#E0F0F8] p-2 text-xs text-[#055A8C]"
         >
           {error}
         </p>

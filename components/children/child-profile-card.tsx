@@ -25,7 +25,7 @@ export function ChildProfileCard({ child, onDelete, onEdit }: ChildProfileCardPr
   return (
     <div
       data-testid="child-profile-card"
-      className="flex items-center justify-between rounded-lg border border-brand-border bg-white p-4 shadow-sm"
+      className="flex items-center justify-between rounded-card border border-brand-border bg-white p-4 shadow-sm"
     >
       <div className="flex items-center gap-3">
         <div className="flex h-10 w-10 items-center justify-center rounded-full bg-brand-primary-light text-sm font-bold text-brand-primary">
@@ -45,7 +45,7 @@ export function ChildProfileCard({ child, onDelete, onEdit }: ChildProfileCardPr
         <button
           type="button"
           data-testid="edit-child-btn"
-          className="rounded-md border border-brand-border bg-white px-3 py-1.5 text-xs font-medium text-brand-text hover:bg-brand-surface-muted"
+          className="rounded-button border border-brand-border bg-white px-3 py-1.5 text-xs font-medium text-brand-text hover:bg-brand-surface-muted"
           onClick={() => onEdit(child.id)}
         >
           Edit
@@ -56,7 +56,7 @@ export function ChildProfileCard({ child, onDelete, onEdit }: ChildProfileCardPr
             <button
               type="button"
               data-testid="confirm-delete-btn"
-              className="rounded-md bg-[#055A8C] px-3 py-1.5 text-xs font-medium text-white hover:bg-[#044A72]"
+              className="rounded-button bg-[#055A8C] px-3 py-1.5 text-xs font-medium text-white hover:bg-[#044A72]"
               onClick={() => {
                 onDelete(child.id);
                 setConfirmDelete(false);
@@ -66,7 +66,7 @@ export function ChildProfileCard({ child, onDelete, onEdit }: ChildProfileCardPr
             </button>
             <button
               type="button"
-              className="rounded-md border border-brand-border bg-white px-3 py-1.5 text-xs font-medium text-brand-text hover:bg-brand-surface-muted"
+              className="rounded-button border border-brand-border bg-white px-3 py-1.5 text-xs font-medium text-brand-text hover:bg-brand-surface-muted"
               onClick={() => setConfirmDelete(false)}
             >
               Cancel
@@ -76,7 +76,7 @@ export function ChildProfileCard({ child, onDelete, onEdit }: ChildProfileCardPr
           <button
             type="button"
             data-testid="delete-child-btn"
-            className="rounded-md border border-brand-border bg-white px-3 py-1.5 text-xs font-medium text-[#055A8C] hover:bg-[#E0F0F8]"
+            className="rounded-button border border-brand-border bg-white px-3 py-1.5 text-xs font-medium text-[#055A8C] hover:bg-[#E0F0F8]"
             onClick={() => setConfirmDelete(true)}
           >
             Remove

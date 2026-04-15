@@ -3,7 +3,13 @@ import { createClient } from "@/lib/supabase/server";
 import {
   getConfidenceTierBySignals,
   getConfidenceScoreBySignals,
+  getDiscriminativeConfidence,
+  getPosteriorConfidence,
+  getConfidenceTierByPosterior,
 } from "@/lib/engine";
+import type { TournamentEntry } from "@/lib/engine";
+import { buildBracketTrace } from "@/lib/engine/tournament";
+import type { BracketMatch } from "@/lib/engine/types";
 import type {
   RankedAllergen,
   GatedRankedAllergen,
@@ -14,6 +20,7 @@ import {
   getCachedAccessStatus,
   hasFeatureAccess,
 } from "@/lib/subscription";
+import { Bracket } from "@/components/bracket";
 import { DashboardLeaderboard } from "./dashboard-leaderboard";
 import { PageContainer } from "@/components/layout";
 
@@ -104,21 +111,53 @@ export default async function DashboardPage() {
 
   const eloRows = (rawEloRows ?? []) as unknown as EloRowWithAllergen[];
 
+  // Two-layer confidence model (issue #193) — mirrors the logic in
+  // `app/api/leaderboard/route.ts` so the dashboard's server-rendered
+  // payload carries `discriminative` + `posterior` into the bracket UI
+  // (issue #179).
+  const elos = eloRows.map((row) => row.elo_score);
+  const tournamentEntries: TournamentEntry[] = eloRows.map((row) => ({
+    allergen_id: row.allergen_id,
+    common_name: row.allergens.common_name,
+    category: row.allergens.category,
+    composite_score: row.elo_score,
+    tier: "low" as const,
+  }));
+  const posteriors = getPosteriorConfidence(tournamentEntries, { seed: 0 });
+
   // Map to ranked allergens with confidence tiers + numeric score
   // (server-side computation; score derivation lives in @/lib/engine).
   const allergens: RankedAllergen[] = eloRows.map((row, index) => {
     const totalSignals = row.positive_signals + row.negative_signals;
+    const discriminative = getDiscriminativeConfidence(row.elo_score, elos);
+    const posterior = posteriors[row.allergen_id] ?? 0;
     return {
       allergen_id: row.allergen_id,
       common_name: row.allergens.common_name,
       category: row.allergens.category as RankedAllergen["category"],
       elo_score: row.elo_score,
-      confidence_tier: getConfidenceTierBySignals(totalSignals),
-      // Numeric 0–1 confidence emitted per issue #160.
+      // Tier prefers the posterior (issue #193), falling back to legacy
+      // signal-count derivation if the posterior is non-finite.
+      confidence_tier: Number.isFinite(posterior)
+        ? getConfidenceTierByPosterior(posterior)
+        : getConfidenceTierBySignals(totalSignals),
+      // `score` stays as the legacy surface for components that haven't
+      // migrated yet; `discriminative` / `posterior` are the two-layer
+      // signals the bracket UI reads.
       score: getConfidenceScoreBySignals(totalSignals),
+      discriminative,
+      posterior,
       rank: index + 1,
     };
   });
+
+  // Bracket trace for the #179 bracket UI. `tournamentEntries` is
+  // already ordered by Elo descending (the Supabase query orders by
+  // elo_score desc), which matches `pairwiseSort`'s ordering for
+  // distinct composite scores. The engine helper handles byes for
+  // non-power-of-two counts and returns an empty trace for
+  // zero/one-entry inputs.
+  const bracketTrace: BracketMatch[] = buildBracketTrace(tournamentEntries);
 
   // Determine if we should show Environmental Forecast mode.
   // Forecast mode activates when the user's most recent check-in has severity = 0,
@@ -159,6 +198,16 @@ export default async function DashboardPage() {
           Signed in as {user.email}
         </p>
       </div>
+
+      {/* Tournament bracket (ticket #179). Rendered above the
+          leaderboard so users can see the path to their champion
+          before the ranked list. Hidden in Environmental Forecast
+          mode — no tournament has been played yet. */}
+      {!isEnvironmentalForecast && bracketTrace.length > 0 && (
+        <div className="mb-6">
+          <Bracket nodes={bracketTrace} ranked={allergens} />
+        </div>
+      )}
 
       <DashboardLeaderboard
         allergens={finalFourView.allergensForClient}

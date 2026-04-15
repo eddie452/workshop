@@ -12,5 +12,14 @@ export default defineConfig({
   test: {
     environment: "jsdom",
     setupFiles: ["./vitest.setup.ts"],
+    // Exclude agent-harness scratch worktrees — they contain duplicate
+    // copies of the test suite pinned to older branches and are not
+    // part of this checkout's test scope.
+    exclude: [
+      "**/node_modules/**",
+      "**/dist/**",
+      "**/.next/**",
+      "**/.claude/worktrees/**",
+    ],
   },
 });

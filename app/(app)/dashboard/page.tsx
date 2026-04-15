@@ -10,10 +10,9 @@ import type {
   CheckinSeverityQuery,
 } from "@/components/leaderboard/types";
 import { gateFinalFour } from "@/lib/leaderboard/gate-final-four";
-import { hasFeatureAccess } from "@/lib/subscription";
-import type {
-  AccessStatus,
-  SubscriptionTier,
+import {
+  getCachedAccessStatus,
+  hasFeatureAccess,
 } from "@/lib/subscription";
 import { DashboardLeaderboard } from "./dashboard-leaderboard";
 import { PageContainer } from "@/components/layout";
@@ -54,44 +53,34 @@ export default async function DashboardPage() {
   const profile = profileData as { fda_acknowledged: boolean } | null;
   const fdaAcknowledged = profile?.fda_acknowledged ?? false;
 
-  // Fetch subscription tier
-  const { data: subscriptionData } = await supabase
-    .from("user_subscriptions")
-    .select("tier")
-    .eq("user_id", user.id)
-    .single();
+  // Resolve subscription + referral access via the canonical helper.
+  // `getCachedAccessStatus` honors `expires_at` against `now()` so an
+  // expired subscriber (whose tier hasn't been flipped yet) is correctly
+  // treated as inactive. React `cache()` makes this free to call across
+  // the request — no duplicate DB round-trips.
+  const accessStatus = await getCachedAccessStatus(supabase, user.id);
+  const isPremium = accessStatus.subscriptionActive;
 
-  const subscription = subscriptionData as { tier: string } | null;
-  const tier = (subscription?.tier ?? "free") as SubscriptionTier;
-  const isPremium = tier === "madness_plus" || tier === "madness_family";
-
-  // Fetch referral status — drives the Final Four gated reveal (#157).
-  // The user_profiles row carries both the referral count and a
-  // permanent `features_unlocked` flag that the record_referral RPC
-  // flips once the threshold (3) is crossed.
+  // Fetch referral count for the Final Four gated reveal (#157).
+  // `referralUnlocked` (the permanent `features_unlocked` flag) is
+  // already carried inside `accessStatus`; only the live count needs
+  // a separate read.
   const { data: referralProfile } = await supabase
     .from("user_profiles")
-    .select("referral_count, features_unlocked")
+    .select("referral_count")
     .eq("id", user.id)
     .single();
 
   const referralRow = referralProfile as {
     referral_count: number | null;
-    features_unlocked: boolean | null;
   } | null;
 
   const referralCount = referralRow?.referral_count ?? 0;
-  const referralUnlocked = referralRow?.features_unlocked ?? false;
+  const referralUnlocked = accessStatus.referralUnlocked;
 
   // Granular feature check for the Full Rankings section (ranks #5+).
   // Uses the centralized `hasFeatureAccess` helper so the gate can
   // evolve independently of other premium features in the future.
-  const accessStatus: AccessStatus = {
-    tier,
-    subscriptionActive: isPremium,
-    referralUnlocked,
-    isPremium: isPremium || referralUnlocked,
-  };
   const hasFullRankings = hasFeatureAccess(accessStatus, "full_rankings");
 
   // Fetch allergen Elo rankings

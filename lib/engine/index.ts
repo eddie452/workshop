@@ -69,8 +69,23 @@ export {
   getConfidenceLabel,
 } from "./confidence";
 
-// Confidence score (numeric 0–1 companion to the tier string, issue #160)
-export { getConfidenceScoreBySignals } from "./confidence-score";
+// Confidence score — two-layer model (issue #193)
+//   - getConfidenceScoreBySignals: legacy signal-count curve (deprecated)
+//   - getDiscriminativeConfidence: Elo-separation sigmoid (cheap, sync)
+//   - getPosteriorConfidence: Monte Carlo top-K frequency (tier driver)
+//   - getConfidenceTierByPosterior: posterior → tier string
+export {
+  getConfidenceScoreBySignals,
+  getDiscriminativeConfidence,
+  getPosteriorConfidence,
+  getConfidenceTierByPosterior,
+  DISCRIMINATIVE_SIGMOID_K,
+  POSTERIOR_NOISE_BASE,
+  POSTERIOR_DEFAULT_RUNS,
+  POSTERIOR_DEFAULT_TOP_K,
+  POSTERIOR_DEFAULT_NOISE,
+} from "./confidence-score";
+export type { PosteriorConfidenceOptions } from "./confidence-score";
 
 // Monte Carlo exposure simulation
 export type {

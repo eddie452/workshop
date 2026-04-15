@@ -368,6 +368,25 @@ describe("Leaderboard", () => {
       expect(screen.getByText("1350")).toBeDefined();
       expect(screen.queryByTestId("ranking-score-locked")).toBeNull();
     });
+
+    it("falls back to isPremium=false when hasFullRankings is undefined (locks ranks #5+)", () => {
+      // Pins the lock-fallback direction. If a future refactor accidentally
+      // defaults `hasFullRankings` to `true` (e.g., `?? true`), this test
+      // fails — preventing a silent paywall bypass for free / expired-sub
+      // users on the dashboard surface.
+      render(
+        <Leaderboard
+          {...defaultProps}
+          isPremium={false}
+        />
+      );
+      // Scores hidden, lock icons + upgrade CTA shown
+      expect(screen.queryByText("1350")).toBeNull();
+      expect(screen.queryByText("1300")).toBeNull();
+      const lockedElements = screen.getAllByTestId("ranking-score-locked");
+      expect(lockedElements.length).toBe(2);
+      expect(screen.getByTestId("rankings-upgrade-cta")).toBeDefined();
+    });
   });
 
   describe("with only champion (no Final Four)", () => {

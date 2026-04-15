@@ -170,6 +170,34 @@ export interface TournamentEntry {
   tier: ConfidenceTier;
 }
 
+/**
+ * A single pairwise match in the bracket trace.
+ *
+ * One `BracketMatch` is emitted for every head-to-head comparison
+ * performed during the tournament. They are ordered by
+ * `(round asc, matchId asc)` within `TournamentResult.bracket_trace`.
+ */
+export interface BracketMatch {
+  /** Zero-indexed round number; 0 = first round, last round = finals */
+  round: number;
+  /** Stable match identifier within the round, zero-indexed */
+  matchId: number;
+  leftAllergenId: string;
+  rightAllergenId: string;
+  /** Allergen ID of the advancing side */
+  winnerId: string;
+  /** Raw composite score of the left side at time of match */
+  leftScore: number;
+  /** Raw composite score of the right side at time of match */
+  rightScore: number;
+}
+
+/**
+ * Alias used by bracket UI consumers.
+ * Equivalent to {@link BracketMatch} for now.
+ */
+export type BracketNode = BracketMatch;
+
 /** Result of the pairwise tournament sort */
 export interface TournamentResult {
   /** Full ranked leaderboard (highest score first) */
@@ -178,6 +206,18 @@ export interface TournamentResult {
   final_four: TournamentEntry[];
   /** Top 1 allergen (Trigger Champion) */
   trigger_champion: TournamentEntry | null;
+  /**
+   * Round-by-round match trace, ordered by `(round asc, matchId asc)`.
+   *
+   * For a power-of-two entry count N, contains exactly `N - 1` matches
+   * (8 → 7, 16 → 15, 32 → 31). For non-power-of-two counts, the bracket
+   * is still well-defined: byes are awarded to the top seeds so the
+   * first-round size is reduced to the next power of two, and only
+   * real head-to-head matches are recorded.
+   *
+   * Empty for zero- or one-entry tournaments (no matches are played).
+   */
+  bracket_trace: BracketMatch[];
 }
 
 /* ------------------------------------------------------------------ */

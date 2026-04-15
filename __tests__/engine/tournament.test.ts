@@ -1,5 +1,6 @@
 import { describe, it, expect } from "vitest";
 import {
+  buildBracketTrace,
   createTournamentEntry,
   pairwiseCompare,
   pairwiseSort,
@@ -190,5 +191,144 @@ describe("runTournament", () => {
     const result = runTournament(entries);
     expect(result.leaderboard[0].tier).toBe("very_high");
     expect(result.leaderboard[1].tier).toBe("low");
+  });
+});
+
+/* ------------------------------------------------------------------ */
+/* bracket_trace                                                       */
+/* ------------------------------------------------------------------ */
+
+/**
+ * Build N tournament entries with distinct, strictly-decreasing scores
+ * so that the top seed always wins and ordering is unambiguous.
+ */
+const makeEntries = (n: number): TournamentEntry[] =>
+  Array.from({ length: n }, (_, i) =>
+    makeEntry({
+      allergen_id: `a${String(i).padStart(3, "0")}`,
+      common_name: `Allergen ${i}`,
+      composite_score: 2000 - i * 10,
+    }),
+  );
+
+describe("bracket_trace", () => {
+  it("emits exactly 7 matches for an 8-entry tournament (8→4→2→1)", () => {
+    const result = runTournament(makeEntries(8));
+    expect(result.bracket_trace).toHaveLength(7);
+
+    // 4 first-round, 2 semifinal, 1 final
+    const byRound = result.bracket_trace.reduce<Record<number, number>>(
+      (acc, m) => {
+        acc[m.round] = (acc[m.round] ?? 0) + 1;
+        return acc;
+      },
+      {},
+    );
+    expect(byRound[0]).toBe(4);
+    expect(byRound[1]).toBe(2);
+    expect(byRound[2]).toBe(1);
+  });
+
+  it("emits exactly 15 matches for a 16-entry tournament", () => {
+    const result = runTournament(makeEntries(16));
+    expect(result.bracket_trace).toHaveLength(15);
+
+    const rounds = new Set(result.bracket_trace.map((m) => m.round));
+    expect(rounds.size).toBe(4); // 16→8→4→2→1 = 4 rounds
+  });
+
+  it("emits exactly 31 matches for a 32-entry tournament", () => {
+    const result = runTournament(makeEntries(32));
+    expect(result.bracket_trace).toHaveLength(31);
+
+    const rounds = new Set(result.bracket_trace.map((m) => m.round));
+    expect(rounds.size).toBe(5); // 32→16→8→4→2→1 = 5 rounds
+  });
+
+  it("final-round winnerId matches trigger_champion.allergen_id", () => {
+    for (const n of [8, 16, 32]) {
+      const result = runTournament(makeEntries(n));
+      const finalRound = Math.max(
+        ...result.bracket_trace.map((m) => m.round),
+      );
+      const finalMatches = result.bracket_trace.filter(
+        (m) => m.round === finalRound,
+      );
+      expect(finalMatches).toHaveLength(1);
+      expect(finalMatches[0].winnerId).toBe(
+        result.trigger_champion?.allergen_id,
+      );
+    }
+  });
+
+  it("produces a byte-identical trace across repeated runs (determinism)", () => {
+    const entries = makeEntries(16);
+    const a = runTournament(entries).bracket_trace;
+    const b = runTournament([...entries].reverse()).bracket_trace;
+    // Same input (set-wise) and same comparator => identical trace
+    expect(JSON.stringify(a)).toBe(JSON.stringify(b));
+  });
+
+  it("is ordered by (round asc, matchId asc)", () => {
+    const trace = runTournament(makeEntries(16)).bracket_trace;
+    for (let i = 1; i < trace.length; i++) {
+      const prev = trace[i - 1];
+      const curr = trace[i];
+      const prevKey = prev.round * 10_000 + prev.matchId;
+      const currKey = curr.round * 10_000 + curr.matchId;
+      expect(currKey).toBeGreaterThan(prevKey);
+    }
+  });
+
+  it("records left/right scores and a winnerId equal to left or right", () => {
+    const trace = runTournament(makeEntries(8)).bracket_trace;
+    for (const m of trace) {
+      expect(typeof m.leftScore).toBe("number");
+      expect(typeof m.rightScore).toBe("number");
+      expect([m.leftAllergenId, m.rightAllergenId]).toContain(m.winnerId);
+    }
+  });
+
+  it("returns empty bracket_trace for 0 and 1 entries", () => {
+    expect(runTournament([]).bracket_trace).toEqual([]);
+    expect(
+      runTournament([makeEntry({ allergen_id: "only" })]).bracket_trace,
+    ).toEqual([]);
+  });
+
+  it("does not change leaderboard/final_four/trigger_champion shape", () => {
+    // Regression guard: adding bracket_trace must not perturb legacy fields.
+    const entries = makeEntries(8);
+    const result = runTournament(entries);
+    const sortedIds = [...entries]
+      .sort(pairwiseCompare)
+      .map((e) => e.allergen_id);
+    expect(result.leaderboard.map((e) => e.allergen_id)).toEqual(sortedIds);
+    expect(result.final_four.map((e) => e.allergen_id)).toEqual(
+      sortedIds.slice(0, 4),
+    );
+    expect(result.trigger_champion?.allergen_id).toBe(sortedIds[0]);
+  });
+
+  it("buildBracketTrace is callable directly and matches runTournament output", () => {
+    const entries = makeEntries(16);
+    const sorted = pairwiseSort(entries);
+    const direct = buildBracketTrace(sorted);
+    const viaRun = runTournament(entries).bracket_trace;
+    expect(direct).toEqual(viaRun);
+  });
+
+  it("handles non-power-of-two entry counts by awarding byes to top seeds", () => {
+    // 6 entries: bracket size 4, 2 byes → 6-1=5 head-to-head matches total.
+    const result = runTournament(makeEntries(6));
+    expect(result.bracket_trace).toHaveLength(5);
+    // Top seed still wins because scores are strictly decreasing.
+    const finalRound = Math.max(
+      ...result.bracket_trace.map((m) => m.round),
+    );
+    const finalMatch = result.bracket_trace.find(
+      (m) => m.round === finalRound,
+    );
+    expect(finalMatch?.winnerId).toBe(result.trigger_champion?.allergen_id);
   });
 });

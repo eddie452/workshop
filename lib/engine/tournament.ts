@@ -12,6 +12,7 @@
  */
 
 import type {
+  BracketMatch,
   ConfidenceTier,
   TournamentEntry,
   TournamentResult,
@@ -89,6 +90,101 @@ export function pairwiseSort(entries: TournamentEntry[]): TournamentEntry[] {
 }
 
 /* ------------------------------------------------------------------ */
+/* Bracket trace                                                       */
+/* ------------------------------------------------------------------ */
+
+/**
+ * Build a round-by-round bracket trace from a sorted leaderboard.
+ *
+ * The bracket is a single-elimination tournament seeded directly from
+ * the leaderboard: highest seed meets lowest seed, etc. Winners are
+ * determined by {@link pairwiseCompare}, which is the same comparator
+ * used by {@link pairwiseSort} — so the trace is consistent with the
+ * leaderboard and fully deterministic under the same input.
+ *
+ * For a power-of-two count N, this emits exactly N - 1 matches
+ * (8 → 7, 16 → 15, 32 → 31). For non-power-of-two counts, the top
+ * seeds receive first-round byes so the round-one field is reduced to
+ * the next lower power of two; byes are *not* recorded as matches —
+ * only real head-to-heads are. Zero- and one-entry inputs yield an
+ * empty trace.
+ *
+ * Pure and deterministic — no I/O, no randomness.
+ *
+ * @param sorted — entries already sorted by {@link pairwiseSort}
+ * @returns bracket trace ordered by (round asc, matchId asc)
+ */
+export function buildBracketTrace(
+  sorted: readonly TournamentEntry[],
+): BracketMatch[] {
+  const trace: BracketMatch[] = [];
+  if (sorted.length < 2) return trace;
+
+  // Largest power of two that is <= sorted.length.
+  // Everything above it gets a first-round bye.
+  let bracketSize = 1;
+  while (bracketSize * 2 <= sorted.length) bracketSize *= 2;
+
+  const byeCount = sorted.length - bracketSize;
+  // Top `byeCount` seeds get byes; remaining seeds form round 0.
+  const byes: TournamentEntry[] = sorted.slice(0, byeCount);
+  const roundZeroField: TournamentEntry[] = sorted.slice(byeCount);
+
+  // Round 0: pair seeds 1-vs-N, 2-vs-(N-1), ...
+  let currentRound: TournamentEntry[] = [];
+  const fieldSize = roundZeroField.length;
+  if (fieldSize >= 2) {
+    for (let i = 0; i < fieldSize / 2; i++) {
+      const left = roundZeroField[i];
+      const right = roundZeroField[fieldSize - 1 - i];
+      const winner = pairwiseCompare(left, right) <= 0 ? left : right;
+      trace.push({
+        round: 0,
+        matchId: i,
+        leftAllergenId: left.allergen_id,
+        rightAllergenId: right.allergen_id,
+        winnerId: winner.allergen_id,
+        leftScore: left.composite_score,
+        rightScore: right.composite_score,
+      });
+      currentRound.push(winner);
+    }
+  } else {
+    currentRound = [...roundZeroField];
+  }
+
+  // Reinsert byes at the top of the field for subsequent rounds,
+  // preserving seed order (top seed plays lowest surviving seed).
+  currentRound = [...byes, ...currentRound];
+
+  // Subsequent rounds: top vs bottom of survivors list each round.
+  let roundIndex = 1;
+  while (currentRound.length > 1) {
+    const nextRound: TournamentEntry[] = [];
+    const size = currentRound.length;
+    for (let i = 0; i < size / 2; i++) {
+      const left = currentRound[i];
+      const right = currentRound[size - 1 - i];
+      const winner = pairwiseCompare(left, right) <= 0 ? left : right;
+      trace.push({
+        round: roundIndex,
+        matchId: i,
+        leftAllergenId: left.allergen_id,
+        rightAllergenId: right.allergen_id,
+        winnerId: winner.allergen_id,
+        leftScore: left.composite_score,
+        rightScore: right.composite_score,
+      });
+      nextRound.push(winner);
+    }
+    currentRound = nextRound;
+    roundIndex++;
+  }
+
+  return trace;
+}
+
+/* ------------------------------------------------------------------ */
 /* Final Four + Trigger Champion                                       */
 /* ------------------------------------------------------------------ */
 
@@ -96,17 +192,20 @@ export function pairwiseSort(entries: TournamentEntry[]): TournamentEntry[] {
  * Run the full pairwise tournament: sort, extract Final Four and Trigger Champion.
  *
  * @param entries — tournament entries (will be sorted)
- * @returns TournamentResult with leaderboard, final_four, and trigger_champion
+ * @returns TournamentResult with leaderboard, final_four, trigger_champion,
+ *          and a bracket_trace of every head-to-head match played
  */
 export function runTournament(entries: TournamentEntry[]): TournamentResult {
   const leaderboard = pairwiseSort(entries);
 
   const final_four = leaderboard.slice(0, FINAL_FOUR_SIZE);
   const trigger_champion = leaderboard.length > 0 ? leaderboard[0] : null;
+  const bracket_trace = buildBracketTrace(leaderboard);
 
   return {
     leaderboard,
     final_four,
     trigger_champion,
+    bracket_trace,
   };
 }

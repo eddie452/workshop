@@ -79,7 +79,7 @@ function FoodTag({ food }: { food: string }) {
   return (
     <span
       data-testid="pfas-food-tag"
-      className="inline-block rounded-button border border-brand-border bg-brand-primary-light px-2 py-1 text-xs font-medium text-brand-primary-dark"
+      className="inline-block rounded-full border border-brand-border bg-brand-primary-light px-2 py-1 text-xs font-medium text-brand-primary-dark"
     >
       {food}
     </span>

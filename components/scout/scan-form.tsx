@@ -112,7 +112,7 @@ export function ScanForm() {
 
       {/* Image preview */}
       {previewUrl && (
-        <div className="mb-4 overflow-hidden rounded-lg border border-brand-border">
+        <div className="mb-4 overflow-hidden rounded-card border border-brand-border">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src={previewUrl}
@@ -129,7 +129,7 @@ export function ScanForm() {
           type="button"
           onClick={handleCapture}
           disabled={isScanning}
-          className="w-full cursor-pointer rounded-lg border-none bg-brand-accent px-4 py-3 text-sm font-semibold text-brand-primary-dark hover:bg-brand-accent-dark disabled:opacity-50"
+          className="w-full cursor-pointer rounded-button border-none bg-brand-accent px-4 py-3 text-sm font-semibold text-brand-primary-dark hover:bg-brand-accent-dark disabled:opacity-50"
           data-testid="scout-capture-btn"
         >
           {isScanning ? "Scanning..." : "Take Photo or Upload"}
@@ -149,7 +149,7 @@ export function ScanForm() {
       {/* Error message */}
       {error && (
         <div
-          className="mt-3 rounded-md border border-[#B8E4F0] bg-[#E0F0F8] px-4 py-3"
+          className="mt-3 rounded-card border border-[#B8E4F0] bg-[#E0F0F8] px-4 py-3"
           data-testid="scout-error"
         >
           <p className="text-sm text-[#055A8C]">
@@ -165,7 +165,7 @@ export function ScanForm() {
           data-testid="scout-results"
         >
           {results.matches.length === 0 ? (
-            <div className="rounded-md border border-brand-border bg-brand-surface-muted px-4 py-3">
+            <div className="rounded-card border border-brand-border bg-brand-surface-muted px-4 py-3">
               <p className="text-sm text-brand-text-secondary">
                 No allergen-producing plants identified in this photo.
                 Try taking a closer photo of the plant.
@@ -200,7 +200,7 @@ export function ScanForm() {
           <button
             type="button"
             onClick={handleReset}
-            className="mt-4 w-full cursor-pointer rounded-lg border border-brand-border bg-white px-4 py-2 text-sm font-medium text-brand-text hover:bg-brand-surface-muted"
+            className="mt-4 w-full cursor-pointer rounded-button border border-brand-border bg-white px-4 py-2 text-sm font-medium text-brand-text hover:bg-brand-surface-muted"
             data-testid="scout-reset-btn"
           >
             Scan Another Plant
@@ -220,7 +220,7 @@ function MatchCard({ match }: { match: ScanMatchResult }) {
 
   return (
     <div
-      className={`rounded-md border px-4 py-3 ${
+      className={`rounded-card border px-4 py-3 ${
         isActive
           ? "border-brand-border bg-brand-primary-light"
           : "border-brand-border-light bg-brand-surface-muted"

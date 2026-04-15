@@ -58,7 +58,7 @@ export function SymptomZones({ symptoms, onChange }: SymptomZonesProps) {
           return (
             <div
               key={zone.id}
-              className="overflow-hidden rounded-lg border border-brand-border"
+              className="overflow-hidden rounded-card border border-brand-border"
               data-testid={`zone-${zone.id}`}
             >
               {/* Zone header — toggle expand */}

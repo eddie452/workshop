@@ -45,7 +45,7 @@ export function ProfileSwitcher({
         type="button"
         data-testid="profile-switcher-toggle"
         onClick={() => setIsOpen(!isOpen)}
-        className="flex items-center gap-2 rounded-lg border border-brand-border bg-white px-3 py-2 text-sm font-medium text-brand-text shadow-sm hover:bg-brand-surface-muted"
+        className="flex items-center gap-2 rounded-button border border-brand-border bg-white px-3 py-2 text-sm font-medium text-brand-text shadow-sm hover:bg-brand-surface-muted"
       >
         <span className="flex h-6 w-6 items-center justify-center rounded-full bg-brand-primary-light text-xs font-bold text-brand-primary">
           {activeLabel.charAt(0).toUpperCase()}
@@ -64,7 +64,7 @@ export function ProfileSwitcher({
       {isOpen && (
         <div
           data-testid="profile-switcher-menu"
-          className="absolute left-0 z-10 mt-1 w-56 rounded-lg border border-brand-border bg-white py-1 shadow-lg"
+          className="absolute left-0 z-10 mt-1 w-56 rounded-card border border-brand-border bg-white py-1 shadow-lg"
         >
           {/* Parent/Self option */}
           <button

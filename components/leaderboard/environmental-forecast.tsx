@@ -98,7 +98,7 @@ function DataCard({
   children: React.ReactNode;
 }) {
   return (
-    <div className="rounded-lg border border-brand-border bg-white p-4">
+    <div className="rounded-card border border-brand-border bg-white p-4">
       <h3 className="mb-3 text-sm font-semibold text-brand-text">
         {title}
       </h3>
@@ -140,7 +140,7 @@ function LoadingSkeleton() {
       {[1, 2, 3].map((i) => (
         <div
           key={i}
-          className="h-24 animate-pulse rounded-lg bg-brand-surface-muted"
+          className="h-24 animate-pulse rounded-card bg-brand-surface-muted"
         />
       ))}
     </div>
@@ -151,7 +151,7 @@ function NoDataMessage() {
   return (
     <div
       data-testid="forecast-no-data"
-      className="rounded-lg border border-brand-border bg-brand-surface-muted p-6 text-center"
+      className="rounded-card border border-brand-border bg-brand-surface-muted p-6 text-center"
     >
       <p className="text-sm text-brand-text-secondary">
         Environmental data is not available. Please ensure your home location is

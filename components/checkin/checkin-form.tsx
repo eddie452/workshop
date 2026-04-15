@@ -101,7 +101,7 @@ export function CheckinForm({ onSuccess, alreadyCheckedIn = false }: CheckinForm
   if (alreadyCheckedIn || submitted) {
     return (
       <div
-        className="rounded-lg border border-brand-border bg-brand-primary-light p-6 text-center"
+        className="rounded-card border border-brand-border bg-brand-primary-light p-6 text-center"
         data-testid="checkin-complete"
       >
         <p className="text-lg font-semibold text-brand-primary-dark">
@@ -126,7 +126,7 @@ export function CheckinForm({ onSuccess, alreadyCheckedIn = false }: CheckinForm
       {error && (
         <div
           role="alert"
-          className="rounded-lg border border-[#B8E4F0] bg-[#E0F0F8] px-4 py-3 text-sm text-[#055A8C]"
+          className="rounded-card border border-[#B8E4F0] bg-[#E0F0F8] px-4 py-3 text-sm text-[#055A8C]"
           data-testid="checkin-error"
         >
           {error}
@@ -159,7 +159,7 @@ export function CheckinForm({ onSuccess, alreadyCheckedIn = false }: CheckinForm
         type="submit"
         disabled={isSubmitting}
         data-testid="checkin-submit"
-        className="w-full rounded-lg bg-brand-primary px-4 py-3 text-base font-semibold text-white transition-colors hover:bg-brand-primary-dark disabled:cursor-not-allowed disabled:opacity-50"
+        className="w-full rounded-button bg-brand-primary px-4 py-3 text-base font-semibold text-white transition-colors hover:bg-brand-primary-dark disabled:cursor-not-allowed disabled:opacity-50"
       >
         {isSubmitting ? "Submitting..." : formData.severity === 0 ? "Log Symptom-Free Day" : "Submit Check-in"}
       </button>

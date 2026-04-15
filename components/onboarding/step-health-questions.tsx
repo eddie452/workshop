@@ -154,7 +154,7 @@ export function StepHealthQuestions({
                 seasonal_pattern: e.target.value as SeasonalPattern,
               })
             }
-            className="mt-1 block w-full rounded-md border border-brand-border bg-white px-3 py-2 text-sm"
+            className="mt-1 block w-full rounded-button border border-brand-border bg-white px-3 py-2 text-sm"
           >
             {SEASONAL_OPTIONS.map((opt) => (
               <option key={opt.value} value={opt.value}>
@@ -208,13 +208,13 @@ export function StepHealthQuestions({
           <button
             type="button"
             onClick={onBack}
-            className="flex-1 rounded-md border border-brand-border bg-white px-4 py-2 text-sm font-medium text-brand-text hover:bg-brand-surface-muted"
+            className="flex-1 rounded-button border border-brand-border bg-white px-4 py-2 text-sm font-medium text-brand-text hover:bg-brand-surface-muted"
           >
             Back
           </button>
           <button
             type="submit"
-            className="flex-1 rounded-md bg-brand-primary px-4 py-2 text-sm font-medium text-white hover:bg-brand-primary-dark"
+            className="flex-1 rounded-button bg-brand-primary px-4 py-2 text-sm font-medium text-white hover:bg-brand-primary-dark"
           >
             Continue
           </button>

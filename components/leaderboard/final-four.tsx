@@ -26,7 +26,7 @@ function FinalFourCard({ allergen }: { allergen: GatedRankedAllergen }) {
     <div
       data-testid="final-four-card"
       data-locked={locked}
-      className="rounded-lg border border-brand-border bg-white p-4 shadow-sm"
+      className="rounded-card border border-brand-border bg-white p-4 shadow-sm"
     >
       {/* Rank badge */}
       <div className="mb-2 flex items-center justify-between">

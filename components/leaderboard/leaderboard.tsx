@@ -222,7 +222,7 @@ export function Leaderboard({
           </h2>
           <div
             data-testid="full-rankings"
-            className="divide-y divide-brand-border-light rounded-lg border border-brand-border bg-white"
+            className="divide-y divide-brand-border-light rounded-card border border-brand-border bg-white"
           >
             {fullRankings.map((allergen) => (
               <div

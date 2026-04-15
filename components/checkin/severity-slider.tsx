@@ -33,7 +33,7 @@ export function SeveritySlider({ value, onChange }: SeveritySliderProps) {
               aria-label={`${level.label}: ${level.description}`}
               data-testid={`severity-${level.value}`}
               onClick={() => onChange(level.value)}
-              className={`cursor-pointer rounded-lg border-2 p-3 text-left transition-colors ${
+              className={`cursor-pointer rounded-card border-2 p-3 text-left transition-colors ${
                 isSelected
                   ? "border-brand-primary bg-brand-primary-light"
                   : "border-brand-border bg-white hover:border-brand-border"

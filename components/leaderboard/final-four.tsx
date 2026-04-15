@@ -14,7 +14,7 @@
  */
 
 import type { FinalFourProps, GatedRankedAllergen } from "./types";
-import { ConfidenceBadge } from "./confidence-badge";
+import { ConfidenceBadge } from "@/components/shared/confidence-badge";
 import { CategoryIcon } from "./category-icon";
 import { BlurOverlay } from "./blur-overlay";
 import { FinalFourUnlockCta } from "./final-four-unlock-cta";
@@ -36,8 +36,8 @@ function FinalFourCard({ allergen }: { allergen: GatedRankedAllergen }) {
         >
           #{allergen.rank}
         </span>
-        {!locked && allergen.confidence_tier && (
-          <ConfidenceBadge tier={allergen.confidence_tier} />
+        {!locked && allergen.score !== null && (
+          <ConfidenceBadge score={allergen.score} variant="compact" />
         )}
       </div>
 

@@ -16,6 +16,14 @@ export interface RankedAllergen {
   category: AllergenCategory;
   elo_score: number;
   confidence_tier: ConfidenceTier;
+  /**
+   * Numeric confidence in [0, 1] — companion to `confidence_tier`,
+   * emitted by the engine per issue #160 and consumed by the shared
+   * `<ConfidenceBadge score={...} />`. Kept alongside the legacy
+   * `confidence_tier` string during the migration to avoid cascading
+   * changes through the gated Final Four and PDF report code paths.
+   */
+  score: number;
   rank: number;
 }
 
@@ -36,6 +44,11 @@ export interface GatedRankedAllergen {
   elo_score: number | null;
   /** null when locked */
   confidence_tier: ConfidenceTier | null;
+  /**
+   * Numeric confidence in [0, 1]; null when locked (stripped server-side
+   * along with the other identifying fields).
+   */
+  score: number | null;
   /** true means the entry is server-redacted and should render as a silhouette */
   locked: boolean;
 }

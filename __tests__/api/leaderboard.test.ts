@@ -278,5 +278,18 @@ describe("GET /api/leaderboard", () => {
     expect(json.allergens[1].confidence_tier).toBe("high");
     expect(json.allergens[2].confidence_tier).toBe("medium");
     expect(json.allergens[3].confidence_tier).toBe("low");
+
+    // #160: numeric score is populated alongside the tier string.
+    // All four are in [0, 1] and non-null.
+    for (const a of json.allergens) {
+      expect(typeof a.score).toBe("number");
+      expect(a.score).toBeGreaterThanOrEqual(0);
+      expect(a.score).toBeLessThanOrEqual(1);
+    }
+    // 15 signals sits between the 14-anchor (0.75) and 30-anchor (0.9)
+    // inclusive-left, so rank #2 (15 signals) should be >= 0.75.
+    expect(json.allergens[1].score).toBeGreaterThanOrEqual(0.75);
+    // 3 signals is below the first boundary (7 -> 0.5).
+    expect(json.allergens[3].score).toBeLessThan(0.5);
   });
 });

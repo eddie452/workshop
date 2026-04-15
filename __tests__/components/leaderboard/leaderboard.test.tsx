@@ -47,6 +47,7 @@ const mockAllergens: RankedAllergen[] = [
     category: "tree",
     elo_score: 1650,
     confidence_tier: "very_high",
+    score: 0.95,
     rank: 1,
   },
   {
@@ -55,6 +56,7 @@ const mockAllergens: RankedAllergen[] = [
     category: "tree",
     elo_score: 1500,
     confidence_tier: "high",
+    score: 0.8,
     rank: 2,
   },
   {
@@ -63,6 +65,7 @@ const mockAllergens: RankedAllergen[] = [
     category: "weed",
     elo_score: 1450,
     confidence_tier: "medium",
+    score: 0.6,
     rank: 3,
   },
   {
@@ -71,6 +74,7 @@ const mockAllergens: RankedAllergen[] = [
     category: "grass",
     elo_score: 1400,
     confidence_tier: "low",
+    score: 0.3,
     rank: 4,
   },
   {
@@ -79,6 +83,7 @@ const mockAllergens: RankedAllergen[] = [
     category: "indoor",
     elo_score: 1350,
     confidence_tier: "medium",
+    score: 0.55,
     rank: 5,
   },
   {
@@ -87,6 +92,7 @@ const mockAllergens: RankedAllergen[] = [
     category: "indoor",
     elo_score: 1300,
     confidence_tier: "low",
+    score: 0.25,
     rank: 6,
   },
 ];

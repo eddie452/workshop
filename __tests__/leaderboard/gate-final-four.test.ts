@@ -17,6 +17,7 @@ const ALLERGENS: RankedAllergen[] = [
     category: "tree",
     elo_score: 1650,
     confidence_tier: "very_high",
+    score: 0.95,
     rank: 1,
   },
   {
@@ -25,6 +26,7 @@ const ALLERGENS: RankedAllergen[] = [
     category: "tree",
     elo_score: 1500,
     confidence_tier: "high",
+    score: 0.8,
     rank: 2,
   },
   {
@@ -33,6 +35,7 @@ const ALLERGENS: RankedAllergen[] = [
     category: "weed",
     elo_score: 1450,
     confidence_tier: "medium",
+    score: 0.6,
     rank: 3,
   },
   {
@@ -41,6 +44,7 @@ const ALLERGENS: RankedAllergen[] = [
     category: "grass",
     elo_score: 1400,
     confidence_tier: "low",
+    score: 0.3,
     rank: 4,
   },
   {
@@ -49,6 +53,7 @@ const ALLERGENS: RankedAllergen[] = [
     category: "indoor",
     elo_score: 1350,
     confidence_tier: "medium",
+    score: 0.55,
     rank: 5,
   },
 ];
@@ -111,7 +116,21 @@ describe("gateFinalFour", () => {
         expect(entry.common_name).toBeNull();
         expect(entry.elo_score).toBeNull();
         expect(entry.confidence_tier).toBeNull();
+        // Numeric score is also stripped (#160 defense in depth).
+        expect(entry.score).toBeNull();
       });
+    });
+
+    it("numeric score propagates through unlocked Final Four entries (#160)", () => {
+      const result = gateFinalFour({
+        allergens: ALLERGENS,
+        isPremium: true,
+        referralCount: 0,
+        referralUnlocked: false,
+      });
+      expect(result.gated[0].score).toBe(0.8);
+      expect(result.gated[1].score).toBe(0.6);
+      expect(result.gated[2].score).toBe(0.3);
     });
 
     it("free users with 1 or 2 credits still receive a redacted Final Four", () => {

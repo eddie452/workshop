@@ -6,8 +6,7 @@
  */
 
 import type { TriggerChampionCardProps } from "./types";
-import { ConfidenceBadge } from "./confidence-badge";
-import { ConfidenceBadge as SharedConfidenceBadge } from "@/components/shared/confidence-badge";
+import { ConfidenceBadge } from "@/components/shared/confidence-badge";
 import { CategoryIcon } from "./category-icon";
 
 export function TriggerChampionCard({ allergen }: TriggerChampionCardProps) {
@@ -50,10 +49,9 @@ export function TriggerChampionCard({ allergen }: TriggerChampionCardProps) {
         >
           Elo {allergen.elo_score}
         </span>
-        <ConfidenceBadge tier={allergen.confidence_tier} />
-        {/* Confidence score will render when RankedAllergen carries a numeric confidence field (see issue #160) */}
+        {/* Numeric confidence badge — emitted by the engine per #160. */}
         <span data-testid="champion-confidence-score">
-          <SharedConfidenceBadge score={null} variant="full" />
+          <ConfidenceBadge score={allergen.score} variant="full" />
         </span>
       </div>
     </div>

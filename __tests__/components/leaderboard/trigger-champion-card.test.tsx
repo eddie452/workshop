@@ -16,6 +16,7 @@ const mockChampion: RankedAllergen = {
   category: "tree",
   elo_score: 1650,
   confidence_tier: "high",
+  score: 0.85,
   rank: 1,
 };
 
@@ -35,11 +36,12 @@ describe("TriggerChampionCard", () => {
     expect(screen.getByText("Trigger Champion")).toBeDefined();
   });
 
-  it("renders the confidence badge", () => {
+  it("renders the numeric confidence badge with the score's bucket", () => {
     render(<TriggerChampionCard allergen={mockChampion} />);
-    const badge = screen.getByTestId("confidence-badge");
-    expect(badge.textContent).toBe("High");
-    expect(badge.getAttribute("data-tier")).toBe("high");
+    const badge = screen.getByTestId("shared-confidence-badge");
+    expect(badge.getAttribute("data-bucket")).toBe("high");
+    // score = 0.85 -> "85%" display
+    expect(badge.textContent).toContain("85%");
   });
 
   it("renders the category icon", () => {

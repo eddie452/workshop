@@ -18,6 +18,7 @@ import type { BracketMatch } from "@/lib/engine/types";
 import type { RankedAllergen } from "@/components/leaderboard/types";
 import { FDA_DISCLAIMER_LABEL } from "@/components/shared/fda-disclaimer";
 import { BracketNode } from "./bracket-node";
+import { BracketConnector } from "./bracket-lines";
 import {
   buildBracketVMs,
   roundLabel,
@@ -29,6 +30,8 @@ export interface BracketProps {
   nodes: readonly BracketMatch[];
   /** Ranked leaderboard providing thumbnails + per-allergen confidence. */
   ranked: readonly RankedAllergen[];
+  /** Whether to render connecting lines between rounds. Defaults to true. */
+  showLines?: boolean;
 }
 
 /** Group VMs by round, preserving per-round matchId order. */
@@ -44,7 +47,7 @@ function groupByRound(vms: BracketNodeVM[]): BracketNodeVM[][] {
   return columns;
 }
 
-export function Bracket({ nodes, ranked }: BracketProps) {
+export function Bracket({ nodes, ranked, showLines = true }: BracketProps) {
   const vms = buildBracketVMs(nodes, ranked);
 
   if (vms.length === 0) {
@@ -105,27 +108,31 @@ export function Bracket({ nodes, ranked }: BracketProps) {
         {columns.map((column, roundIdx) => {
           const isFinal = roundIdx === totalRounds - 1;
           return (
-            <div
-              key={`round-${roundIdx}`}
-              data-testid={`bracket-column-${roundIdx}`}
-              data-round={roundIdx}
-              className="flex min-w-[240px] flex-1 flex-col gap-3"
-            >
-              <h3
-                data-testid={`bracket-round-label-${roundIdx}`}
-                className="text-xs font-semibold uppercase tracking-wider text-brand-text-accent"
+            <div key={`round-group-${roundIdx}`} className="flex">
+              <div
+                data-testid={`bracket-column-${roundIdx}`}
+                data-round={roundIdx}
+                className="flex min-w-[240px] flex-1 flex-col gap-3"
               >
-                {roundLabel(roundIdx, totalRounds)}
-              </h3>
-              <div className="flex flex-col justify-around gap-3">
-                {column.map((vm) => (
-                  <BracketNode
-                    key={`${vm.round}-${vm.matchId}`}
-                    node={vm}
-                    isFinal={isFinal}
-                  />
-                ))}
+                <h3
+                  data-testid={`bracket-round-label-${roundIdx}`}
+                  className="text-xs font-semibold uppercase tracking-wider text-brand-text-accent"
+                >
+                  {roundLabel(roundIdx, totalRounds)}
+                </h3>
+                <div className="flex flex-col justify-around gap-3">
+                  {column.map((vm) => (
+                    <BracketNode
+                      key={`${vm.round}-${vm.matchId}`}
+                      node={vm}
+                      isFinal={isFinal}
+                    />
+                  ))}
+                </div>
               </div>
+              {showLines && !isFinal && (
+                <BracketConnector sourceMatchCount={column.length} />
+              )}
             </div>
           );
         })}

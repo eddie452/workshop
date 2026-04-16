@@ -87,6 +87,22 @@ describe("NavBar", () => {
       }
     });
 
+    it("sets aria-current='page' on the active link", () => {
+      mockPathname = "/checkin";
+      render(<NavBar authState="authenticated" />);
+
+      const checkinLinks = screen.getAllByText("Check-in");
+      for (const link of checkinLinks) {
+        expect(link.getAttribute("aria-current")).toBe("page");
+      }
+
+      // Inactive links should NOT have aria-current
+      const dashboardLinks = screen.getAllByText("Dashboard");
+      for (const link of dashboardLinks) {
+        expect(link.getAttribute("aria-current")).toBeNull();
+      }
+    });
+
     it("renders sign-out buttons (desktop + mobile after open)", () => {
       render(<NavBar authState="authenticated" />);
 
@@ -112,6 +128,12 @@ describe("NavBar", () => {
       render(<NavBar authState="authenticated" />);
       const header = screen.getByTestId("nav-bar");
       expect(header.getAttribute("data-auth-state")).toBe("authenticated");
+    });
+
+    it("renders the nav landmark with aria-label='Primary'", () => {
+      render(<NavBar authState="authenticated" />);
+      const nav = screen.getByRole("navigation", { name: "Primary" });
+      expect(nav).toBeDefined();
     });
   });
 

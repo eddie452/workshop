@@ -33,6 +33,12 @@ const AUTHENTICATED_LINKS: NavLink[] = [
 ];
 
 export interface NavBarProps {
+  /**
+   * Server-derived auth state passed from the layout.
+   * - "unauthenticated" — landing page nav (Sign In / Get Started)
+   * - "authenticated" — app nav (Dashboard / Check-in / Children / Scout / Sign Out)
+   * Always resolved server-side to avoid FOUC and hydration mismatch.
+   */
   authState: NavBarAuthState;
 }
 
@@ -62,7 +68,7 @@ export function NavBar({ authState }: NavBarProps) {
       data-testid="nav-bar"
       data-auth-state={authState}
     >
-      <nav className="mx-auto flex max-w-5xl items-center justify-between px-4 py-3 sm:px-6 sm:py-4">
+      <nav aria-label="Primary" className="mx-auto flex max-w-5xl items-center justify-between px-4 py-3 sm:px-6 sm:py-4">
         {/* Logo */}
         <Link href={logoHref} className="flex items-center">
           {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -81,6 +87,7 @@ export function NavBar({ authState }: NavBarProps) {
                 <Link
                   key={link.href}
                   href={link.href}
+                  aria-current={isActive(link.href) ? "page" : undefined}
                   className={`rounded-button px-3 py-2 text-sm font-medium transition-colors ${
                     isActive(link.href)
                       ? "bg-white/20 text-white"
@@ -172,6 +179,7 @@ export function NavBar({ authState }: NavBarProps) {
                   key={link.href}
                   href={link.href}
                   onClick={() => setMobileMenuOpen(false)}
+                  aria-current={isActive(link.href) ? "page" : undefined}
                   className={`block rounded-button px-3 py-2 text-sm font-medium transition-colors ${
                     isActive(link.href)
                       ? "bg-white/20 text-white"

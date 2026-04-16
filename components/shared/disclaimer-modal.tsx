@@ -100,7 +100,7 @@ export function DisclaimerModal({
           onClick={handleAcknowledge}
           disabled={loading}
           data-testid="acknowledge-button"
-          className="w-full rounded-button bg-brand-primary-dark px-4 py-3 text-sm font-semibold text-white hover:bg-brand-primary-dark/80 disabled:opacity-50 disabled:cursor-not-allowed"
+          className="w-full rounded-button bg-brand-premium px-4 py-3 text-sm font-semibold text-white hover:bg-brand-premium/80 disabled:opacity-50 disabled:cursor-not-allowed"
         >
           {loading ? "Saving..." : "I Understand"}
         </button>

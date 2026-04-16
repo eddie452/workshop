@@ -84,7 +84,7 @@ export function SymptomZones({ symptoms, onChange }: SymptomZonesProps) {
                 <div className="flex items-center gap-2">
                   {activeCount > 0 && (
                     <span
-                      className="rounded-full bg-brand-primary-dark px-2 py-0.5 text-xs font-bold text-white"
+                      className="rounded-full bg-brand-premium px-2 py-0.5 text-xs font-bold text-white"
                       aria-label={`${activeCount} symptom${activeCount !== 1 ? "s" : ""} selected`}
                     >
                       {activeCount}

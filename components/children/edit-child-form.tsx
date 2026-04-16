@@ -64,7 +64,7 @@ export function EditChildForm({ child, onSubmit, onCancel, isLoading, error }: E
           type="submit"
           data-testid="edit-child-save-btn"
           disabled={isLoading || !name.trim()}
-          className="rounded-button bg-brand-primary-dark px-4 py-2 text-xs font-semibold text-white hover:bg-brand-primary-dark/80 disabled:opacity-50"
+          className="rounded-button bg-brand-premium px-4 py-2 text-xs font-semibold text-white hover:bg-brand-premium/80 disabled:opacity-50"
         >
           {isLoading ? "Saving..." : "Save"}
         </button>

@@ -58,7 +58,7 @@ export function NavBar({ authState }: NavBarProps) {
 
   return (
     <header
-      className="border-b border-white/20 bg-brand-primary-dark"
+      className="border-b border-white/20 bg-brand-premium"
       data-testid="nav-bar"
       data-auth-state={authState}
     >
@@ -162,7 +162,7 @@ export function NavBar({ authState }: NavBarProps) {
       {/* Mobile menu */}
       {mobileMenuOpen && (
         <div
-          className="border-t border-white/20 bg-brand-primary-dark px-4 pb-3 pt-2 sm:hidden"
+          className="border-t border-white/20 bg-brand-premium px-4 pb-3 pt-2 sm:hidden"
           data-testid="nav-bar-mobile-menu"
         >
           {isAuthenticated ? (

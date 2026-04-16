@@ -1,22 +1,25 @@
 /**
- * WCAG AA Contrast Regression Guard — No white text on Champ Blue
+ * WCAG AA Contrast Regression Guard — No low-contrast text on Champ Blue
  *
  * White text (#FFFFFF) on Champ Blue (#00B6E2 / bg-brand-primary)
- * measures ~2.4:1 contrast, failing WCAG AA (4.5:1 normal, 3:1 large).
+ * measures ~2.39:1 contrast, failing WCAG AA (4.5:1 normal, 3:1 large).
  *
- * This test scans consumer-facing source files for the dangerous
- * combination of `text-white` (including opacity variants like
- * `text-white/80`) appearing inside elements or sections that use
- * `bg-brand-primary` as their background — NOT `bg-brand-primary-dark`
- * or `bg-brand-primary-light`, which have acceptable contrast.
+ * Dusty Denim text (#0682BB / text-brand-primary-dark) on Champ Blue
+ * bg (#00B6E2 / bg-brand-primary) measures ~1.79:1 — even worse.
+ *
+ * This test scans consumer-facing source files for BOTH dangerous
+ * combinations on `bg-brand-primary`:
+ *   1. `text-white` on `bg-brand-primary` (~2.39:1, FAIL)
+ *   2. `text-brand-primary-dark` on `bg-brand-primary` (~1.79:1, FAIL)
+ *
+ * Correct pairings use `bg-brand-premium` (#055A8C) with `text-white`
+ * for dark backgrounds (~7.38:1, AA PASS).
  *
  * Contrast ratios (WCAG relative luminance formula):
- *   - White (#FFF) on Champ Blue (#00B6E2): ~2.43:1 (FAIL)
- *   - White (#FFF) on Dusty Denim (#0682BB): ~4.79:1 (AA PASS)
- *   - Dusty Denim (#0682BB) on Champ Blue (#00B6E2): ~1.97:1 —
- *     but brand-primary-dark text on brand-primary bg is used for
- *     large bold headings (3:1 threshold) where the gradient goes
- *     from brand-primary to brand-primary-dark.
+ *   - White (#FFF) on Champ Blue (#00B6E2): ~2.39:1 (FAIL)
+ *   - White (#FFF) on Dusty Denim (#0682BB): ~4.27:1 (FAIL normal)
+ *   - White (#FFF) on Premium (#055A8C): ~7.38:1 (AA PASS)
+ *   - Dusty Denim (#0682BB) on Champ Blue (#00B6E2): ~1.79:1 (FAIL)
  *
  * Closes #185.
  */
@@ -65,17 +68,13 @@ function isExcluded(relPath: string): boolean {
 }
 
 /**
- * Detects the dangerous pattern: an element or section that has
- * `bg-brand-primary` (but NOT `bg-brand-primary-dark` or
- * `bg-brand-primary-light`) AND `text-white` (with optional opacity
- * suffix like `/80`) in the same className string or within child
- * elements of a bg-brand-primary container.
+ * Detects dangerous low-contrast patterns on `bg-brand-primary`:
  *
- * Strategy: scan each file for className strings containing
- * `bg-brand-primary` (exact — not `-dark` or `-light` suffix).
- * Then check if those same className strings also contain `text-white`.
- * Also check for section-level containers where bg-brand-primary
- * is the section bg and text-white appears in child elements.
+ * 1. `text-white` on `bg-brand-primary` (~2.39:1 — FAIL AA)
+ * 2. `text-brand-primary-dark` on `bg-brand-primary` (~1.79:1 — FAIL AA)
+ *
+ * Both same-line and section-level (parent container bg with child text)
+ * patterns are detected.
  */
 function findViolations(
   filePath: string,
@@ -84,29 +83,34 @@ function findViolations(
   const lines = contents.split(/\r?\n/);
   const hits: Array<{ line: number; text: string }> = [];
 
-  // Pattern 1: Same-line — className contains both bg-brand-primary
-  // (or hover:bg-brand-primary) and text-white on the same line.
   // bg-brand-primary must NOT be followed by -dark or -light.
   const bgPattern = /(?:^|[^-])bg-brand-primary(?!-dark|-light)/;
   const hoverBgPattern = /hover:bg-brand-primary(?!-dark|-light)/;
   const textWhitePattern = /text-white/;
+  // Dusty Denim text on Champ Blue bg is even worse (1.79:1)
+  const textPrimaryDarkPattern = /text-brand-primary-dark/;
 
   // Also catch Champ Blue gradient containers (from-brand-primary)
   const gradientPattern = /from-brand-primary(?!-dark|-light)/;
+
+  // Any "bad text" on a Champ Blue background
+  function hasBadText(line: string): boolean {
+    return textWhitePattern.test(line) || textPrimaryDarkPattern.test(line);
+  }
 
   for (let i = 0; i < lines.length; i++) {
     const line = lines[i];
     const hasDangerousBg =
       bgPattern.test(line) ||
       hoverBgPattern.test(line);
-    if (hasDangerousBg && textWhitePattern.test(line)) {
+    if (hasDangerousBg && hasBadText(line)) {
       hits.push({ line: i + 1, text: line.trim() });
     }
   }
 
-  // Pattern 2: Section-level — a container element (section/div) has
+  // Section-level — a container element (section/div) has
   // bg-brand-primary or a Champ Blue gradient on one line and
-  // text-white appears in child elements within the same JSX block.
+  // bad text appears in child elements within the same JSX block.
   let inBrandPrimarySection = false;
   let sectionDepth = 0;
 
@@ -137,8 +141,8 @@ function findViolations(
         continue;
       }
 
-      // Check for text-white inside the section (skip lines already caught)
-      if (textWhitePattern.test(line) && !bgPattern.test(line)) {
+      // Check for bad text inside the section (skip lines already caught)
+      if (hasBadText(line) && !bgPattern.test(line)) {
         hits.push({ line: i + 1, text: line.trim() });
       }
     }
@@ -147,7 +151,7 @@ function findViolations(
   return hits;
 }
 
-describe("No text-white on bg-brand-primary (WCAG AA, ticket #185)", () => {
+describe("No low-contrast text on bg-brand-primary (WCAG AA, ticket #185)", () => {
   const projectRoot = process.cwd();
   const files: string[] = [];
   for (const root of ROOTS) {
@@ -163,7 +167,7 @@ describe("No text-white on bg-brand-primary (WCAG AA, ticket #185)", () => {
     expect(files.length).toBeGreaterThan(10);
   });
 
-  it("finds no text-white on bg-brand-primary surfaces", () => {
+  it("finds no low-contrast text on bg-brand-primary surfaces", () => {
     const allHits: Array<{ file: string; line: number; text: string }> = [];
 
     for (const file of files) {
@@ -178,8 +182,9 @@ describe("No text-white on bg-brand-primary (WCAG AA, ticket #185)", () => {
     const message =
       allHits.length === 0
         ? ""
-        : `WCAG AA violation: text-white on bg-brand-primary (~2.4:1 contrast).\n` +
-          `Fix by swapping to text-brand-primary-dark (Option A) or bg-brand-primary-dark (Option B).\n\n` +
+        : `WCAG AA violation: low-contrast text on bg-brand-primary.\n` +
+          `text-white on Champ Blue = ~2.39:1; text-brand-primary-dark on Champ Blue = ~1.79:1.\n` +
+          `Fix: use bg-brand-premium (#055A8C) with text-white (~7.38:1, AA PASS).\n\n` +
           allHits
             .map((h) => `  ${h.file}:${h.line}  ${h.text}`)
             .join("\n");

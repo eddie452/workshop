@@ -60,7 +60,7 @@ export function AddChildForm({ onSubmit, onCancel, isLoading, error }: AddChildF
           type="submit"
           data-testid="save-child-btn"
           disabled={isLoading || !name.trim()}
-          className="rounded-button bg-brand-primary-dark px-4 py-2 text-xs font-semibold text-white hover:bg-brand-primary-dark/80 disabled:opacity-50"
+          className="rounded-button bg-brand-premium px-4 py-2 text-xs font-semibold text-white hover:bg-brand-premium/80 disabled:opacity-50"
         >
           {isLoading ? "Saving..." : "Save"}
         </button>

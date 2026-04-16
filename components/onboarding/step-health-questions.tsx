@@ -214,7 +214,7 @@ export function StepHealthQuestions({
           </button>
           <button
             type="submit"
-            className="flex-1 rounded-button bg-brand-primary-dark px-4 py-2 text-sm font-medium text-white hover:bg-brand-primary-dark/80"
+            className="flex-1 rounded-button bg-brand-premium px-4 py-2 text-sm font-medium text-white hover:bg-brand-premium/80"
           >
             Continue
           </button>

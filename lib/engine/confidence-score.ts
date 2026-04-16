@@ -37,7 +37,11 @@ import { createSeededRng } from "./monte-carlo";
 /* Legacy signal-count curve (kept for migration / back-compat)        */
 /* ------------------------------------------------------------------ */
 
-/** Anchor points for the piecewise-linear score curve. Must be sorted by signals asc. */
+/**
+ * Anchor points for the piecewise-linear score curve. Must be sorted by signals asc.
+ * Monotonic non-decreasing across the domain [0, Infinity); returns 0 for non-positive
+ * inputs and <=1 for any finite positive input.
+ */
 const SCORE_ANCHORS: { signals: number; score: number }[] = [
   { signals: 0, score: 0 },
   { signals: 7, score: 0.5 },

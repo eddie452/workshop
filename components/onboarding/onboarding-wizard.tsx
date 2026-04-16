@@ -105,7 +105,7 @@ export function OnboardingWizard() {
                 <div
                   className={`flex h-8 w-8 items-center justify-center rounded-full text-xs font-bold ${
                     isActive
-                      ? "bg-brand-primary text-white"
+                      ? "bg-brand-premium text-white"
                       : isCompleted
                         ? "bg-brand-primary-light text-brand-primary"
                         : "bg-brand-border-light text-brand-text-muted"

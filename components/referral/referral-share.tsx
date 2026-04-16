@@ -95,8 +95,8 @@ export function ReferralShare({
           data-testid="referral-copy-btn"
           className={`flex-1 cursor-pointer rounded-button border-none px-4 py-2 text-sm font-medium text-white transition-colors ${
             copied
-              ? "bg-brand-primary-dark"
-              : "bg-brand-primary hover:bg-brand-primary-dark"
+              ? "bg-brand-premium"
+              : "bg-brand-premium hover:bg-brand-premium/80"
           }`}
         >
           {copied ? "Copied!" : "Copy Link"}

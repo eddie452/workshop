@@ -112,7 +112,7 @@ export function ProcessingScreen({ formData }: ProcessingScreenProps) {
             setAnimationDone(false);
             submitOnboarding();
           }}
-          className="rounded-button bg-brand-primary px-4 py-2 text-sm font-medium text-white"
+          className="rounded-button bg-brand-premium px-4 py-2 text-sm font-medium text-white"
         >
           Try again
         </button>

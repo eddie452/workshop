@@ -79,7 +79,7 @@ export function StepAddress({ formData, onUpdate, onNext }: StepProps) {
 
         <button
           type="submit"
-          className="w-full rounded-button bg-brand-primary px-4 py-2 text-sm font-medium text-white hover:bg-brand-primary-dark focus:outline-none focus:ring-2 focus:ring-brand-primary focus:ring-offset-2"
+          className="w-full rounded-button bg-brand-premium px-4 py-2 text-sm font-medium text-white hover:bg-brand-premium/80 focus:outline-none focus:ring-2 focus:ring-brand-primary focus:ring-offset-2"
         >
           Continue
         </button>

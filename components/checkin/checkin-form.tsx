@@ -159,7 +159,7 @@ export function CheckinForm({ onSuccess, alreadyCheckedIn = false }: CheckinForm
         type="submit"
         disabled={isSubmitting}
         data-testid="checkin-submit"
-        className="w-full rounded-button bg-brand-primary px-4 py-3 text-base font-semibold text-white transition-colors hover:bg-brand-primary-dark disabled:cursor-not-allowed disabled:opacity-50"
+        className="w-full rounded-button bg-brand-premium px-4 py-3 text-base font-semibold text-white transition-colors hover:bg-brand-premium/80 disabled:cursor-not-allowed disabled:opacity-50"
       >
         {isSubmitting ? "Submitting..." : formData.severity === 0 ? "Log Symptom-Free Day" : "Submit Check-in"}
       </button>

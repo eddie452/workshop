@@ -76,7 +76,7 @@ export function ReferralProgress({
             key={i}
             className={`flex h-6 w-6 items-center justify-center rounded-full text-xs font-medium ${
               i < progress
-                ? "bg-brand-primary-dark text-white"
+                ? "bg-brand-premium text-white"
                 : "bg-brand-surface-muted text-brand-text-faint"
             }`}
           >

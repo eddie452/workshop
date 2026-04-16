@@ -42,7 +42,7 @@ export default async function HomePage() {
       <NavBar authState="unauthenticated" />
 
       {/* Hero Section */}
-      <section className="bg-gradient-to-b from-brand-primary to-brand-primary-dark px-4 py-16 sm:px-6 sm:py-24">
+      <section className="bg-brand-premium px-4 py-16 sm:px-6 sm:py-24">
         <div className="mx-auto max-w-3xl text-center">
           <h1
             className="text-3xl font-bold tracking-tight text-white sm:text-5xl"
@@ -81,7 +81,7 @@ export default async function HomePage() {
       </section>
 
       {/* How It Works */}
-      <section className="bg-brand-primary px-4 py-16 sm:px-6">
+      <section className="bg-brand-premium px-4 py-16 sm:px-6">
         <div className="mx-auto max-w-5xl">
           <h2
             className="text-center text-2xl font-bold text-white sm:text-3xl"
@@ -151,7 +151,7 @@ export default async function HomePage() {
       </section>
 
       {/* CTA Section */}
-      <section className="bg-gradient-to-b from-brand-primary to-brand-primary-dark px-4 py-16 sm:px-6">
+      <section className="bg-brand-premium px-4 py-16 sm:px-6">
         <div className="mx-auto max-w-2xl text-center">
           <h2
             className="text-2xl font-bold text-white sm:text-3xl"

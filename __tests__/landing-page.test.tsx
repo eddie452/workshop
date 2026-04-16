@@ -146,13 +146,10 @@ describe("HomePage", () => {
       ).toBeDefined();
     });
 
-    // 50-30-18-2 color balance (#153): the "How It Works" band is the
-    // middle slab on the landing page. It must render on Champ Blue
-    // (`bg-brand-primary`) — not Dusty Denim (`bg-brand-primary-dark`) —
-    // so the surface keeps its ~50% Champ Blue weight and doesn't
-    // over-index on Dusty Denim (which already owns nav + hero bottom
-    // + CTA bottom).
-    it("uses Champ Blue (not Dusty Denim) for the How It Works band", async () => {
+    // WCAG AA contrast (#185): the "How It Works" band must use
+    // bg-brand-premium (#055A8C) so white text achieves >=4.5:1.
+    // Champ Blue (#00B6E2) fails AA with any available text color.
+    it("uses brand-premium (not Champ Blue) for the How It Works band", async () => {
       const Page = await HomePage();
       const { container } = render(Page);
 
@@ -162,8 +159,8 @@ describe("HomePage", () => {
       const section = heading.closest("section");
       expect(section).not.toBeNull();
       const classes = section!.className.split(/\s+/);
-      expect(classes).toContain("bg-brand-primary");
-      expect(classes).not.toContain("bg-brand-primary-dark");
+      expect(classes).toContain("bg-brand-premium");
+      expect(classes).not.toContain("bg-brand-primary");
       // Silence unused-var lint for container
       void container;
     });

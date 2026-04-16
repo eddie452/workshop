@@ -160,7 +160,7 @@ export function ChildrenManager({
               setShowAddForm(true);
               setError(null);
             }}
-            className="rounded-button bg-brand-primary px-4 py-2 text-xs font-semibold text-white hover:bg-brand-primary-dark"
+            className="rounded-button bg-brand-primary-dark px-4 py-2 text-xs font-semibold text-white hover:bg-brand-primary-dark/80"
           >
             + Add Child
           </button>
@@ -196,7 +196,7 @@ export function ChildrenManager({
             type="button"
             data-testid="empty-state-add-btn"
             onClick={() => setShowAddForm(true)}
-            className="rounded-button bg-brand-primary px-4 py-2 text-xs font-semibold text-white hover:bg-brand-primary-dark"
+            className="rounded-button bg-brand-primary-dark px-4 py-2 text-xs font-semibold text-white hover:bg-brand-primary-dark/80"
           >
             + Add Your First Child
           </button>

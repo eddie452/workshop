@@ -106,7 +106,7 @@ export function FinalFourUnlockCta({
         href="/referral"
         data-testid="final-four-unlock-invite"
         onClick={() => onInviteClick?.()}
-        className="mb-3 inline-block w-full rounded-button bg-brand-primary-dark px-4 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-brand-primary"
+        className="mb-3 inline-block w-full rounded-button bg-brand-primary-dark px-4 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-brand-primary-dark/80"
       >
         {inviteLabel}
       </Link>

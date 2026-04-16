@@ -45,7 +45,7 @@ export default async function HomePage() {
       <section className="bg-gradient-to-b from-brand-primary to-brand-primary-dark px-4 py-16 sm:px-6 sm:py-24">
         <div className="mx-auto max-w-3xl text-center">
           <h1
-            className="text-3xl font-bold tracking-tight text-white sm:text-5xl"
+            className="text-3xl font-bold tracking-tight text-brand-primary-dark sm:text-5xl"
             style={{ fontFamily: "var(--font-title)" }}
           >
             Allergy Madness
@@ -53,10 +53,10 @@ export default async function HomePage() {
           <p className="mx-auto mt-2 text-base text-brand-primary-light">
             by Champ Allergy
           </p>
-          <p className="mx-auto mt-4 max-w-xl text-lg text-white/90 sm:mt-6 sm:text-xl">
+          <p className="mx-auto mt-4 max-w-xl text-lg text-brand-primary-dark/90 sm:mt-6 sm:text-xl">
             Predict Your Allergy Triggers
           </p>
-          <p className="mx-auto mt-2 max-w-xl text-base text-white/80">
+          <p className="mx-auto mt-2 max-w-xl text-base text-brand-primary-dark/80">
             Track symptoms, discover patterns, and get personalized insights
             about what may be causing your allergies — all from your phone.
           </p>
@@ -69,12 +69,12 @@ export default async function HomePage() {
             </Link>
             <Link
               href="/login"
-              className="w-full rounded-button border border-white/40 px-8 py-3 text-center text-base font-medium text-white transition-colors hover:border-white hover:bg-white/10 sm:w-auto"
+              className="w-full rounded-button border border-brand-primary-dark/40 px-8 py-3 text-center text-base font-medium text-brand-primary-dark transition-colors hover:border-brand-primary-dark hover:bg-brand-primary-dark/10 sm:w-auto"
             >
               Sign In
             </Link>
           </div>
-          <p className="mt-3 text-sm text-white/70">
+          <p className="mt-3 text-sm text-brand-primary-dark/70">
             No credit card required. Free plan available.
           </p>
         </div>
@@ -84,12 +84,12 @@ export default async function HomePage() {
       <section className="bg-brand-primary px-4 py-16 sm:px-6">
         <div className="mx-auto max-w-5xl">
           <h2
-            className="text-center text-2xl font-bold text-white sm:text-3xl"
+            className="text-center text-2xl font-bold text-brand-primary-dark sm:text-3xl"
             style={{ fontFamily: "var(--font-title)" }}
           >
             How It Works
           </h2>
-          <p className="mx-auto mt-2 max-w-lg text-center text-white/80">
+          <p className="mx-auto mt-2 max-w-lg text-center text-brand-primary-dark/80">
             Three simple steps to understanding your allergy triggers.
           </p>
           <div className="mt-12 grid gap-8 sm:grid-cols-3">
@@ -154,12 +154,12 @@ export default async function HomePage() {
       <section className="bg-gradient-to-b from-brand-primary to-brand-primary-dark px-4 py-16 sm:px-6">
         <div className="mx-auto max-w-2xl text-center">
           <h2
-            className="text-2xl font-bold text-white sm:text-3xl"
+            className="text-2xl font-bold text-brand-primary-dark sm:text-3xl"
             style={{ fontFamily: "var(--font-title)" }}
           >
             Ready to Understand Your Allergies?
           </h2>
-          <p className="mt-3 text-white/80">
+          <p className="mt-3 text-brand-primary-dark/80">
             Join thousands of families using Allergy Madness to track and
             predict allergy triggers.
           </p>
@@ -217,8 +217,8 @@ function StepCard({
       <div className="flex h-10 w-10 items-center justify-center rounded-full bg-white text-sm font-bold text-brand-primary">
         {step}
       </div>
-      <h3 className="mt-4 text-lg font-semibold text-white">{title}</h3>
-      <p className="mt-2 text-sm text-white/80">{description}</p>
+      <h3 className="mt-4 text-lg font-semibold text-brand-primary-dark">{title}</h3>
+      <p className="mt-2 text-sm text-brand-primary-dark/80">{description}</p>
     </div>
   );
 }

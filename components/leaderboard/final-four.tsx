@@ -18,6 +18,7 @@ import { ConfidenceBadge } from "@/components/shared/confidence-badge";
 import { CategoryIcon } from "./category-icon";
 import { BlurOverlay } from "./blur-overlay";
 import { FinalFourUnlockCta } from "./final-four-unlock-cta";
+import { getAllergenThumbnail } from "@/lib/allergens/thumbnails";
 
 /** Type guard that narrows `score` from `number | null` to `number`. */
 function hasNumericScore(
@@ -28,6 +29,7 @@ function hasNumericScore(
 
 function FinalFourCard({ allergen }: { allergen: GatedRankedAllergen }) {
   const locked = allergen.locked;
+  const thumb = getAllergenThumbnail(allergen.allergen_id);
 
   return (
     <div
@@ -50,6 +52,17 @@ function FinalFourCard({ allergen }: { allergen: GatedRankedAllergen }) {
 
       {/* Allergen info (silhouette if locked) */}
       <div className="flex items-center gap-2">
+        {/* Thumbnail — skip for locked/redacted rows (generic icon next to "???" is meaningless) */}
+        {!locked && (
+          /* eslint-disable-next-line @next/next/no-img-element */
+          <img
+            src={thumb.src}
+            alt={thumb.alt}
+            width={48}
+            height={48}
+            className="h-12 w-12 flex-shrink-0 rounded-xl"
+          />
+        )}
         <CategoryIcon category={allergen.category} />
         <div>
           <p

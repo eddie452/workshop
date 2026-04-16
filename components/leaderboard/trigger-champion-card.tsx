@@ -8,8 +8,11 @@
 import type { TriggerChampionCardProps } from "./types";
 import { ConfidenceBadge } from "@/components/shared/confidence-badge";
 import { CategoryIcon } from "./category-icon";
+import { getAllergenThumbnail } from "@/lib/allergens/thumbnails";
 
 export function TriggerChampionCard({ allergen }: TriggerChampionCardProps) {
+  const thumb = getAllergenThumbnail(allergen.allergen_id);
+
   return (
     <div
       data-testid="trigger-champion-card"
@@ -30,8 +33,17 @@ export function TriggerChampionCard({ allergen }: TriggerChampionCardProps) {
         </h2>
       </div>
 
-      {/* Allergen name + category */}
+      {/* Allergen name + thumbnail + category */}
       <div className="mb-3 flex items-center gap-3">
+        {/* Thumbnail — plain <img> for SVG compat, matches bracket-node pattern (#179) */}
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src={thumb.src}
+          alt={thumb.alt}
+          width={48}
+          height={48}
+          className="h-12 w-12 flex-shrink-0 rounded-xl"
+        />
         <CategoryIcon category={allergen.category} />
         <h3
           data-testid="champion-name"

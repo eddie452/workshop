@@ -109,6 +109,19 @@ describe("FinalFour", () => {
       );
       expect(screen.queryByTestId("final-four-unlock-cta")).toBeNull();
     });
+
+    it("renders allergen thumbnails for unlocked cards", () => {
+      render(
+        <FinalFour allergens={mockUnlockedAllergens} isUnlocked={true} />,
+      );
+      const thumbs = screen.getAllByAltText("Pollen allergen thumbnail");
+      expect(thumbs.length).toBe(3);
+      thumbs.forEach((img) => {
+        expect(img.getAttribute("src")).toBe("/allergens/generic-plant.svg");
+        expect(img.getAttribute("width")).toBe("48");
+        expect(img.getAttribute("height")).toBe("48");
+      });
+    });
   });
 
   describe("locked (free tier, < 3 referral credits)", () => {
@@ -198,6 +211,13 @@ describe("FinalFour", () => {
       );
       expect(screen.getByTestId("final-four-unlock-invite")).toBeDefined();
       expect(screen.getByTestId("final-four-unlock-upgrade")).toBeDefined();
+    });
+
+    it("does NOT render thumbnails for locked/redacted cards", () => {
+      render(
+        <FinalFour allergens={mockLockedAllergens} isUnlocked={false} />,
+      );
+      expect(screen.queryByAltText("Pollen allergen thumbnail")).toBeNull();
     });
   });
 

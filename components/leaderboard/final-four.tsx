@@ -19,6 +19,13 @@ import { CategoryIcon } from "./category-icon";
 import { BlurOverlay } from "./blur-overlay";
 import { FinalFourUnlockCta } from "./final-four-unlock-cta";
 
+/** Type guard that narrows `score` from `number | null` to `number`. */
+function hasNumericScore(
+  allergen: GatedRankedAllergen,
+): allergen is GatedRankedAllergen & { score: number } {
+  return allergen.score !== null;
+}
+
 function FinalFourCard({ allergen }: { allergen: GatedRankedAllergen }) {
   const locked = allergen.locked;
 
@@ -36,7 +43,7 @@ function FinalFourCard({ allergen }: { allergen: GatedRankedAllergen }) {
         >
           #{allergen.rank}
         </span>
-        {!locked && allergen.score !== null && (
+        {!locked && hasNumericScore(allergen) && (
           <ConfidenceBadge score={allergen.score} variant="compact" />
         )}
       </div>

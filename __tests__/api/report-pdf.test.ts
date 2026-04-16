@@ -256,7 +256,10 @@ describe("GET /api/report/pdf", () => {
     expect(callArg.region).toBeNull();
   });
 
-  it("computes confidence tiers correctly", async () => {
+  it("computes confidence tiers via posterior model (issue #193)", async () => {
+    // With 6 allergens and topK=4 (default), the Monte Carlo posterior
+    // assigns ~1.0 to the top 4 (very_high) and ~0.0 to the bottom 2
+    // (low) when the Elo gaps are large enough that noise cannot reorder.
     mockCreateClient.mockResolvedValue(
       createMockSupabaseClient({
         eloRows: [
@@ -288,6 +291,20 @@ describe("GET /api/report/pdf", () => {
             negative_signals: 1,
             allergens: { common_name: "Dust", category: "indoor" },
           },
+          {
+            allergen_id: "a5",
+            elo_score: 1100,
+            positive_signals: 1,
+            negative_signals: 0,
+            allergens: { common_name: "Cat", category: "animal" },
+          },
+          {
+            allergen_id: "a6",
+            elo_score: 1000,
+            positive_signals: 0,
+            negative_signals: 0,
+            allergens: { common_name: "Dog", category: "animal" },
+          },
         ],
       }) as unknown as Awaited<ReturnType<typeof createClient>>
     );
@@ -295,13 +312,13 @@ describe("GET /api/report/pdf", () => {
     await GET();
 
     const callArg = mockGenerateReportPdf.mock.calls[0][0];
-    // 35 signals = very_high
+    // Top 4 by Elo → posterior ≈ 1.0 → very_high
     expect(callArg.allergens[0].confidence_tier).toBe("very_high");
-    // 15 signals = high
-    expect(callArg.allergens[1].confidence_tier).toBe("high");
-    // 8 signals = medium
-    expect(callArg.allergens[2].confidence_tier).toBe("medium");
-    // 3 signals = low
-    expect(callArg.allergens[3].confidence_tier).toBe("low");
+    expect(callArg.allergens[1].confidence_tier).toBe("very_high");
+    expect(callArg.allergens[2].confidence_tier).toBe("very_high");
+    expect(callArg.allergens[3].confidence_tier).toBe("very_high");
+    // Bottom 2 → posterior ≈ 0.0 → low
+    expect(callArg.allergens[4].confidence_tier).toBe("low");
+    expect(callArg.allergens[5].confidence_tier).toBe("low");
   });
 });

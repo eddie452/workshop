@@ -14,7 +14,12 @@ import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 import { generateReportPdf } from "@/lib/pdf";
 import type { PdfAllergenEntry } from "@/lib/pdf";
-import { getConfidenceTierBySignals } from "@/lib/engine";
+import {
+  getConfidenceTierBySignals,
+  getPosteriorConfidence,
+  getConfidenceTierByPosterior,
+} from "@/lib/engine";
+import type { TournamentEntry } from "@/lib/engine";
 
 /** Shape returned by the Supabase join query */
 interface EloRowWithAllergen {
@@ -95,16 +100,34 @@ export async function GET() {
     );
   }
 
-  // Map to PDF allergen entries
-  const allergens: PdfAllergenEntry[] = eloRows.map((row, index) => ({
-    rank: index + 1,
+  // Two-layer confidence model (issue #193) — mirrors the logic in
+  // `app/api/leaderboard/route.ts` so the PDF report's tier string
+  // matches the leaderboard byte-for-byte.
+  const tournamentEntries: TournamentEntry[] = eloRows.map((row) => ({
+    allergen_id: row.allergen_id,
     common_name: row.allergens.common_name,
-    category: row.allergens.category as PdfAllergenEntry["category"],
-    elo_score: row.elo_score,
-    confidence_tier: getConfidenceTierBySignals(
-      row.positive_signals + row.negative_signals
-    ),
+    category: row.allergens.category,
+    composite_score: row.elo_score,
+    tier: "low" as const,
   }));
+  const posteriors = getPosteriorConfidence(tournamentEntries, { seed: 0 });
+
+  // Map to PDF allergen entries
+  const allergens: PdfAllergenEntry[] = eloRows.map((row, index) => {
+    const totalSignals = row.positive_signals + row.negative_signals;
+    const posterior = posteriors[row.allergen_id] ?? 0;
+    return {
+      rank: index + 1,
+      common_name: row.allergens.common_name,
+      category: row.allergens.category as PdfAllergenEntry["category"],
+      elo_score: row.elo_score,
+      // Tier derives from the posterior (issue #193). Falls back to the
+      // legacy signal-count tier if the posterior is non-finite.
+      confidence_tier: Number.isFinite(posterior)
+        ? getConfidenceTierByPosterior(posterior)
+        : getConfidenceTierBySignals(totalSignals),
+    };
+  });
 
   // Generate PDF
   const pdfBuffer = generateReportPdf({

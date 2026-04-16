@@ -140,6 +140,17 @@ describe("Leaderboard", () => {
       render(<Leaderboard {...defaultProps} />);
       expect(screen.getByText("Dust Mites")).toBeDefined();
     });
+
+    it("renders allergen thumbnails in the champion card and full rankings rows", () => {
+      render(<Leaderboard {...defaultProps} isPremium={true} />);
+      // Champion (1) + Full Rankings rows (2) = 3 thumbnails minimum
+      // (Final Four thumbnails are in their own sub-component)
+      const thumbs = screen.getAllByAltText("Pollen allergen thumbnail");
+      expect(thumbs.length).toBeGreaterThanOrEqual(3);
+      thumbs.forEach((img) => {
+        expect(img.getAttribute("src")).toBe("/allergens/generic-plant.svg");
+      });
+    });
   });
 
   describe("free-tier user (blurred Final Four)", () => {

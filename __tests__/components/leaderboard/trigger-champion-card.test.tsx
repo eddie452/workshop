@@ -54,4 +54,13 @@ describe("TriggerChampionCard", () => {
     render(<TriggerChampionCard allergen={mockChampion} />);
     expect(screen.getByTestId("trigger-champion-card")).toBeDefined();
   });
+
+  it("renders an allergen thumbnail with alt text", () => {
+    render(<TriggerChampionCard allergen={mockChampion} />);
+    const img = screen.getByAltText("Pollen allergen thumbnail");
+    expect(img).toBeDefined();
+    expect(img.getAttribute("src")).toBe("/allergens/generic-plant.svg");
+    expect(img.getAttribute("width")).toBe("48");
+    expect(img.getAttribute("height")).toBe("48");
+  });
 });

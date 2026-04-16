@@ -27,6 +27,7 @@ import { CategoryIcon } from "./category-icon";
 import { UpgradeCta } from "@/components/subscription/upgrade-cta";
 import { PfasPanel } from "@/components/pfas/pfas-panel";
 import type { PfasCrossReactivity } from "@/lib/pfas/types";
+import { getAllergenThumbnail } from "@/lib/allergens/thumbnails";
 import type { RankedAllergen, GatedRankedAllergen } from "./types";
 
 export interface LeaderboardClientProps {
@@ -224,7 +225,9 @@ export function Leaderboard({
             data-testid="full-rankings"
             className="divide-y divide-brand-border-light rounded-card border border-brand-border bg-white"
           >
-            {fullRankings.map((allergen) => (
+            {fullRankings.map((allergen) => {
+              const thumb = getAllergenThumbnail(allergen.allergen_id);
+              return (
               <div
                 key={allergen.allergen_id}
                 data-testid="ranked-allergen-row"
@@ -234,6 +237,15 @@ export function Leaderboard({
                   <span className="flex h-7 w-7 items-center justify-center rounded-full bg-brand-surface-muted text-xs font-bold text-brand-text-muted">
                     #{allergen.rank}
                   </span>
+                  {/* Thumbnail — plain <img> for SVG compat, matches bracket-node pattern (#179) */}
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src={thumb.src}
+                    alt={thumb.alt}
+                    width={48}
+                    height={48}
+                    className="h-12 w-12 flex-shrink-0 rounded-xl"
+                  />
                   <CategoryIcon category={allergen.category} />
                   <span className="text-sm font-medium text-brand-primary-dark">
                     {allergen.common_name}
@@ -272,7 +284,8 @@ export function Leaderboard({
                   </div>
                 )}
               </div>
-            ))}
+              );
+            })}
           </div>
 
           {/* Upgrade CTA for free users */}

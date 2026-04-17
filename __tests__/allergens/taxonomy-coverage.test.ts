@@ -15,8 +15,12 @@ interface SeedRow {
 }
 
 describe("taxonomy coverage vs. allergens-seed.json", () => {
+  // Cast to `Set<string>` at the boundary so set-membership checks can
+  // accept arbitrary seed IDs. `ALLERGEN_IDS` is typed as
+  // `readonly AllergenId[]`, which narrows downstream consumers but
+  // would otherwise reject `.has(seedId: string)` here.
   const seedIds = new Set((allergensSeed as SeedRow[]).map((r) => r.id));
-  const taxonomyIds = new Set(ALLERGEN_IDS);
+  const taxonomyIds: Set<string> = new Set(ALLERGEN_IDS);
 
   it("seed data is non-empty (sanity)", () => {
     expect(seedIds.size).toBeGreaterThan(0);

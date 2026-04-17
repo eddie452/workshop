@@ -111,15 +111,18 @@ export const ALLERGEN_TAXONOMY = [
  */
 export type AllergenId = (typeof ALLERGEN_TAXONOMY)[number]["id"];
 
-export const ALLERGEN_IDS: readonly string[] = ALLERGEN_TAXONOMY.map(
+export const ALLERGEN_IDS: readonly AllergenId[] = ALLERGEN_TAXONOMY.map(
   (e) => e.id,
 );
 
 /**
  * Module-level index built once at import time. Replaces a linear
  * `Array.find()` scan (O(n)) with an O(1) `Map.get()` lookup.
+ *
+ * Keyed by `AllergenId` so `Map.get(id: AllergenId)` is the primary
+ * typed path; `getAllergenEntry(id: string)` casts at the boundary.
  */
-const ALLERGEN_BY_ID: ReadonlyMap<string, AllergenTaxonomyEntry> = new Map(
+const ALLERGEN_BY_ID: ReadonlyMap<AllergenId, AllergenTaxonomyEntry> = new Map(
   ALLERGEN_TAXONOMY.map((entry) => [entry.id, entry]),
 );
 
@@ -132,5 +135,8 @@ export function getAllergenEntry(
 export function getAllergenEntry(
   id: string,
 ): AllergenTaxonomyEntry | undefined {
-  return ALLERGEN_BY_ID.get(id);
+  // Cast at the boundary: the Map is keyed by the narrow `AllergenId`
+  // union, but the public overload accepts arbitrary strings and returns
+  // `undefined` for unknown keys.
+  return ALLERGEN_BY_ID.get(id as AllergenId);
 }

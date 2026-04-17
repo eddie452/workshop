@@ -128,7 +128,10 @@ export {
   isWindFromRegion,
   detectLRT,
   detectLRTForAll,
+  regionDistanceMiles,
+  distanceDecayMultiplier,
 } from "./lrt";
+export type { BloomPredicate, DetectLRTOptions } from "./lrt";
 
 // Tournament sort
 export {

@@ -169,3 +169,29 @@ body {
     opacity: 0.5;
   }
 }
+
+/* Bracket slide-in (ticket #155) — fade + translate from left.
+   Tokenized duration/easing so individual nodes can opt into the
+   animation via inline `animation-delay` for per-round stagger.
+   `prefers-reduced-motion` forces an instant, static state so users
+   who opt out never see motion. */
+@keyframes bracket-node-slide-in {
+  from {
+    opacity: 0;
+    transform: translateX(-12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.bracket-node-enter {
+  animation: bracket-node-slide-in 300ms ease-out both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bracket-node-enter {
+    animation: none !important;
+  }
+}

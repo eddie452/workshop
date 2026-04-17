@@ -113,6 +113,7 @@ export function FinalFourUnlockCta({
 
       {/* Secondary CTA — upgrade to Pro */}
       <Link
+        // TODO(billing): point to /upgrade once Stripe checkout lands. Tracked in future billing epic.
         href="/referral"
         data-testid="final-four-unlock-upgrade"
         onClick={() => onUpgradeClick?.()}

@@ -8,10 +8,16 @@
  *
  * Features:
  * - Trigger Champion (#1) always visible
- * - Final Four (#2-4) blurred for free tier, visible for premium
+ * - Final Four (#2-4) blurred for free tier; unlocked for Pro users or
+ *   free users who earn >= 3 referral credits via the referral-unlock path
  * - FDA disclaimer always visible
  * - Environmental Forecast mode when severity = 0
  * - First-time FDA acknowledgment gate
+ *
+ * Naming note: "Final Four" is the tournament-stage brand term (four
+ * survivors enter the semifinals). The UI renders three cards because
+ * rank #1 is extracted into the Trigger Champion above, leaving #2-#4
+ * in this section. Do not rename the user-facing copy.
  */
 
 import { useState, useEffect } from "react";

@@ -102,13 +102,18 @@ export function Bracket({ nodes, ranked, showLines = true }: BracketProps) {
 
       <div
         data-testid="bracket-grid"
-        className="flex gap-4 overflow-x-auto"
+        className="flex snap-x snap-mandatory gap-4 overflow-x-auto scroll-smooth sm:snap-none"
         style={{ gridTemplateColumns: `repeat(${totalRounds}, minmax(0, 1fr))` }}
       >
         {columns.map((column, roundIdx) => {
           const isFinal = roundIdx === totalRounds - 1;
+          // Per-round stagger: later rounds fade in slightly after earlier
+          // ones, producing a left-to-right "progression" reveal. Nodes
+          // within the same column share a delay — keeps the sequence
+          // readable without multiplying animation complexity.
+          const roundDelayMs = roundIdx * 120;
           return (
-            <div key={`round-group-${roundIdx}`} className="flex">
+            <div key={`round-group-${roundIdx}`} className="flex snap-start">
               <div
                 data-testid={`bracket-column-${roundIdx}`}
                 data-round={roundIdx}
@@ -121,12 +126,17 @@ export function Bracket({ nodes, ranked, showLines = true }: BracketProps) {
                   {roundLabel(roundIdx, totalRounds)}
                 </h3>
                 <div className="flex flex-col justify-around gap-3">
-                  {column.map((vm) => (
-                    <BracketNode
+                  {column.map((vm, nodeIdx) => (
+                    <div
                       key={`${vm.round}-${vm.matchId}`}
-                      node={vm}
-                      isFinal={isFinal}
-                    />
+                      data-testid={`bracket-node-wrap-${vm.round}-${vm.matchId}`}
+                      className="bracket-node-enter"
+                      style={{
+                        animationDelay: `${roundDelayMs + nodeIdx * 40}ms`,
+                      }}
+                    >
+                      <BracketNode node={vm} isFinal={isFinal} />
+                    </div>
                   ))}
                 </div>
               </div>
@@ -137,6 +147,20 @@ export function Bracket({ nodes, ranked, showLines = true }: BracketProps) {
           );
         })}
       </div>
+
+      {/* Mobile-only "scroll to see more" hint — hidden on >= sm when the
+          bracket fits on-screen without scrolling. Purely informational;
+          aria-hidden to avoid duplicate announcements because the grid
+          itself is already labelled. */}
+      {totalRounds > 1 && (
+        <p
+          data-testid="bracket-scroll-hint"
+          aria-hidden="true"
+          className="mt-2 text-center text-[11px] font-medium text-brand-text-secondary sm:hidden"
+        >
+          Swipe to see all rounds &rarr;
+        </p>
+      )}
 
       <footer className="mt-4 border-t border-brand-border-light pt-3">
         <p

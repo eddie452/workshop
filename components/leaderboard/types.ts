@@ -29,8 +29,14 @@ export interface RankedAllergen {
    * from `lib/engine/confidence-score#getDiscriminativeConfidence`.
    * Answers "how far is this allergen's Elo from the pack?". By
    * construction #1 is high, #N is low (see issue #193).
-   * Optional during rollout: older payloads (and some test fixtures)
-   * may still omit it; new server code should populate it.
+   *
+   * Canonical population: the leaderboard API path
+   * (`app/api/leaderboard/route.ts` → `buildRankedFromEloRows`)
+   * ALWAYS populates this field. The `?` exists purely for
+   * legacy unit-test fixtures authored before issue #193 landed;
+   * flipping this to required would ripple through those fixtures
+   * and is an intentional non-goal of issue #198. New server code
+   * must populate it; new tests should populate it too.
    */
   discriminative?: number;
   /**
@@ -39,7 +45,11 @@ export interface RankedAllergen {
    * Answers "probability this allergen is actually top-K in
    * repeated tournaments under bounded noise." This is the
    * tier-driving number going forward (issue #193).
-   * Optional during rollout (see `discriminative`).
+   *
+   * Canonical population: same as `discriminative` above — the
+   * leaderboard API path always populates it; optionality exists
+   * only for legacy fixtures (see issue #198, explicit non-goal
+   * to flip to required).
    */
   posterior?: number;
   rank: number;

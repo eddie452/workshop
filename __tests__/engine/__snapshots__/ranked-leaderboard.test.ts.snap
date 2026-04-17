@@ -1,0 +1,34 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`buildRankedFromEloRows > pins the exact posterior + discriminative for the fixture (seed=0) 1`] = `
+[
+  {
+    "allergen_id": "ragweed",
+    "confidence_tier": "very_high",
+    "discriminative": 0.817574,
+    "posterior": 1,
+    "rank": 1,
+  },
+  {
+    "allergen_id": "oak-pollen",
+    "confidence_tier": "very_high",
+    "discriminative": 0.622459,
+    "posterior": 1,
+    "rank": 2,
+  },
+  {
+    "allergen_id": "dust-mite",
+    "confidence_tier": "very_high",
+    "discriminative": 0.377541,
+    "posterior": 1,
+    "rank": 3,
+  },
+  {
+    "allergen_id": "cat-dander",
+    "confidence_tier": "very_high",
+    "discriminative": 0.182426,
+    "posterior": 1,
+    "rank": 4,
+  },
+]
+`;

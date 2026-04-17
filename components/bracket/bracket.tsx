@@ -68,12 +68,18 @@ export function Bracket({ nodes, ranked, showLines = true }: BracketProps) {
   const totalRounds = columns.length;
 
   // The champion is the winner of the final (last) round's single match.
+  // Optional chaining keeps the "≥1 round implies ≥1 final match"
+  // invariant local — a future refactor that produces an empty final
+  // column renders without crashing instead of throwing.
   const finalColumn = columns[columns.length - 1];
-  const finalMatch = finalColumn[0];
-  const championSide =
-    finalMatch.winnerSide === "left" ? finalMatch.left : finalMatch.right;
-  const championPosterior = championSide.posterior;
-  const isLowConfidence = championPosterior < 0.5;
+  const finalMatch = finalColumn?.[0];
+  const championSide = finalMatch
+    ? finalMatch.winnerSide === "left"
+      ? finalMatch.left
+      : finalMatch.right
+    : undefined;
+  const championPosterior = championSide?.posterior ?? 0;
+  const isLowConfidence = Boolean(finalMatch) && championPosterior < 0.5;
 
   return (
     <section
@@ -100,10 +106,14 @@ export function Bracket({ nodes, ranked, showLines = true }: BracketProps) {
         </p>
       )}
 
+      {/* The container is a flex row — each round is a snap-aligned
+          child. An earlier draft set `gridTemplateColumns` here, but
+          the `flex` class wins the cascade, so the inline style was
+          dead. Issue #179-B / #179-C will reason about this flex
+          layout (not a grid), so keep the class authoritative. */}
       <div
         data-testid="bracket-grid"
         className="flex snap-x snap-mandatory gap-4 overflow-x-auto scroll-smooth sm:snap-none"
-        style={{ gridTemplateColumns: `repeat(${totalRounds}, minmax(0, 1fr))` }}
       >
         {columns.map((column, roundIdx) => {
           const isFinal = roundIdx === totalRounds - 1;

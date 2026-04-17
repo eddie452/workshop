@@ -156,5 +156,13 @@ export {
   analyzeScan,
 } from "./trigger-scout";
 
+// Ranked leaderboard builder — shared two-layer confidence mapping
+// used by the dashboard page and the leaderboard API (issue #200).
+export { buildRankedFromEloRows } from "./ranked-leaderboard";
+export type {
+  BuildRankedOptions,
+  EloRowForRanking,
+} from "./ranked-leaderboard";
+
 // Run orchestrator
 export { runTournamentPipeline } from "./run";

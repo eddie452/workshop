@@ -1,20 +1,9 @@
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
-import {
-  getConfidenceTierBySignals,
-  getConfidenceScoreBySignals,
-  getDiscriminativeConfidence,
-  getPosteriorConfidence,
-  getConfidenceTierByPosterior,
-} from "@/lib/engine";
-import type { TournamentEntry } from "@/lib/engine";
+import { buildRankedFromEloRows } from "@/lib/engine";
 import { buildBracketTrace } from "@/lib/engine/tournament";
 import type { BracketMatch } from "@/lib/engine/types";
-import type {
-  RankedAllergen,
-  GatedRankedAllergen,
-  CheckinSeverityQuery,
-} from "@/components/leaderboard/types";
+import type { CheckinSeverityQuery } from "@/components/leaderboard/types";
 import { gateFinalFour } from "@/lib/leaderboard/gate-final-four";
 import {
   getCachedAccessStatus,
@@ -111,45 +100,23 @@ export default async function DashboardPage() {
 
   const eloRows = (rawEloRows ?? []) as unknown as EloRowWithAllergen[];
 
-  // Two-layer confidence model (issue #193) — mirrors the logic in
-  // `app/api/leaderboard/route.ts` so the dashboard's server-rendered
-  // payload carries `discriminative` + `posterior` into the bracket UI
-  // (issue #179).
-  const elos = eloRows.map((row) => row.elo_score);
-  const tournamentEntries: TournamentEntry[] = eloRows.map((row) => ({
-    allergen_id: row.allergen_id,
-    common_name: row.allergens.common_name,
-    category: row.allergens.category,
-    composite_score: row.elo_score,
-    tier: "low" as const,
-  }));
-  const posteriors = getPosteriorConfidence(tournamentEntries, { seed: 0 });
-
-  // Map to ranked allergens with confidence tiers + numeric score
-  // (server-side computation; score derivation lives in @/lib/engine).
-  const allergens: RankedAllergen[] = eloRows.map((row, index) => {
-    const totalSignals = row.positive_signals + row.negative_signals;
-    const discriminative = getDiscriminativeConfidence(row.elo_score, elos);
-    const posterior = posteriors[row.allergen_id] ?? 0;
-    return {
+  // Two-layer confidence model (issue #193) — extracted into the
+  // shared `buildRankedFromEloRows` helper (issue #200) so this page
+  // and `app/api/leaderboard/route.ts` cannot drift on seed / runs /
+  // noise. `scoreSource: "signals"` preserves the legacy signal-count
+  // curve for the back-compat `score` field rendered by components
+  // that have not yet migrated to `discriminative` / `posterior`.
+  const { allergens, tournamentEntries } = buildRankedFromEloRows(
+    eloRows.map((row) => ({
       allergen_id: row.allergen_id,
-      common_name: row.allergens.common_name,
-      category: row.allergens.category as RankedAllergen["category"],
       elo_score: row.elo_score,
-      // Tier prefers the posterior (issue #193), falling back to legacy
-      // signal-count derivation if the posterior is non-finite.
-      confidence_tier: Number.isFinite(posterior)
-        ? getConfidenceTierByPosterior(posterior)
-        : getConfidenceTierBySignals(totalSignals),
-      // `score` stays as the legacy surface for components that haven't
-      // migrated yet; `discriminative` / `posterior` are the two-layer
-      // signals the bracket UI reads.
-      score: getConfidenceScoreBySignals(totalSignals),
-      discriminative,
-      posterior,
-      rank: index + 1,
-    };
-  });
+      positive_signals: row.positive_signals,
+      negative_signals: row.negative_signals,
+      common_name: row.allergens.common_name,
+      category: row.allergens.category,
+    })),
+    { seed: 0, scoreSource: "signals" },
+  );
 
   // Bracket trace for the #179 bracket UI. `tournamentEntries` is
   // already ordered by Elo descending (the Supabase query orders by

@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 import { buildRankedFromEloRows } from "@/lib/engine";
+import { hashStringToInt32 } from "@/lib/engine/hash";
 
 /**
  * Shape returned by the Supabase join query.
@@ -120,7 +121,7 @@ export async function GET() {
       common_name: row.allergens.common_name,
       category: row.allergens.category,
     })),
-    { seed: 0, scoreSource: "discriminative" },
+    { seed: hashStringToInt32(user.id), scoreSource: "discriminative" },
   );
 
   return NextResponse.json({

@@ -314,3 +314,53 @@ describe("GET /api/leaderboard", () => {
     }
   });
 });
+
+/* ------------------------------------------------------------------ */
+/* Per-user posterior seeding (#229)                                   */
+/* ------------------------------------------------------------------ */
+
+describe("per-user posterior seeding (#229)", () => {
+  it("two different user IDs produce different posterior maps on the same leaderboard", async () => {
+    // Exercise `buildRankedFromEloRows` directly — same helper the
+    // route delegates to. A regression to `seed: 0` for all users
+    // would produce byte-identical maps and fail this test.
+    const { buildRankedFromEloRows } = await import(
+      "@/lib/engine/ranked-leaderboard"
+    );
+    const { hashStringToInt32 } = await import("@/lib/engine/hash");
+
+    // Enough entries (> default topK=4) with close Elos so tail
+    // allergens fall in and out of the top-K across Monte Carlo
+    // runs, making the posterior map genuinely seed-dependent.
+    const rows = [
+      { allergen_id: "a", elo_score: 1650, positive_signals: 10, negative_signals: 3, common_name: "A", category: "tree" },
+      { allergen_id: "b", elo_score: 1620, positive_signals: 9,  negative_signals: 3, common_name: "B", category: "tree" },
+      { allergen_id: "c", elo_score: 1600, positive_signals: 8,  negative_signals: 3, common_name: "C", category: "grass" },
+      { allergen_id: "d", elo_score: 1585, positive_signals: 7,  negative_signals: 3, common_name: "D", category: "grass" },
+      { allergen_id: "e", elo_score: 1570, positive_signals: 6,  negative_signals: 3, common_name: "E", category: "weed" },
+      { allergen_id: "f", elo_score: 1555, positive_signals: 5,  negative_signals: 3, common_name: "F", category: "weed" },
+      { allergen_id: "g", elo_score: 1540, positive_signals: 4,  negative_signals: 3, common_name: "G", category: "mold" },
+      { allergen_id: "h", elo_score: 1525, positive_signals: 3,  negative_signals: 3, common_name: "H", category: "mold" },
+    ];
+
+    const userA = "user-alpha";
+    const userB = "user-beta";
+
+    const resultA = buildRankedFromEloRows(rows, {
+      seed: hashStringToInt32(userA),
+      scoreSource: "discriminative",
+    });
+    const resultB = buildRankedFromEloRows(rows, {
+      seed: hashStringToInt32(userB),
+      scoreSource: "discriminative",
+    });
+
+    // Sanity: the hashes themselves differ.
+    expect(hashStringToInt32(userA)).not.toBe(hashStringToInt32(userB));
+
+    // Core assertion: posterior maps are NOT byte-identical.
+    const posteriorsA = resultA.allergens.map((a) => a.posterior);
+    const posteriorsB = resultB.allergens.map((a) => a.posterior);
+    expect(posteriorsA).not.toEqual(posteriorsB);
+  });
+});

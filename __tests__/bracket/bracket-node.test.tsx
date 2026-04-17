@@ -70,26 +70,46 @@ describe("BracketNode", () => {
     expect(winnerName.className).not.toContain("line-through");
   });
 
-  it("shows the Nature Pop champion badge on the final match winner with posterior >= 0.75", () => {
-    render(<BracketNode node={makeNode()} isFinal />);
-    const badge = screen.getByTestId("bracket-champion-badge");
-    expect(badge.textContent).toContain("Most likely trigger");
-    expect(badge.className).toContain("bg-brand-accent");
-  });
+  // Champion-badge logic should be symmetric across `winnerSide`.
+  // Prior to issue #200 only the "left" case was covered, which would
+  // miss a regression that threaded `winnerSide` into the badge
+  // predicate incorrectly. `describe.each` pins both sides.
+  describe.each<"left" | "right">(["left", "right"])(
+    "champion badge (winnerSide: %s)",
+    (winnerSide) => {
+      /**
+       * Build a node whose winning side carries the specified
+       * posterior, regardless of which physical side wins. Keeps
+       * each case under test isolated from the fixture's default
+       * left-side win.
+       */
+      function nodeWithWinnerPosterior(posterior: number): BracketNodeVM {
+        const base = makeNode();
+        const winner = { ...(winnerSide === "left" ? base.left : base.right), posterior, discriminative: posterior };
+        const loser = winnerSide === "left" ? base.right : base.left;
+        return {
+          ...base,
+          winnerSide,
+          left: winnerSide === "left" ? winner : loser,
+          right: winnerSide === "right" ? winner : loser,
+        };
+      }
 
-  it("does NOT show the champion badge when posterior < 0.75 even if final", () => {
-    const node = makeNode({
-      left: {
-        ...makeNode().left,
-        posterior: 0.6,
-        discriminative: 0.6,
-      },
-    });
-    render(<BracketNode node={node} isFinal />);
-    expect(screen.queryByTestId("bracket-champion-badge")).toBeNull();
-    // But the advancing side still gets the muted "Advances" badge.
-    expect(screen.getByTestId("bracket-winner-badge")).toBeDefined();
-  });
+      it("shows the Nature Pop champion badge on the final match winner with posterior >= 0.75", () => {
+        render(<BracketNode node={nodeWithWinnerPosterior(0.8)} isFinal />);
+        const badge = screen.getByTestId("bracket-champion-badge");
+        expect(badge.textContent).toContain("Most likely trigger");
+        expect(badge.className).toContain("bg-brand-accent");
+      });
+
+      it("does NOT show the champion badge when posterior < 0.75 even if final", () => {
+        render(<BracketNode node={nodeWithWinnerPosterior(0.6)} isFinal />);
+        expect(screen.queryByTestId("bracket-champion-badge")).toBeNull();
+        // But the advancing side still gets the muted "Advances" badge.
+        expect(screen.getByTestId("bracket-winner-badge")).toBeDefined();
+      });
+    },
+  );
 
   it("uses the muted 'Advances' badge for non-final winners", () => {
     render(<BracketNode node={makeNode()} isFinal={false} />);

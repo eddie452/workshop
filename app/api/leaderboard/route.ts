@@ -1,13 +1,6 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
-import {
-  getConfidenceTierBySignals,
-  getDiscriminativeConfidence,
-  getPosteriorConfidence,
-  getConfidenceTierByPosterior,
-} from "@/lib/engine";
-import type { TournamentEntry } from "@/lib/engine";
-import type { RankedAllergen } from "@/components/leaderboard/types";
+import { buildRankedFromEloRows } from "@/lib/engine";
 
 /**
  * Shape returned by the Supabase join query.
@@ -108,49 +101,27 @@ export async function GET() {
   // (no Elo data means no symptoms have been processed)
   const isEnvironmentalForecast = eloRows.length === 0;
 
-  // Two-layer confidence model (issue #193):
-  //   - discriminative: per-allergen Elo separation from the pack
-  //   - posterior: Monte Carlo top-K frequency → drives the tier string
-  // Legacy signal-count surfaces (`score`, `confidence_tier`) are kept
-  // populated for back-compat with older callers during the migration.
-  const elos = eloRows.map((row) => row.elo_score);
-  const tournamentEntries: TournamentEntry[] = eloRows.map((row) => ({
-    allergen_id: row.allergen_id,
-    common_name: row.allergens.common_name,
-    category: row.allergens.category,
-    composite_score: row.elo_score,
-    // Placeholder — the posterior run does not use `tier`.
-    tier: "low" as const,
-  }));
-  const posteriors = getPosteriorConfidence(tournamentEntries, {
-    seed: 0,
-  });
-
-  const allergens: RankedAllergen[] = eloRows.map((row, index) => {
-    const totalSignals = row.positive_signals + row.negative_signals;
-    const discriminative = getDiscriminativeConfidence(row.elo_score, elos);
-    const posterior = posteriors[row.allergen_id] ?? 0;
-    return {
+  // Two-layer confidence model (issue #193) — delegated to the
+  // shared `buildRankedFromEloRows` helper (issue #200) so the API
+  // and the dashboard page stay locked to the same seed / runs /
+  // noise.
+  //
+  // `scoreSource: "discriminative"` preserves this route's existing
+  // behavior: `score` maps to the Elo-separation sigmoid so clients
+  // reading the back-compat `score` field still see visible variation
+  // between #1 and #N (the 21% flat-line bug was caused by feeding
+  // it a signal-count metric).
+  const { allergens } = buildRankedFromEloRows(
+    eloRows.map((row) => ({
       allergen_id: row.allergen_id,
-      common_name: row.allergens.common_name,
-      category: row.allergens.category as RankedAllergen["category"],
       elo_score: row.elo_score,
-      // Tier now derives from the posterior (issue #193). Falls back
-      // to the legacy signal-count tier if the posterior is somehow
-      // non-finite — defense in depth for the migration window.
-      confidence_tier: Number.isFinite(posterior)
-        ? getConfidenceTierByPosterior(posterior)
-        : getConfidenceTierBySignals(totalSignals),
-      // `score` is the back-compat numeric surface: it now maps to
-      // the discriminative layer so older UI that reads `score` still
-      // shows visible variation between #1 and #N (the 21% flat-line
-      // bug was caused by feeding it a signal-count metric).
-      score: discriminative,
-      discriminative,
-      posterior,
-      rank: index + 1,
-    };
-  });
+      positive_signals: row.positive_signals,
+      negative_signals: row.negative_signals,
+      common_name: row.allergens.common_name,
+      category: row.allergens.category,
+    })),
+    { seed: 0, scoreSource: "discriminative" },
+  );
 
   return NextResponse.json({
     allergens,

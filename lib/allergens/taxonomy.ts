@@ -41,7 +41,7 @@ export interface AllergenTaxonomyEntry {
   readonly slug: string;
 }
 
-export const ALLERGEN_TAXONOMY: readonly AllergenTaxonomyEntry[] = [
+export const ALLERGEN_TAXONOMY = [
   // Tree pollens
   { id: "oak", name: "Oak", category: "pollen", slug: "oak" },
   { id: "birch", name: "Birch", category: "pollen", slug: "birch" },
@@ -102,15 +102,35 @@ export const ALLERGEN_TAXONOMY: readonly AllergenTaxonomyEntry[] = [
   // Indoor — other
   { id: "cockroach", name: "Cockroach", category: "other", slug: "cockroach" },
   { id: "mouse", name: "Mouse", category: "other", slug: "mouse" },
-] as const;
+] as const satisfies readonly AllergenTaxonomyEntry[];
+
+/**
+ * String literal union of every canonical allergen ID in the taxonomy.
+ * Derived from {@link ALLERGEN_TAXONOMY} so adding or removing an entry
+ * automatically updates every consumer that accepts `AllergenId`.
+ */
+export type AllergenId = (typeof ALLERGEN_TAXONOMY)[number]["id"];
 
 export const ALLERGEN_IDS: readonly string[] = ALLERGEN_TAXONOMY.map(
   (e) => e.id,
 );
 
-/** Lookup by ID. Returns undefined for unknown IDs. */
+/**
+ * Module-level index built once at import time. Replaces a linear
+ * `Array.find()` scan (O(n)) with an O(1) `Map.get()` lookup.
+ */
+const ALLERGEN_BY_ID: ReadonlyMap<string, AllergenTaxonomyEntry> = new Map(
+  ALLERGEN_TAXONOMY.map((entry) => [entry.id, entry]),
+);
+
+/** Lookup by known `AllergenId` — entry is guaranteed to exist. */
+export function getAllergenEntry(id: AllergenId): AllergenTaxonomyEntry;
+/** Lookup by arbitrary string — returns undefined for unknown IDs. */
+export function getAllergenEntry(
+  id: string,
+): AllergenTaxonomyEntry | undefined;
 export function getAllergenEntry(
   id: string,
 ): AllergenTaxonomyEntry | undefined {
-  return ALLERGEN_TAXONOMY.find((e) => e.id === id);
+  return ALLERGEN_BY_ID.get(id);
 }

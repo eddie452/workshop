@@ -88,4 +88,12 @@ describe("getAllergenEntry", () => {
   it("returns undefined for the empty string", () => {
     expect(getAllergenEntry("")).toBeUndefined();
   });
+
+  it("internal lookup map has no silent ID collisions", () => {
+    // If two taxonomy entries ever shared an id, the Map would silently
+    // drop one and its size would be less than the array length. This
+    // invariant guards the O(1) lookup path in getAllergenEntry().
+    const lookup = new Map(ALLERGEN_TAXONOMY.map((e) => [e.id, e]));
+    expect(lookup.size).toBe(ALLERGEN_TAXONOMY.length);
+  });
 });

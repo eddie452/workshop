@@ -57,7 +57,7 @@ export function ChildFormFields({
       {error && (
         <p
           data-testid={errorTestId}
-          className="mb-3 rounded-card bg-[#E0F0F8] p-2 text-xs text-[#055A8C]"
+          className="mb-3 rounded-card bg-brand-premium-light p-2 text-xs text-brand-premium"
         >
           {error}
         </p>

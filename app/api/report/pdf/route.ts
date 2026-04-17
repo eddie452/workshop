@@ -19,7 +19,7 @@ import {
   getPosteriorConfidence,
   getConfidenceTierByPosterior,
 } from "@/lib/engine";
-import type { TournamentEntry } from "@/lib/engine";
+import type { PosteriorInput } from "@/lib/engine";
 
 /** Shape returned by the Supabase join query */
 interface EloRowWithAllergen {
@@ -103,12 +103,11 @@ export async function GET() {
   // Two-layer confidence model (issue #193) — mirrors the logic in
   // `app/api/leaderboard/route.ts` so the PDF report's tier string
   // matches the leaderboard byte-for-byte.
-  const tournamentEntries: TournamentEntry[] = eloRows.map((row) => ({
+  const tournamentEntries: PosteriorInput[] = eloRows.map((row) => ({
     allergen_id: row.allergen_id,
     common_name: row.allergens.common_name,
     category: row.allergens.category,
     composite_score: row.elo_score,
-    tier: "low" as const,
   }));
   const posteriors = getPosteriorConfidence(tournamentEntries, { seed: 0 });
 

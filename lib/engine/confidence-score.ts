@@ -149,7 +149,16 @@ export function getDiscriminativeConfidence(
   return clamp(sigmoid(k * delta), 0, 1);
 }
 
-/** Median of a numeric array. Non-mutating. */
+/**
+ * Median of a numeric array. Non-mutating.
+ *
+ * Scaling ceiling (issue #198): `getDiscriminativeConfidence`
+ * allocates a fresh sorted copy per call via `[...values].sort(...)`,
+ * yielding O(N log N) per allergen and O(N² log N) when invoked
+ * once per allergen in the leaderboard route. Fine for N ≤ few
+ * hundred; revisit (sort neighbors once in the caller) if the
+ * allergen catalog grows by an order of magnitude.
+ */
 function medianOf(values: number[]): number {
   const sorted = [...values].sort((a, b) => a - b);
   const n = sorted.length;
@@ -197,6 +206,22 @@ export const POSTERIOR_DEFAULT_TOP_K = 4;
 export const POSTERIOR_DEFAULT_NOISE = 0.25;
 
 /**
+ * Input shape for `getPosteriorConfidence`.
+ *
+ * The posterior Monte Carlo runner only needs the fields that feed
+ * pairwise sorting (`allergen_id`, `composite_score`) plus the
+ * metadata that rides along for downstream callers. It never reads
+ * `tier` — that field is an output of the confidence layers, not an
+ * input — so we omit it here. Narrowing the input stops callers from
+ * fabricating a `tier: "low" as const` placeholder just to satisfy
+ * the older `TournamentEntry[]` signature (issue #198).
+ *
+ * `TournamentEntry[]` remains assignable to `PosteriorInput[]` by
+ * structural subtyping, so existing callers keep working unchanged.
+ */
+export type PosteriorInput = Omit<TournamentEntry, "tier">;
+
+/**
  * Compute the posterior confidence for every allergen on a
  * leaderboard via seeded Monte Carlo resampling of the pairwise
  * tournament.
@@ -220,7 +245,7 @@ export const POSTERIOR_DEFAULT_NOISE = 0.25;
  * @returns map from allergen_id to posterior in [0, 1]
  */
 export function getPosteriorConfidence(
-  leaderboard: TournamentEntry[],
+  leaderboard: PosteriorInput[],
   options: PosteriorConfidenceOptions = {},
 ): Record<string, number> {
   const runs = options.runs ?? POSTERIOR_DEFAULT_RUNS;
@@ -244,14 +269,18 @@ export function getPosteriorConfidence(
   const noiseMagnitude = Math.max(0, noise) * POSTERIOR_NOISE_BASE;
 
   for (let r = 0; r < runs; r++) {
-    const perturbed: TournamentEntry[] = leaderboard.map((entry) => ({
+    const perturbed: PosteriorInput[] = leaderboard.map((entry) => ({
       ...entry,
       // Uniform draw in [-noiseMagnitude, +noiseMagnitude].
       composite_score:
         entry.composite_score + (rng() * 2 - 1) * noiseMagnitude,
     }));
 
-    const sorted = pairwiseSort(perturbed);
+    // `pairwiseSort` only reads `composite_score` and `allergen_id`;
+    // the `tier` field on `TournamentEntry` is unused here. The cast
+    // below keeps `pairwiseSort`'s public signature untouched (issue
+    // #198 non-goal: don't broaden tournament.ts).
+    const sorted = pairwiseSort(perturbed as TournamentEntry[]);
     const topSize = Math.min(topK, sorted.length);
     for (let i = 0; i < topSize; i++) {
       tally[sorted[i].allergen_id] += 1;

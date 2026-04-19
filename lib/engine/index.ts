@@ -85,7 +85,7 @@ export {
   POSTERIOR_DEFAULT_TOP_K,
   POSTERIOR_DEFAULT_NOISE,
 } from "./confidence-score";
-export type { PosteriorConfidenceOptions } from "./confidence-score";
+export type { PosteriorConfidenceOptions, PosteriorInput } from "./confidence-score";
 
 // Monte Carlo exposure simulation
 export type {

@@ -686,6 +686,30 @@ export interface Database {
         };
       };
 
+      travel_sessions: {
+        Row: {
+          id: string;
+          user_id: string;
+          location_id: string;
+          started_at: string;
+          ended_at: string | null;
+        };
+        Insert: {
+          id?: string;
+          user_id: string;
+          location_id: string;
+          started_at?: string;
+          ended_at?: string | null;
+        };
+        Update: {
+          id?: string;
+          user_id?: string;
+          location_id?: string;
+          started_at?: string;
+          ended_at?: string | null;
+        };
+      };
+
       referrals: {
         Row: {
           id: string;
@@ -760,6 +784,10 @@ export type UserSubscriptionUpdate = Tables["user_subscriptions"]["Update"];
 export type Referral = Tables["referrals"]["Row"];
 export type ReferralInsert = Tables["referrals"]["Insert"];
 export type ReferralUpdate = Tables["referrals"]["Update"];
+
+export type TravelSession = Tables["travel_sessions"]["Row"];
+export type TravelSessionInsert = Tables["travel_sessions"]["Insert"];
+export type TravelSessionUpdate = Tables["travel_sessions"]["Update"];
 
 /**
  * UserProfile with income_tier stripped out.

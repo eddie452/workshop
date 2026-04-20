@@ -1,6 +1,7 @@
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { buildRankedFromEloRows } from "@/lib/engine";
+import { hashStringToInt32 } from "@/lib/engine/hash";
 import { buildBracketTrace } from "@/lib/engine/tournament";
 import type { BracketMatch } from "@/lib/engine/types";
 import type { CheckinSeverityQuery } from "@/components/leaderboard/types";
@@ -100,12 +101,14 @@ export default async function DashboardPage() {
 
   const eloRows = (rawEloRows ?? []) as unknown as EloRowWithAllergen[];
 
-  // Two-layer confidence model (issue #193) — extracted into the
-  // shared `buildRankedFromEloRows` helper (issue #200) so this page
-  // and `app/api/leaderboard/route.ts` cannot drift on seed / runs /
-  // noise. `scoreSource: "signals"` preserves the legacy signal-count
-  // curve for the back-compat `score` field rendered by components
-  // that have not yet migrated to `discriminative` / `posterior`.
+  // Two-layer confidence model (issue #193) — delegated to the shared
+  // `buildRankedFromEloRows` helper (issue #200) so this page and
+  // `app/api/leaderboard/route.ts` stay locked to the same seed /
+  // runs / noise. `scoreSource: "discriminative"` maps the back-compat
+  // `score` field to the Elo-separation sigmoid so the dashboard
+  // matches the API (issue #237 — previously "signals" produced a
+  // stale flat-line confidence curve). `seed` is derived per-user via
+  // `hashStringToInt32(user.id)` to match the API route (issue #229).
   const { allergens, tournamentEntries } = buildRankedFromEloRows(
     eloRows.map((row) => ({
       allergen_id: row.allergen_id,
@@ -115,7 +118,7 @@ export default async function DashboardPage() {
       common_name: row.allergens.common_name,
       category: row.allergens.category,
     })),
-    { seed: 0, scoreSource: "signals" },
+    { seed: hashStringToInt32(user.id), scoreSource: "discriminative" },
   );
 
   // Bracket trace for the #179 bracket UI. `tournamentEntries` is

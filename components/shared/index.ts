@@ -22,3 +22,6 @@ export type {
   ConfidenceBadgeProps,
   ConfidenceBadgeVariant,
 } from "./confidence-badge";
+
+export { RevealGate } from "./reveal-gate";
+export type { RevealGateProps } from "./reveal-gate";

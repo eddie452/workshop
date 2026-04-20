@@ -13,6 +13,8 @@ import {
 import { Bracket } from "@/components/bracket";
 import { DashboardLeaderboard } from "./dashboard-leaderboard";
 import { PageContainer } from "@/components/layout";
+import { FullRankings } from "@/components/leaderboard";
+import { FdaDisclaimer, RevealGate } from "@/components/shared";
 
 /**
  * Shape returned by the Supabase join query.
@@ -169,16 +171,9 @@ export default async function DashboardPage() {
         </p>
       </div>
 
-      {/* Tournament bracket (ticket #179). Rendered above the
-          leaderboard so users can see the path to their champion
-          before the ranked list. Hidden in Environmental Forecast
-          mode — no tournament has been played yet. */}
-      {!isEnvironmentalForecast && bracketTrace.length > 0 && (
-        <div className="mb-6">
-          <Bracket nodes={bracketTrace} ranked={allergens} />
-        </div>
-      )}
-
+      {/* Champion + Final Four (core leaderboard surface). Full
+          Rankings and the FDA disclaimer are rendered lower on the
+          page per #242 — the Leaderboard emits neither here. */}
       <DashboardLeaderboard
         allergens={finalFourView.allergensForClient}
         finalFourGated={finalFourView.gated}
@@ -189,7 +184,54 @@ export default async function DashboardPage() {
         isEnvironmentalForecast={isEnvironmentalForecast}
         fdaAcknowledged={fdaAcknowledged}
         userId={user.id}
+        showFdaDisclaimer={false}
+        showFullRankings={false}
       />
+
+      {/* Tournament bracket (ticket #179) — gated behind a reveal
+          button per #242. Hidden entirely in Environmental Forecast
+          mode and when the bracket trace is empty (first-time users
+          have no tournament data yet). */}
+      {!isEnvironmentalForecast && bracketTrace.length > 0 && (
+        <div className="mt-6" data-testid="bracket-reveal-gate">
+          <RevealGate label="Show Bracket" hideLabel="Hide Bracket">
+            <div className="mt-4">
+              <Bracket nodes={bracketTrace} ranked={allergens} />
+            </div>
+          </RevealGate>
+        </div>
+      )}
+
+      {/* Full Rankings — gated behind a "View All" reveal button per
+          #242. Only renders when the leaderboard surface has ranks
+          #5+ to show (i.e., not in Environmental Forecast mode or
+          when the user has fewer than 5 ranked allergens). */}
+      {!isEnvironmentalForecast &&
+        finalFourView.allergensForClient.length > 4 && (
+          <div className="mt-6" data-testid="rankings-reveal-gate">
+            <RevealGate label="View All" hideLabel="Hide Rankings">
+              <div className="mt-4">
+                <FullRankings
+                  allergens={finalFourView.allergensForClient}
+                  finalFourGated={finalFourView.gated}
+                  isPremium={isPremium}
+                  hasFullRankings={hasFullRankings}
+                />
+              </div>
+            </RevealGate>
+          </div>
+        )}
+
+      {/* FDA disclaimer — moved to the bottom of the page per #242.
+          Text unchanged; only position relative to prior inline
+          placement inside the Leaderboard surface.
+          Suppressed in Environmental Forecast mode because that
+          surface already embeds its own FDA disclaimer. */}
+      {!isEnvironmentalForecast && (
+        <div className="mt-8" data-testid="dashboard-fda-disclaimer">
+          <FdaDisclaimer />
+        </div>
+      )}
     </PageContainer>
   );
 }

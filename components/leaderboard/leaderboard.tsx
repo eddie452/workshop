@@ -78,6 +78,21 @@ export interface LeaderboardClientProps {
   userId: string;
   /** PFAS cross-reactivity entries for top allergens (optional) */
   pfasEntries?: PfasCrossReactivity[];
+  /**
+   * When `false`, the FDA disclaimer block is NOT rendered inside the
+   * leaderboard surface. Used by the dashboard (#242) which renders
+   * the disclaimer at the very bottom of the page instead of inline.
+   * Defaults to `true` for backwards compatibility with existing
+   * callers and tests that expect the inline banner.
+   */
+  showFdaDisclaimer?: boolean;
+  /**
+   * When `false`, the Full Rankings (ranks #5+) section is NOT
+   * rendered. Used by the dashboard (#242) to gate the full list
+   * behind a "View All" reveal button owned by the page. Defaults
+   * to `true` for backwards compatibility.
+   */
+  showFullRankings?: boolean;
 }
 
 export function Leaderboard({
@@ -91,6 +106,8 @@ export function Leaderboard({
   fdaAcknowledged,
   userId,
   pfasEntries = [],
+  showFdaDisclaimer = true,
+  showFullRankings = true,
 }: LeaderboardClientProps) {
   const [acknowledged, setAcknowledged] = useState(fdaAcknowledged);
   const [forecastData, setForecastData] = useState<ForecastData | null>(null);
@@ -197,8 +214,10 @@ export function Leaderboard({
         Your Allergen Leaderboard
       </h1>
 
-      {/* FDA Disclaimer — always visible */}
-      <FdaDisclaimer />
+      {/* FDA Disclaimer — always visible unless the parent surface
+          has opted to render it elsewhere (see #242, where the
+          dashboard moves it to the very bottom of the page). */}
+      {showFdaDisclaimer && <FdaDisclaimer />}
 
       {/* Trigger Champion */}
       {champion && (
@@ -221,8 +240,10 @@ export function Leaderboard({
         </div>
       )}
 
-      {/* Full Ranked List (beyond top 4) */}
-      {fullRankings.length > 0 && (
+      {/* Full Ranked List (beyond top 4). The dashboard (#242) gates
+          this behind a "View All" reveal button by passing
+          `showFullRankings={false}` until the user opts in. */}
+      {showFullRankings && fullRankings.length > 0 && (
         <div className="mt-6">
           <h2 className="mb-3 text-lg font-semibold text-brand-text-accent">
             Full Rankings

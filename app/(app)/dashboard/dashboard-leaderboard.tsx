@@ -28,6 +28,10 @@ interface DashboardLeaderboardProps {
   isEnvironmentalForecast: boolean;
   fdaAcknowledged: boolean;
   userId: string;
+  /** Forwarded to the underlying Leaderboard. See #242. */
+  showFdaDisclaimer?: boolean;
+  /** Forwarded to the underlying Leaderboard. See #242. */
+  showFullRankings?: boolean;
 }
 
 export function DashboardLeaderboard({
@@ -40,6 +44,8 @@ export function DashboardLeaderboard({
   isEnvironmentalForecast,
   fdaAcknowledged,
   userId,
+  showFdaDisclaimer,
+  showFullRankings,
 }: DashboardLeaderboardProps) {
   return (
     <Leaderboard
@@ -52,6 +58,8 @@ export function DashboardLeaderboard({
       isEnvironmentalForecast={isEnvironmentalForecast}
       fdaAcknowledged={fdaAcknowledged}
       userId={userId}
+      showFdaDisclaimer={showFdaDisclaimer}
+      showFullRankings={showFullRankings}
     />
   );
 }

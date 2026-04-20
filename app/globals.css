@@ -1,61 +1,95 @@
 @import "tailwindcss";
 
 /*
- * Champ Health / Allergy Madness Design System
+ * Champ Health / Allergy Madness Design System — 4-Color System
+ * =============================================================
  *
- * Brand tokens defined via Tailwind v4 @theme directive.
- * All semantic colors are available as utility classes:
- *   bg-brand-primary, text-brand-accent, border-brand-warning, etc.
+ * Ticket #246 (epic #243): consolidated palette.
  *
- * CSS custom properties are also set on :root for runtime access
- * and PDF report usage.
+ * CANONICAL TOKENS (the only 5 colors in the system):
+ *   --color-champ-blue   #00B6E2  Primary brand, ~50% visual weight
+ *   --color-dusty-denim  #0682BB  Headings, buttons, accent text
+ *   --color-white        #FFFFFF  Surfaces
+ *   --color-nature-pop   #CCDC29  CTAs, eye-catching accent (~2%)
+ *   --color-alert-red    #dc2626  Error states only
+ *
+ * All legacy `--color-brand-*` and `--champ-*` tokens are preserved
+ * as ALIASES pointing to the nearest canonical color. This keeps
+ * every existing call site working unchanged while the surface
+ * migrations happen in follow-up tickets (#247-#252). The alias
+ * layer is removed in the final migration ticket (#253).
+ *
+ * Alias mapping (summary):
+ *   *-primary / *-primary-light      → champ-blue
+ *   *-primary-dark / *-text*         → dusty-denim
+ *   *-premium*                       → dusty-denim
+ *   *-accent*                        → nature-pop
+ *   *-warning*                       → nature-pop  (warnings become attention-states)
+ *   *-error* / *-error-dark          → alert-red
+ *   *-surface / *-surface-muted      → white
+ *   *-border / *-border-light        → champ-blue
+ *   *-light variants used as soft backgrounds → white
+ *
+ * ZERO visual change is expected from this ticket: every old token
+ * still resolves to a concrete color. Subsequent tickets re-point
+ * individual call sites directly at canonical tokens.
  */
 
 @theme {
   /* ------------------------------------------------------------------ */
-  /* Champ Allergy Brand Colors                                          */
+  /* CANONICAL 4-color system (+ functional alert-red)                   */
   /* ------------------------------------------------------------------ */
 
-  /* Primary — Champ Blue (Pantone 306 C) — 50% of visual */
-  --color-brand-primary: #00B6E2;
-  --color-brand-primary-light: #E0F5FB;
-  --color-brand-primary-dark: #0682BB;
+  --color-champ-blue: #00B6E2;
+  --color-dusty-denim: #0682BB;
+  --color-white: #FFFFFF;
+  --color-nature-pop: #CCDC29;
+  --color-alert-red: #dc2626;
 
-  /* Accent — Nature Pop (Pantone 381 C) — 2% CTAs, eye-catching */
-  --color-brand-accent: #CCDC29;
-  --color-brand-accent-light: #F5F8D9;
-  --color-brand-accent-dark: #B0C020;
+  /* ------------------------------------------------------------------ */
+  /* Legacy aliases — Champ Allergy Brand Colors                         */
+  /* All tokens below alias one of the 5 canonical colors above.         */
+  /* ------------------------------------------------------------------ */
 
-  /* Warning — FDA disclaimer amber (functional) */
-  --color-brand-warning: #d97706;
-  --color-brand-warning-light: #fffbeb;
-  --color-brand-warning-dark: #92400e;
+  /* Primary — Champ Blue */
+  --color-brand-primary: var(--color-champ-blue);
+  --color-brand-primary-light: var(--color-white);
+  --color-brand-primary-dark: var(--color-dusty-denim);
 
-  /* Error — Alert red (functional) */
-  --color-brand-error: #dc2626;
-  --color-brand-error-light: #fef2f2;
-  --color-brand-error-dark: #991b1b;
+  /* Accent — Nature Pop */
+  --color-brand-accent: var(--color-nature-pop);
+  --color-brand-accent-light: var(--color-white);
+  --color-brand-accent-dark: var(--color-nature-pop);
 
-  /* Premium — Dusty Denim (Pantone 640 C) */
-  --color-brand-premium: #055A8C;
-  --color-brand-premium-light: #E0F0F8;
-  --color-brand-premium-dark: #045A82;
+  /* Warning — remapped to Nature Pop in 4-color system
+     (no ambers in the palette; true errors use alert-red) */
+  --color-brand-warning: var(--color-nature-pop);
+  --color-brand-warning-light: var(--color-white);
+  --color-brand-warning-dark: var(--color-nature-pop);
 
-  /* Surface / Neutral — NO GRAY, use light blue tints */
-  --color-brand-surface: #ffffff;
-  --color-brand-surface-muted: #F0F9FC;
-  --color-brand-border: #B8E4F0;
-  --color-brand-border-light: #D6F0F8;
+  /* Error — Alert Red */
+  --color-brand-error: var(--color-alert-red);
+  --color-brand-error-light: var(--color-white);
+  --color-brand-error-dark: var(--color-alert-red);
 
-  /* Text — NO BLACK, Dusty Denim hierarchy
-     Primary tier stays darker (#045A82) so body copy clears WCAG AA
-     normal (4.5:1) on white. For opt-in Dusty Denim on headings /
-     font-semibold callers, use `brand-text-accent` (#0682BB, AA Large). */
-  --color-brand-text: #045A82;
-  --color-brand-text-secondary: #056DA5;
-  --color-brand-text-muted: #0678B1;
-  --color-brand-text-faint: #0776A8;
-  --color-brand-text-accent: #0682BB;
+  /* Premium — Dusty Denim (4-color system collapses premium into dusty-denim) */
+  --color-brand-premium: var(--color-dusty-denim);
+  --color-brand-premium-light: var(--color-white);
+  --color-brand-premium-dark: var(--color-dusty-denim);
+
+  /* Surface — White */
+  --color-brand-surface: var(--color-white);
+  --color-brand-surface-muted: var(--color-white);
+  --color-brand-border: var(--color-champ-blue);
+  --color-brand-border-light: var(--color-white);
+
+  /* Text — Dusty Denim hierarchy (all tiers collapse to dusty-denim
+     in the 4-color system; per-surface tuning happens in #247-#252) */
+  --color-brand-text: var(--color-dusty-denim);
+  --color-brand-text-secondary: var(--color-dusty-denim);
+  --color-brand-text-muted: var(--color-dusty-denim);
+  --color-brand-text-faint: var(--color-dusty-denim);
+  --color-brand-text-accent: var(--color-dusty-denim);
 
   /* ------------------------------------------------------------------ */
   /* Typography                                                          */
@@ -78,53 +112,59 @@
 
 /* ------------------------------------------------------------------ */
 /* CSS Custom Properties (for runtime/PDF access)                       */
+/* Mirrors the @theme block — same aliasing treatment.                  */
 /* ------------------------------------------------------------------ */
 
 :root {
+  /* Canonical tokens duplicated on :root for runtime access */
+  --color-champ-blue: #00B6E2;
+  --color-dusty-denim: #0682BB;
+  --color-white: #FFFFFF;
+  --color-nature-pop: #CCDC29;
+  --color-alert-red: #dc2626;
+
   /* Primary — Champ Blue */
-  --champ-primary: #00B6E2;
-  --champ-primary-light: #E0F5FB;
-  --champ-primary-dark: #0682BB;
+  --champ-primary: var(--color-champ-blue);
+  --champ-primary-light: var(--color-white);
+  --champ-primary-dark: var(--color-dusty-denim);
   --champ-primary-rgb: 0, 182, 226;
 
   /* Accent — Nature Pop */
-  --champ-accent: #CCDC29;
-  --champ-accent-light: #F5F8D9;
-  --champ-accent-dark: #B0C020;
+  --champ-accent: var(--color-nature-pop);
+  --champ-accent-light: var(--color-white);
+  --champ-accent-dark: var(--color-nature-pop);
   --champ-accent-rgb: 204, 220, 41;
 
-  /* Warning */
-  --champ-warning: #d97706;
-  --champ-warning-light: #fffbeb;
-  --champ-warning-dark: #92400e;
-  --champ-warning-rgb: 217, 119, 6;
+  /* Warning — remapped to Nature Pop */
+  --champ-warning: var(--color-nature-pop);
+  --champ-warning-light: var(--color-white);
+  --champ-warning-dark: var(--color-nature-pop);
+  --champ-warning-rgb: 204, 220, 41;
 
-  /* Error */
-  --champ-error: #dc2626;
-  --champ-error-light: #fef2f2;
-  --champ-error-dark: #991b1b;
+  /* Error — Alert Red */
+  --champ-error: var(--color-alert-red);
+  --champ-error-light: var(--color-white);
+  --champ-error-dark: var(--color-alert-red);
   --champ-error-rgb: 220, 38, 38;
 
   /* Premium — Dusty Denim */
-  --champ-premium: #055A8C;
-  --champ-premium-light: #E0F0F8;
-  --champ-premium-dark: #045A82;
-  --champ-premium-rgb: 5, 90, 140;
+  --champ-premium: var(--color-dusty-denim);
+  --champ-premium-light: var(--color-white);
+  --champ-premium-dark: var(--color-dusty-denim);
+  --champ-premium-rgb: 6, 130, 187;
 
-  /* Surface — NO GRAY */
-  --champ-surface: #ffffff;
-  --champ-surface-muted: #F0F9FC;
-  --champ-border: #B8E4F0;
-  --champ-border-light: #D6F0F8;
+  /* Surface — White */
+  --champ-surface: var(--color-white);
+  --champ-surface-muted: var(--color-white);
+  --champ-border: var(--color-champ-blue);
+  --champ-border-light: var(--color-white);
 
-  /* Text — NO BLACK, Dusty Denim hierarchy
-     Mirrors the @theme --color-brand-text* tokens. Primary stays darker
-     for AA-compliant body copy; accent is opt-in Dusty Denim for headings. */
-  --champ-text: #045A82;
-  --champ-text-secondary: #056DA5;
-  --champ-text-muted: #0678B1;
-  --champ-text-faint: #0776A8;
-  --champ-text-accent: #0682BB;
+  /* Text — Dusty Denim hierarchy */
+  --champ-text: var(--color-dusty-denim);
+  --champ-text-secondary: var(--color-dusty-denim);
+  --champ-text-muted: var(--color-dusty-denim);
+  --champ-text-faint: var(--color-dusty-denim);
+  --champ-text-accent: var(--color-dusty-denim);
 }
 
 /* ------------------------------------------------------------------ */

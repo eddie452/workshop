@@ -16,6 +16,8 @@ export { BlurOverlay } from "./blur-overlay";
 // `ConfidenceBadge` from `@/components/shared/confidence-badge` for the
 // numeric 0–1 variant.
 export { CategoryIcon } from "./category-icon";
+export { FullRankings } from "./full-rankings";
+export type { FullRankingsProps } from "./full-rankings";
 export { EnvironmentalForecast } from "./environmental-forecast";
 export type { ForecastData, EnvironmentalForecastProps } from "./environmental-forecast";
 

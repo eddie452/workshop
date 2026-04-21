@@ -1,8 +1,16 @@
 name: Preview Deploy
 
+# TEMPORARILY DISABLED (2026-04-21): Render free-tier pipeline minutes
+# exhausted — every PR's preview run was instantly rejected with
+# build_failed, but still burned workflow-runtime cost on GitHub.
+# Switched to workflow_dispatch so it only runs when manually triggered.
+# Re-enable by replacing this block with:
+#   on:
+#     pull_request:
+#       types: [opened, synchronize, reopened]
+# once Render quota resets OR the workspace is upgraded to a paid plan.
 on:
-  pull_request:
-    types: [opened, synchronize, reopened]
+  workflow_dispatch:
 
 jobs:
   ci:

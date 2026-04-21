@@ -29,10 +29,10 @@ export default async function ReferralPage() {
   return (
     <PageContainer width="sm" className="space-y-6">
       <div>
-        <h1 className="m-0 text-2xl font-bold text-brand-primary-dark">
+        <h1 className="m-0 text-2xl font-bold text-dusty-denim">
           Invite Friends
         </h1>
-        <p className="mt-1 mb-0 text-sm text-brand-text-muted">
+        <p className="mt-1 mb-0 text-sm text-dusty-denim">
           Share Allergy Madness with friends and unlock all features for free.
         </p>
       </div>

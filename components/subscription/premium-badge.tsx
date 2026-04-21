@@ -25,10 +25,10 @@ export function PremiumBadge({
     return (
       <span
         data-testid="premium-badge"
-        className="inline-flex items-center gap-1 rounded-full bg-brand-primary-light px-2 py-0.5 text-xs font-medium text-brand-primary-dark"
+        className="inline-flex items-center gap-1 rounded-full bg-white px-2 py-0.5 text-xs font-medium text-dusty-denim"
       >
         {!compact && (
-          <span aria-hidden="true" className="inline-flex h-4 w-4 items-center justify-center rounded-full bg-brand-primary">
+          <span aria-hidden="true" className="inline-flex h-4 w-4 items-center justify-center rounded-full bg-champ-blue">
             <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth={2.5} strokeLinecap="round" strokeLinejoin="round">
               <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" />
             </svg>
@@ -42,10 +42,10 @@ export function PremiumBadge({
   return (
     <span
       data-testid="premium-badge-locked"
-      className="inline-flex items-center gap-1 rounded-full bg-brand-surface-muted px-2 py-0.5 text-xs font-medium text-brand-text-muted"
+      className="inline-flex items-center gap-1 rounded-full bg-white px-2 py-0.5 text-xs font-medium text-dusty-denim"
     >
       {!compact && (
-        <span aria-hidden="true" className="inline-flex h-4 w-4 items-center justify-center rounded-full bg-brand-surface-muted">
+        <span aria-hidden="true" className="inline-flex h-4 w-4 items-center justify-center rounded-full bg-white">
           <LockIcon size={10} strokeWidth={2.5} />
         </span>
       )}

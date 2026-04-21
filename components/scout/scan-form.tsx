@@ -112,7 +112,7 @@ export function ScanForm() {
 
       {/* Image preview */}
       {previewUrl && (
-        <div className="mb-4 overflow-hidden rounded-card border border-brand-border">
+        <div className="mb-4 overflow-hidden rounded-card border border-champ-blue">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src={previewUrl}
@@ -129,7 +129,7 @@ export function ScanForm() {
           type="button"
           onClick={handleCapture}
           disabled={isScanning}
-          className="w-full cursor-pointer rounded-button border-none bg-brand-accent px-4 py-3 text-sm font-semibold text-brand-primary-dark hover:bg-brand-accent-dark disabled:opacity-50"
+          className="w-full cursor-pointer rounded-button border-none bg-nature-pop px-4 py-3 text-sm font-semibold text-dusty-denim hover:bg-nature-pop disabled:opacity-50"
           data-testid="scout-capture-btn"
         >
           {isScanning ? "Scanning..." : "Take Photo or Upload"}
@@ -139,7 +139,7 @@ export function ScanForm() {
       {/* Scanning spinner */}
       {isScanning && (
         <p
-          className="mt-3 text-center text-sm text-brand-text-muted"
+          className="mt-3 text-center text-sm text-dusty-denim"
           data-testid="scout-scanning"
         >
           Analyzing plant image with AI...
@@ -165,8 +165,8 @@ export function ScanForm() {
           data-testid="scout-results"
         >
           {results.matches.length === 0 ? (
-            <div className="rounded-card border border-brand-border bg-brand-surface-muted px-4 py-3">
-              <p className="text-sm text-brand-text-secondary">
+            <div className="rounded-card border border-champ-blue bg-white px-4 py-3">
+              <p className="text-sm text-dusty-denim">
                 No allergen-producing plants identified in this photo.
                 Try taking a closer photo of the plant.
               </p>
@@ -175,12 +175,12 @@ export function ScanForm() {
             <>
               {/* Summary */}
               <div className="mb-3">
-                <p className="text-sm font-medium text-brand-text">
+                <p className="text-sm font-medium text-dusty-denim">
                   {results.matches.length} plant
                   {results.matches.length === 1 ? "" : "s"} identified
                 </p>
                 {results.active_count > 0 && (
-                  <p className="text-xs text-brand-primary">
+                  <p className="text-xs text-champ-blue">
                     {results.active_count} active — {results.proximity_multiplier}x
                     proximity multiplier applied
                   </p>
@@ -200,7 +200,7 @@ export function ScanForm() {
           <button
             type="button"
             onClick={handleReset}
-            className="mt-4 w-full cursor-pointer rounded-button border border-brand-border bg-white px-4 py-2 text-sm font-medium text-brand-text hover:bg-brand-surface-muted"
+            className="mt-4 w-full cursor-pointer rounded-button border border-champ-blue bg-white px-4 py-2 text-sm font-medium text-dusty-denim hover:bg-white"
             data-testid="scout-reset-btn"
           >
             Scan Another Plant
@@ -222,17 +222,17 @@ function MatchCard({ match }: { match: ScanMatchResult }) {
     <div
       className={`rounded-card border px-4 py-3 ${
         isActive
-          ? "border-brand-border bg-brand-primary-light"
-          : "border-brand-border-light bg-brand-surface-muted"
+          ? "border-champ-blue bg-white"
+          : "border-champ-blue bg-white"
       }`}
       data-testid={`scout-match-${match.allergen_id}`}
     >
       <div className="flex items-center justify-between">
         <div>
-          <p className="text-sm font-semibold text-brand-primary-dark">
+          <p className="text-sm font-semibold text-dusty-denim">
             {match.common_name}
           </p>
-          <p className="mt-0.5 text-xs text-brand-text-muted">
+          <p className="mt-0.5 text-xs text-dusty-denim">
             {match.category} &middot; {Math.round(match.confidence * 100)}%
             confidence
           </p>
@@ -241,7 +241,7 @@ function MatchCard({ match }: { match: ScanMatchResult }) {
           className={`rounded-full px-2 py-1 text-xs font-medium ${
             isActive
               ? "bg-[#D6F0F8] text-[#0682BB]"
-              : "bg-brand-surface-muted text-brand-text-muted"
+              : "bg-white text-dusty-denim"
           }`}
           data-testid={`scout-badge-${match.allergen_id}`}
         >

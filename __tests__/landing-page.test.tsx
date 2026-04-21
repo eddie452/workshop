@@ -147,9 +147,9 @@ describe("HomePage", () => {
     });
 
     // WCAG AA contrast (#185): the "How It Works" band must use
-    // bg-brand-premium (#055A8C) so white text achieves >=4.5:1.
+    // bg-dusty-denim (#055A8C) so white text achieves >=4.5:1.
     // Champ Blue (#00B6E2) fails AA with any available text color.
-    it("uses brand-premium (not Champ Blue) for the How It Works band", async () => {
+    it("uses dusty-denim (not Champ Blue) for the How It Works band", async () => {
       const Page = await HomePage();
       const { container } = render(Page);
 
@@ -159,8 +159,8 @@ describe("HomePage", () => {
       const section = heading.closest("section");
       expect(section).not.toBeNull();
       const classes = section!.className.split(/\s+/);
-      expect(classes).toContain("bg-brand-premium");
-      expect(classes).not.toContain("bg-brand-primary");
+      expect(classes).toContain("bg-dusty-denim");
+      expect(classes).not.toContain("bg-champ-blue");
       // Silence unused-var lint for container
       void container;
     });

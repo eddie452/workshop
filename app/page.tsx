@@ -37,12 +37,12 @@ export default async function HomePage() {
   }
 
   return (
-    <div className="min-h-screen bg-brand-surface">
+    <div className="min-h-screen bg-white">
       {/* Unified navigation (unauthenticated variant) */}
       <NavBar authState="unauthenticated" />
 
       {/* Hero Section */}
-      <section className="bg-brand-premium px-4 py-16 sm:px-6 sm:py-24">
+      <section className="bg-dusty-denim px-4 py-16 sm:px-6 sm:py-24">
         <div className="mx-auto max-w-3xl text-center">
           <h1
             className="text-3xl font-bold tracking-tight text-white sm:text-5xl"
@@ -50,7 +50,7 @@ export default async function HomePage() {
           >
             Allergy Madness
           </h1>
-          <p className="mx-auto mt-2 text-base text-brand-primary-light">
+          <p className="mx-auto mt-2 text-base text-white">
             by Champ Allergy
           </p>
           <p className="mx-auto mt-4 max-w-xl text-lg text-white/90 sm:mt-6 sm:text-xl">
@@ -63,7 +63,7 @@ export default async function HomePage() {
           <div className="mt-8 flex flex-col items-center gap-3 sm:flex-row sm:justify-center sm:gap-4">
             <Link
               href="/signup"
-              className="w-full rounded-button bg-brand-accent px-8 py-3 text-center text-base font-semibold text-brand-primary-dark shadow-sm transition-colors hover:bg-brand-accent-dark sm:w-auto"
+              className="w-full rounded-button bg-nature-pop px-8 py-3 text-center text-base font-semibold text-dusty-denim shadow-sm transition-colors hover:bg-nature-pop sm:w-auto"
             >
               Get Started Free
             </Link>
@@ -81,7 +81,7 @@ export default async function HomePage() {
       </section>
 
       {/* How It Works */}
-      <section className="bg-brand-premium px-4 py-16 sm:px-6">
+      <section className="bg-dusty-denim px-4 py-16 sm:px-6">
         <div className="mx-auto max-w-5xl">
           <h2
             className="text-center text-2xl font-bold text-white sm:text-3xl"
@@ -113,10 +113,10 @@ export default async function HomePage() {
       </section>
 
       {/* Features */}
-      <section className="bg-brand-primary-light px-4 py-16 sm:px-6">
+      <section className="bg-white px-4 py-16 sm:px-6">
         <div className="mx-auto max-w-5xl">
           <h2
-            className="text-center text-2xl font-bold text-brand-primary-dark sm:text-3xl"
+            className="text-center text-2xl font-bold text-dusty-denim sm:text-3xl"
             style={{ fontFamily: "var(--font-title)" }}
           >
             Features
@@ -151,7 +151,7 @@ export default async function HomePage() {
       </section>
 
       {/* CTA Section */}
-      <section className="bg-brand-premium px-4 py-16 sm:px-6">
+      <section className="bg-dusty-denim px-4 py-16 sm:px-6">
         <div className="mx-auto max-w-2xl text-center">
           <h2
             className="text-2xl font-bold text-white sm:text-3xl"
@@ -165,7 +165,7 @@ export default async function HomePage() {
           </p>
           <Link
             href="/signup"
-            className="mt-8 inline-block rounded-button bg-brand-accent px-8 py-3 text-base font-semibold text-brand-primary-dark shadow-sm transition-colors hover:bg-brand-accent-dark"
+            className="mt-8 inline-block rounded-button bg-nature-pop px-8 py-3 text-base font-semibold text-dusty-denim shadow-sm transition-colors hover:bg-nature-pop"
           >
             Get Started Free
           </Link>
@@ -173,22 +173,22 @@ export default async function HomePage() {
       </section>
 
       {/* Footer */}
-      <footer className="border-t border-brand-border bg-white px-4 py-8 sm:px-6">
+      <footer className="border-t border-champ-blue bg-white px-4 py-8 sm:px-6">
         <div className="mx-auto max-w-5xl">
           {/* FDA Disclaimer */}
-          <div className="rounded-card border border-brand-border bg-brand-primary-light px-4 py-3">
-            <p className="text-sm font-semibold text-brand-primary-dark">
+          <div className="rounded-card border border-champ-blue bg-white px-4 py-3">
+            <p className="text-sm font-semibold text-dusty-denim">
               {FDA_DISCLAIMER_LABEL}
             </p>
-            <p className="mt-1 text-xs text-brand-text-secondary">
+            <p className="mt-1 text-xs text-dusty-denim">
               {FDA_DISCLAIMER_FULL_TEXT}
             </p>
           </div>
           <div className="mt-6 flex flex-col items-center gap-2 text-center">
-            <p className="text-sm font-medium text-brand-text-secondary">
+            <p className="text-sm font-medium text-dusty-denim">
               Allergy Madness — The Digital Allergy Test by Champ Allergy
             </p>
-            <p className="text-xs text-brand-text-muted">
+            <p className="text-xs text-dusty-denim">
               &copy; {new Date().getFullYear()} Champ Allergy. All rights
               reserved.
             </p>
@@ -214,7 +214,7 @@ function StepCard({
 }) {
   return (
     <div className="flex flex-col items-center text-center">
-      <div className="flex h-10 w-10 items-center justify-center rounded-full bg-white text-sm font-bold text-brand-primary">
+      <div className="flex h-10 w-10 items-center justify-center rounded-full bg-white text-sm font-bold text-champ-blue">
         {step}
       </div>
       <h3 className="mt-4 text-lg font-semibold text-white">{title}</h3>
@@ -231,9 +231,9 @@ function FeatureCard({
   description: string;
 }) {
   return (
-    <div className="rounded-card border border-brand-border bg-white p-6">
-      <h3 className="text-base font-semibold text-brand-primary-dark">{title}</h3>
-      <p className="mt-2 text-sm text-brand-text-secondary">{description}</p>
+    <div className="rounded-card border border-champ-blue bg-white p-6">
+      <h3 className="text-base font-semibold text-dusty-denim">{title}</h3>
+      <p className="mt-2 text-sm text-dusty-denim">{description}</p>
     </div>
   );
 }

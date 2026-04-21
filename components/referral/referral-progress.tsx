@@ -28,12 +28,12 @@ export function ReferralProgress({
     return (
       <div
         data-testid="referral-progress"
-        className={`rounded-card border border-brand-border bg-brand-primary-light p-4 ${className}`.trim()}
+        className={`rounded-card border border-champ-blue bg-white p-4 ${className}`.trim()}
       >
-        <p className="text-sm font-semibold text-brand-primary-dark">
+        <p className="text-sm font-semibold text-dusty-denim">
           All features unlocked!
         </p>
-        <p className="mt-1 text-xs text-brand-text-secondary">
+        <p className="mt-1 text-xs text-dusty-denim">
           Thank you for sharing Allergy Madness with {referralCount} friend
           {referralCount !== 1 ? "s" : ""}. Your premium features are permanently active.
         </p>
@@ -44,19 +44,19 @@ export function ReferralProgress({
   return (
     <div
       data-testid="referral-progress"
-      className={`rounded-card border border-brand-border bg-white p-4 ${className}`.trim()}
+      className={`rounded-card border border-champ-blue bg-white p-4 ${className}`.trim()}
     >
-      <p className="text-sm font-semibold text-brand-text">
+      <p className="text-sm font-semibold text-dusty-denim">
         {progress} of {REFERRAL_UNLOCK_THRESHOLD} friends invited
       </p>
-      <p className="mt-1 text-xs text-brand-text-muted">
+      <p className="mt-1 text-xs text-dusty-denim">
         Invite {REFERRAL_UNLOCK_THRESHOLD - progress} more friend
         {REFERRAL_UNLOCK_THRESHOLD - progress !== 1 ? "s" : ""} to unlock all features
       </p>
 
       {/* Progress bar */}
       <div
-        className="mt-3 h-2 w-full overflow-hidden rounded-full bg-brand-surface-muted"
+        className="mt-3 h-2 w-full overflow-hidden rounded-full bg-white"
         role="progressbar"
         aria-valuenow={progress}
         aria-valuemin={0}
@@ -64,7 +64,7 @@ export function ReferralProgress({
         aria-label={`${progress} of ${REFERRAL_UNLOCK_THRESHOLD} referrals`}
       >
         <div
-          className="h-full rounded-full bg-brand-primary-dark transition-all duration-300"
+          className="h-full rounded-full bg-dusty-denim transition-all duration-300"
           style={{ width: `${progressPercent}%` }}
         />
       </div>
@@ -76,8 +76,8 @@ export function ReferralProgress({
             key={i}
             className={`flex h-6 w-6 items-center justify-center rounded-full text-xs font-medium ${
               i < progress
-                ? "bg-brand-premium text-white"
-                : "bg-brand-surface-muted text-brand-text-faint"
+                ? "bg-dusty-denim text-white"
+                : "bg-white text-dusty-denim"
             }`}
           >
             {i < progress ? "\u2713" : i + 1}

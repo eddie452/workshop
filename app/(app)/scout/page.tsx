@@ -31,10 +31,10 @@ export default async function ScoutPage() {
     <PageContainer width="sm">
       {/* Header */}
       <div className="mb-6">
-        <h1 className="m-0 mb-1 text-2xl font-bold text-brand-primary-dark">
+        <h1 className="m-0 mb-1 text-2xl font-bold text-dusty-denim">
           Trigger Scout
         </h1>
-        <p className="m-0 text-sm text-brand-text-secondary">
+        <p className="m-0 text-sm text-dusty-denim">
           Photograph a plant you suspect causes reactions. AI will identify it
           and check it against your allergen profile.
         </p>
@@ -52,7 +52,7 @@ export default async function ScoutPage() {
       <div className="mt-6 text-center">
         <a
           href="/dashboard"
-          className="text-sm text-brand-primary no-underline hover:text-brand-primary-dark hover:underline"
+          className="text-sm text-champ-blue no-underline hover:text-dusty-denim hover:underline"
         >
           Back to Dashboard
         </a>

@@ -71,17 +71,17 @@ export function ReferralShare({
   return (
     <div
       data-testid="referral-share"
-      className={`rounded-card border border-brand-border bg-white p-4 ${className}`.trim()}
+      className={`rounded-card border border-champ-blue bg-white p-4 ${className}`.trim()}
     >
-      <p className="text-sm font-semibold text-brand-text">
+      <p className="text-sm font-semibold text-dusty-denim">
         Your Referral Link
       </p>
 
       {/* Link display */}
-      <div className="mt-2 flex items-center gap-2 rounded-card border border-brand-border-light bg-brand-surface-muted px-3 py-2">
+      <div className="mt-2 flex items-center gap-2 rounded-card border border-champ-blue bg-white px-3 py-2">
         <code
           data-testid="referral-link-display"
-          className="flex-1 truncate text-xs text-brand-text-secondary"
+          className="flex-1 truncate text-xs text-dusty-denim"
         >
           {referralLink}
         </code>
@@ -95,8 +95,8 @@ export function ReferralShare({
           data-testid="referral-copy-btn"
           className={`flex-1 cursor-pointer rounded-button border-none px-4 py-2 text-sm font-medium text-white transition-colors ${
             copied
-              ? "bg-brand-premium"
-              : "bg-brand-premium hover:bg-brand-premium/80"
+              ? "bg-dusty-denim"
+              : "bg-dusty-denim hover:bg-dusty-denim/80"
           }`}
         >
           {copied ? "Copied!" : "Copy Link"}
@@ -107,14 +107,14 @@ export function ReferralShare({
             type="button"
             onClick={handleShare}
             data-testid="referral-share-btn"
-            className="flex-1 cursor-pointer rounded-button border border-brand-primary bg-white px-4 py-2 text-sm font-medium text-brand-primary transition-colors hover:bg-brand-primary-light"
+            className="flex-1 cursor-pointer rounded-button border border-champ-blue bg-white px-4 py-2 text-sm font-medium text-champ-blue transition-colors hover:bg-white"
           >
             Share
           </button>
         )}
       </div>
 
-      <p className="mt-2 text-xs text-brand-text-faint">
+      <p className="mt-2 text-xs text-dusty-denim">
         Share this link with friends. When 3 sign up, all features unlock permanently.
       </p>
     </div>

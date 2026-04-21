@@ -79,7 +79,7 @@ function FoodTag({ food }: { food: string }) {
   return (
     <span
       data-testid="pfas-food-tag"
-      className="inline-block rounded-full border border-brand-border bg-brand-primary-light px-2 py-1 text-xs font-medium text-brand-primary-dark"
+      className="inline-block rounded-full border border-champ-blue bg-white px-2 py-1 text-xs font-medium text-dusty-denim"
     >
       {food}
     </span>
@@ -104,13 +104,13 @@ function AllergenCrossReactivityCard({
   return (
     <div
       data-testid="pfas-allergen-card"
-      className="rounded-card border border-brand-border bg-white p-4"
+      className="rounded-card border border-champ-blue bg-white p-4"
     >
       {/* Allergen header — always visible */}
       <div className="mb-3 flex items-center justify-between">
         <div className="flex items-center gap-2">
           <CategoryIcon category={entry.category} />
-          <span className="text-sm font-semibold text-brand-primary-dark">
+          <span className="text-sm font-semibold text-dusty-denim">
             {entry.common_name}
           </span>
         </div>
@@ -119,7 +119,7 @@ function AllergenCrossReactivityCard({
 
       {/* Food list — blurred for free tier */}
       <div>
-        <p className="mb-2 text-xs font-medium text-brand-text-muted">
+        <p className="mb-2 text-xs font-medium text-dusty-denim">
           Cross-reactive foods
         </p>
         {isPremium ? (
@@ -147,10 +147,10 @@ export function PfasPanel({ entries, isPremium }: PfasPanelProps) {
     >
       {/* Section header */}
       <div>
-        <h2 className="text-lg font-semibold text-brand-text-accent">
+        <h2 className="text-lg font-semibold text-dusty-denim">
           Food Cross-Reactivity (PFAS)
         </h2>
-        <p className="mt-1 text-xs text-brand-text-muted">
+        <p className="mt-1 text-xs text-dusty-denim">
           Foods that may trigger oral symptoms due to pollen-food allergy
           syndrome
         </p>

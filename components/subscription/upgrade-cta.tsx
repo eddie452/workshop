@@ -70,12 +70,12 @@ export function UpgradeCta({
   return (
     <div
       data-testid="upgrade-cta"
-      className="mx-auto max-w-md rounded-xl border border-brand-border bg-gradient-to-br from-brand-premium-light to-white p-6 text-center shadow-md"
+      className="mx-auto max-w-md rounded-xl border border-champ-blue bg-white p-6 text-center shadow-md"
     >
-      <h3 className="mb-2 text-lg font-bold text-brand-premium-dark">
+      <h3 className="mb-2 text-lg font-bold text-dusty-denim">
         Unlock {feature}
       </h3>
-      <p className="mb-4 text-sm text-brand-text-secondary">
+      <p className="mb-4 text-sm text-dusty-denim">
         Get the full picture of your allergen triggers with {tierName}.
       </p>
 
@@ -83,7 +83,7 @@ export function UpgradeCta({
       <button
         type="button"
         data-testid="upgrade-cta-subscribe"
-        className="mb-3 w-full cursor-pointer rounded-button border-none bg-brand-premium px-4 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-brand-premium-dark"
+        className="mb-3 w-full cursor-pointer rounded-button border-none bg-nature-pop px-4 py-2.5 text-sm font-semibold text-dusty-denim shadow-sm hover:bg-nature-pop"
         onClick={handleSubscribeClick}
       >
         Upgrade to {tierName}
@@ -95,7 +95,7 @@ export function UpgradeCta({
           role="status"
           aria-live="polite"
           data-testid="upgrade-cta-coming-soon"
-          className="mb-3 text-sm font-medium text-brand-premium-dark"
+          className="mb-3 text-sm font-medium text-dusty-denim"
         >
           Subscriptions coming soon! We&apos;ll let you know when
           {" "}
@@ -107,7 +107,7 @@ export function UpgradeCta({
       {referralsNeeded > 0 && (
         <p
           data-testid="upgrade-cta-referral"
-          className="text-xs text-brand-text-muted"
+          className="text-xs text-dusty-denim"
         >
           Or invite {referralsNeeded} friend{referralsNeeded !== 1 ? "s" : ""}{" "}
           to unlock for free

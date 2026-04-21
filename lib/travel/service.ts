@@ -58,7 +58,16 @@ export interface TravelSessionSummary {
 
 export type ActivateResult =
   | { success: true; session: TravelSessionSummary }
-  | { success: false; error: string; code: "active_session_exists" | "location_failed" | "session_failed" | "validation" };
+  | {
+      success: false;
+      error: string;
+      code:
+        | "active_session_exists"
+        | "location_failed"
+        | "session_failed"
+        | "elo_seed_failed"
+        | "validation";
+    };
 
 export type DeactivateResult =
   | { success: true; session: TravelSessionSummary }
@@ -357,9 +366,54 @@ export async function activateTravel(
     };
   }
 
-  // Seed regional Elo scoped to the travel location.
+  // Seed regional Elo scoped to the travel location. If this fails, we
+  // MUST compensate by deleting the session row just inserted — otherwise
+  // the user is left with an active travel session and no travel Elo rows,
+  // which breaks the dashboard mid-trip (issue #236).
+  //
+  // Option A (Postgres RPC transaction) was considered but rejected: the
+  // Elo seeding pipeline lives in TypeScript (regional allergen filter +
+  // `initializeAllElo`) and porting it to plpgsql would duplicate the
+  // deterministic initializer. Option B — compensating delete — keeps the
+  // TS pipeline authoritative and achieves the atomicity guarantee at the
+  // service layer.
   const region: Region = loc.region ?? "Southeast";
-  await seedTravelElo(supabase, userId, loc.id, region);
+  const seeded = await seedTravelElo(supabase, userId, loc.id, region);
+
+  if (!seeded) {
+    // Compensating rollback: delete the session row so the user is not
+    // left in a half-activated state. We scope by id to avoid touching
+    // any unrelated session.
+    type DeleteChain = {
+      delete: () => {
+        eq: (col: string, val: string) => Promise<{
+          error: { message: string } | null;
+        }>;
+      };
+    };
+
+    const sessionId = insertResult.data.id;
+    const { error: rollbackError } = await (
+      supabase.from("travel_sessions") as unknown as DeleteChain
+    )
+      .delete()
+      .eq("id", sessionId);
+
+    if (rollbackError) {
+      // Compensating delete itself failed — surface loudly. The user now
+      // truly is in a broken state; operators must clean up manually.
+      logger.error("Travel session rollback failed after Elo seed failure", {
+        user_id_hash: userId,
+        reason: rollbackError.message,
+      });
+    }
+
+    return {
+      success: false,
+      error: "Failed to seed travel allergen rankings",
+      code: "elo_seed_failed",
+    };
+  }
 
   return { success: true, session: insertResult.data };
 }

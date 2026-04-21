@@ -47,7 +47,14 @@ interface TableState {
  * A minimal in-memory Supabase stub that supports the exact chain shapes
  * used by `lib/travel/service.ts`. Unsupported chains throw loudly.
  */
-function makeStub(state: TableState) {
+interface StubOptions {
+  /** Force user_allergen_elo.insert to fail with this error message. */
+  failEloInsert?: string;
+  /** Force travel_sessions.delete to fail (compensating rollback path). */
+  failSessionDelete?: string;
+}
+
+function makeStub(state: TableState, options: StubOptions = {}) {
   let idCounter = 1;
   function nextId() {
     return `id-${idCounter++}`;
@@ -168,6 +175,21 @@ function makeStub(state: TableState) {
           },
         }),
       }),
+      delete: () => ({
+        eq: (col: string, val: string) => {
+          if (options.failSessionDelete) {
+            return Promise.resolve({
+              error: { message: options.failSessionDelete },
+            });
+          }
+          const idx = state.travel_sessions.findIndex(
+            (r) =>
+              (r as unknown as Record<string, unknown>)[col] === val,
+          );
+          if (idx >= 0) state.travel_sessions.splice(idx, 1);
+          return Promise.resolve({ error: null });
+        },
+      }),
     };
   }
 
@@ -179,6 +201,11 @@ function makeStub(state: TableState) {
         location_id: string | null;
         elo_score: number;
       }>) => {
+        if (options.failEloInsert) {
+          return Promise.resolve({
+            error: { message: options.failEloInsert },
+          });
+        }
         for (const r of rows) {
           state.user_allergen_elo.push({
             id: nextId(),
@@ -306,6 +333,31 @@ describe("activateTravel", () => {
     }
   });
 
+  it("rolls back the session row when Elo seeding fails (atomicity, #236)", async () => {
+    const state = emptyState();
+    const client = makeStub(state, {
+      failEloInsert: "simulated elo insert failure",
+    });
+
+    const result = await activateTravel(client, USER_A, {
+      lat: 40.7,
+      lng: -74.0,
+      state: "NY",
+    });
+
+    expect(result.success).toBe(false);
+    if (!result.success) {
+      expect(result.code).toBe("elo_seed_failed");
+    }
+
+    // Compensating delete must have removed the session row — no active
+    // session should remain.
+    expect(state.travel_sessions).toHaveLength(0);
+
+    // No travel-scoped Elo rows should have been persisted.
+    expect(state.user_allergen_elo).toHaveLength(0);
+  });
+
   it("returns 409-style active_session_exists when a session is already open", async () => {
     const state = emptyState();
     const client = makeStub(state);
@@ -391,6 +443,27 @@ describe("getActiveSession", () => {
     const client = makeStub(state);
     const result = await getActiveSession(client, USER_A);
     expect(result).toBeNull();
+  });
+});
+
+describe("travel_sessions UPDATE policy migration (#236)", () => {
+  // RLS cannot be exercised against the in-memory stub (auth.uid() has no
+  // analogue). Instead we assert the SQL migration contains the WITH CHECK
+  // clause so the DB-level defense-in-depth is in place. This guards
+  // against regression of the user_id-reassignment attack.
+  it("adds WITH CHECK (auth.uid() = user_id) to travel_sessions_update_own", async () => {
+    const fs = await import("node:fs");
+    const path = await import("node:path");
+    const sqlPath = path.resolve(
+      process.cwd(),
+      "supabase/migrations/20260420120000_travel_sessions_update_with_check.sql",
+    );
+    const sql = fs.readFileSync(sqlPath, "utf8");
+    expect(sql).toMatch(/CREATE POLICY travel_sessions_update_own/);
+    expect(sql).toMatch(/USING \(auth\.uid\(\) = user_id\)/);
+    expect(sql).toMatch(/WITH CHECK \(auth\.uid\(\) = user_id\)/);
+    // Must drop the old policy first since WITH CHECK cannot be altered in place.
+    expect(sql).toMatch(/DROP POLICY travel_sessions_update_own/);
   });
 });
 

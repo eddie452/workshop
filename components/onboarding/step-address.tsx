@@ -32,10 +32,10 @@ export function StepAddress({ formData, onUpdate, onNext }: StepProps) {
     <form onSubmit={handleSubmit}>
       <div className="space-y-6">
         <div>
-          <h2 className="text-xl font-bold text-brand-primary-dark">
+          <h2 className="text-xl font-bold text-dusty-denim">
             Where do you live?
           </h2>
-          <p className="mt-2 text-sm text-brand-text-secondary">
+          <p className="mt-2 text-sm text-dusty-denim">
             Your address helps us identify regional allergens and auto-populate
             your home profile. We use it to predict which allergens are most
             likely to affect you.
@@ -45,7 +45,7 @@ export function StepAddress({ formData, onUpdate, onNext }: StepProps) {
         <div>
           <label
             htmlFor="address"
-            className="block text-sm font-medium text-brand-text"
+            className="block text-sm font-medium text-dusty-denim"
           >
             Home address
           </label>
@@ -60,11 +60,11 @@ export function StepAddress({ formData, onUpdate, onNext }: StepProps) {
             placeholder="123 Main St, City, State ZIP"
             autoFocus
             autoComplete="street-address"
-            className="mt-1 block w-full rounded-button border border-brand-border px-3 py-2 text-sm shadow-sm focus:border-brand-primary focus:outline-none focus:ring-1 focus:ring-brand-primary"
+            className="mt-1 block w-full rounded-button border border-champ-blue px-3 py-2 text-sm shadow-sm focus:border-champ-blue focus:outline-none focus:ring-1 focus:ring-champ-blue"
           />
           {error && (
             <p
-              className="mt-1 text-sm text-[#055A8C]"
+              className="mt-1 text-sm text-dusty-denim"
               role="alert"
             >
               {error}
@@ -72,14 +72,14 @@ export function StepAddress({ formData, onUpdate, onNext }: StepProps) {
           )}
         </div>
 
-        <p className="text-xs text-brand-text-muted">
+        <p className="text-xs text-dusty-denim">
           Your address is geocoded server-side. It is never shared or sold. We
           use it to look up property age, type, and regional pollen data.
         </p>
 
         <button
           type="submit"
-          className="w-full rounded-button bg-brand-premium px-4 py-2 text-sm font-medium text-white hover:bg-brand-premium/80 focus:outline-none focus:ring-2 focus:ring-brand-primary focus:ring-offset-2"
+          className="w-full rounded-button bg-dusty-denim px-4 py-2 text-sm font-medium text-white hover:bg-dusty-denim/80 focus:outline-none focus:ring-2 focus:ring-champ-blue focus:ring-offset-2"
         >
           Continue
         </button>

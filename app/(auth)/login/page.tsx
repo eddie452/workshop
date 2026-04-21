@@ -35,13 +35,13 @@ export default function LoginPage() {
 
   return (
     <div>
-      <h1 className="mb-6 text-center text-2xl font-bold text-brand-primary-dark">
+      <h1 className="mb-6 text-center text-2xl font-bold text-dusty-denim">
         Sign in to Allergy Madness
       </h1>
 
       <form onSubmit={handleSubmit} className="space-y-4">
         {error && (
-          <div className="rounded-card bg-[#E0F0F8] p-3 text-sm text-[#055A8C]">
+          <div className="rounded-card border border-alert-red bg-white p-3 text-sm text-alert-red">
             {error}
           </div>
         )}
@@ -49,7 +49,7 @@ export default function LoginPage() {
         <div>
           <label
             htmlFor="email"
-            className="mb-1 block text-sm font-medium text-brand-text"
+            className="mb-1 block text-sm font-medium text-dusty-denim"
           >
             Email
           </label>
@@ -59,7 +59,7 @@ export default function LoginPage() {
             required
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            className="w-full rounded-button border border-brand-border px-3 py-2 text-sm focus:border-brand-primary focus:outline-none focus:ring-1 focus:ring-brand-primary"
+            className="w-full rounded-button border border-champ-blue px-3 py-2 text-sm focus:border-champ-blue focus:outline-none focus:ring-1 focus:ring-champ-blue"
             placeholder="you@example.com"
           />
         </div>
@@ -67,7 +67,7 @@ export default function LoginPage() {
         <div>
           <label
             htmlFor="password"
-            className="mb-1 block text-sm font-medium text-brand-text"
+            className="mb-1 block text-sm font-medium text-dusty-denim"
           >
             Password
           </label>
@@ -77,7 +77,7 @@ export default function LoginPage() {
             required
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            className="w-full rounded-button border border-brand-border px-3 py-2 text-sm focus:border-brand-primary focus:outline-none focus:ring-1 focus:ring-brand-primary"
+            className="w-full rounded-button border border-champ-blue px-3 py-2 text-sm focus:border-champ-blue focus:outline-none focus:ring-1 focus:ring-champ-blue"
             placeholder="Enter your password"
           />
         </div>
@@ -85,15 +85,15 @@ export default function LoginPage() {
         <button
           type="submit"
           disabled={loading}
-          className="w-full rounded-button bg-brand-premium px-4 py-2 text-sm font-medium text-white hover:bg-brand-premium/80 disabled:opacity-50"
+          className="w-full rounded-button bg-dusty-denim px-4 py-2 text-sm font-medium text-white hover:bg-dusty-denim/80 disabled:opacity-50"
         >
           {loading ? "Signing in..." : "Sign in"}
         </button>
       </form>
 
-      <p className="mt-4 text-center text-sm text-brand-text-secondary">
+      <p className="mt-4 text-center text-sm text-dusty-denim">
         Don&apos;t have an account?{" "}
-        <Link href="/signup" className="text-brand-primary hover:underline">
+        <Link href="/signup" className="text-champ-blue hover:underline">
           Sign up
         </Link>
       </p>

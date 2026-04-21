@@ -35,10 +35,10 @@ export function StepHomeDetails({
     <form onSubmit={handleSubmit}>
       <div className="space-y-6">
         <div>
-          <h2 className="text-xl font-bold text-brand-primary-dark">
+          <h2 className="text-xl font-bold text-dusty-denim">
             About your home
           </h2>
-          <p className="mt-2 text-sm text-brand-text-secondary">
+          <p className="mt-2 text-sm text-dusty-denim">
             Home characteristics affect indoor allergen exposure. We
             auto-populate what we can — feel free to adjust.
           </p>
@@ -48,7 +48,7 @@ export function StepHomeDetails({
         <div>
           <label
             htmlFor="home_type"
-            className="block text-sm font-medium text-brand-text"
+            className="block text-sm font-medium text-dusty-denim"
           >
             Home type
           </label>
@@ -60,7 +60,7 @@ export function StepHomeDetails({
                 home_type: (e.target.value || null) as HomeType | null,
               })
             }
-            className="mt-1 block w-full rounded-button border border-brand-border bg-white px-3 py-2 text-sm"
+            className="mt-1 block w-full rounded-button border border-champ-blue bg-white px-3 py-2 text-sm"
           >
             <option value="">Select home type...</option>
             {HOME_TYPE_OPTIONS.map((opt) => (
@@ -75,7 +75,7 @@ export function StepHomeDetails({
         <div>
           <label
             htmlFor="year_built"
-            className="block text-sm font-medium text-brand-text"
+            className="block text-sm font-medium text-dusty-denim"
           >
             Year built (approximate)
           </label>
@@ -91,7 +91,7 @@ export function StepHomeDetails({
               })
             }
             placeholder="e.g. 1985"
-            className="mt-1 block w-full rounded-button border border-brand-border px-3 py-2 text-sm"
+            className="mt-1 block w-full rounded-button border border-champ-blue px-3 py-2 text-sm"
           />
         </div>
 
@@ -99,7 +99,7 @@ export function StepHomeDetails({
         <div>
           <label
             htmlFor="sqft"
-            className="block text-sm font-medium text-brand-text"
+            className="block text-sm font-medium text-dusty-denim"
           >
             Square footage (approximate)
           </label>
@@ -115,11 +115,11 @@ export function StepHomeDetails({
               })
             }
             placeholder="e.g. 1500"
-            className="mt-1 block w-full rounded-button border border-brand-border px-3 py-2 text-sm"
+            className="mt-1 block w-full rounded-button border border-champ-blue px-3 py-2 text-sm"
           />
         </div>
 
-        <p className="text-xs text-brand-text-muted">
+        <p className="text-xs text-dusty-denim">
           All fields are optional. Older homes and certain construction types may
           have higher indoor allergen risk.
         </p>
@@ -129,13 +129,13 @@ export function StepHomeDetails({
           <button
             type="button"
             onClick={onBack}
-            className="flex-1 rounded-button border border-brand-border bg-white px-4 py-2 text-sm font-medium text-brand-text hover:bg-brand-surface-muted"
+            className="flex-1 rounded-button border border-champ-blue bg-white px-4 py-2 text-sm font-medium text-dusty-denim hover:bg-white"
           >
             Back
           </button>
           <button
             type="submit"
-            className="flex-1 rounded-button bg-brand-premium px-4 py-2 text-sm font-medium text-white hover:bg-brand-premium/80"
+            className="flex-1 rounded-button bg-dusty-denim px-4 py-2 text-sm font-medium text-white hover:bg-dusty-denim/80"
           >
             Continue
           </button>

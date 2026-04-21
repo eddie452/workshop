@@ -96,11 +96,11 @@ export function ProcessingScreen({ formData }: ProcessingScreenProps) {
   if (error) {
     return (
       <div className="space-y-4 text-center">
-        <div className="rounded-card border border-brand-border bg-brand-premium-light p-4">
-          <p className="text-sm font-medium text-brand-premium">
+        <div className="rounded-card border border-champ-blue bg-white p-4">
+          <p className="text-sm font-medium text-dusty-denim">
             Something went wrong
           </p>
-          <p className="mt-1 text-sm text-brand-text-secondary">
+          <p className="mt-1 text-sm text-dusty-denim">
             {error}
           </p>
         </div>
@@ -112,7 +112,7 @@ export function ProcessingScreen({ formData }: ProcessingScreenProps) {
             setAnimationDone(false);
             submitOnboarding();
           }}
-          className="rounded-button bg-brand-premium px-4 py-2 text-sm font-medium text-white"
+          className="rounded-button bg-dusty-denim px-4 py-2 text-sm font-medium text-white"
         >
           Try again
         </button>
@@ -129,10 +129,10 @@ export function ProcessingScreen({ formData }: ProcessingScreenProps) {
       data-testid="processing-screen"
     >
       <div>
-        <h2 className="text-xl font-bold text-brand-primary-dark">
+        <h2 className="text-xl font-bold text-dusty-denim">
           Building your prediction
         </h2>
-        <p className="mt-2 text-sm text-brand-text-muted">
+        <p className="mt-2 text-sm text-dusty-denim">
           Analyzing your data against regional allergen profiles...
         </p>
       </div>
@@ -140,7 +140,7 @@ export function ProcessingScreen({ formData }: ProcessingScreenProps) {
       {/* Spinner */}
       <div className="flex justify-center">
         <div
-          className="h-12 w-12 animate-spin rounded-full border-4 border-brand-border border-t-brand-primary"
+          className="h-12 w-12 animate-spin rounded-full border-4 border-champ-blue border-t-dusty-denim"
           role="status"
           aria-label="Processing"
         />
@@ -148,7 +148,7 @@ export function ProcessingScreen({ formData }: ProcessingScreenProps) {
 
       {/* Current message */}
       <p
-        className="min-h-5 text-sm font-medium text-brand-text"
+        className="min-h-5 text-sm font-medium text-dusty-denim"
         data-testid="processing-message"
         aria-live="polite"
       >
@@ -157,9 +157,9 @@ export function ProcessingScreen({ formData }: ProcessingScreenProps) {
 
       {/* Progress bar */}
       <div className="mx-auto w-full max-w-xs">
-        <div className="h-2 w-full overflow-hidden rounded-full bg-brand-border-light">
+        <div className="h-2 w-full overflow-hidden rounded-full bg-white">
           <div
-            className="h-full rounded-full bg-brand-primary transition-all duration-500"
+            className="h-full rounded-full bg-champ-blue transition-all duration-500"
             style={{ width: `${progress}%` }}
             role="progressbar"
             aria-valuenow={progress}

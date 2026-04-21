@@ -48,17 +48,17 @@ export function StepHealthQuestions({
     <form onSubmit={handleSubmit}>
       <div className="space-y-6">
         <div>
-          <h2 className="text-xl font-bold text-brand-primary-dark">
+          <h2 className="text-xl font-bold text-dusty-denim">
             A few quick questions
           </h2>
-          <p className="mt-2 text-sm text-brand-text-secondary">
+          <p className="mt-2 text-sm text-dusty-denim">
             These help us fine-tune your allergen predictions.
           </p>
         </div>
 
         {/* Pets */}
         <fieldset className="border-none p-0 m-0">
-          <legend className="mb-2 text-sm font-medium text-brand-text">
+          <legend className="mb-2 text-sm font-medium text-dusty-denim">
             Do you have pets at home?
           </legend>
           <div className="flex gap-4">
@@ -94,8 +94,8 @@ export function StepHealthQuestions({
                     onClick={() => togglePetType(pet)}
                     className={`rounded-full border px-3 py-1 text-sm cursor-pointer ${
                       selected
-                        ? "border-brand-primary bg-brand-primary-light text-brand-primary-dark"
-                        : "border-brand-border bg-white text-brand-text"
+                        ? "border-champ-blue bg-champ-blue text-white"
+                        : "border-champ-blue bg-white text-dusty-denim"
                     }`}
                     aria-pressed={selected}
                   >
@@ -109,7 +109,7 @@ export function StepHealthQuestions({
 
         {/* Prior diagnosis */}
         <fieldset className="border-none p-0 m-0">
-          <legend className="mb-2 text-sm font-medium text-brand-text">
+          <legend className="mb-2 text-sm font-medium text-dusty-denim">
             Have you been diagnosed with allergies before?
           </legend>
           <div className="flex gap-4">
@@ -154,7 +154,7 @@ export function StepHealthQuestions({
                 seasonal_pattern: e.target.value as SeasonalPattern,
               })
             }
-            className="mt-1 block w-full rounded-button border border-brand-border bg-white px-3 py-2 text-sm"
+            className="mt-1 block w-full rounded-button border border-champ-blue bg-white px-3 py-2 text-sm"
           >
             {SEASONAL_OPTIONS.map((opt) => (
               <option key={opt.value} value={opt.value}>
@@ -166,7 +166,7 @@ export function StepHealthQuestions({
 
         {/* Indoor risk factors */}
         <fieldset className="border-none p-0 m-0">
-          <legend className="mb-2 text-sm font-medium text-brand-text">
+          <legend className="mb-2 text-sm font-medium text-dusty-denim">
             Indoor risk factors (check any that apply)
           </legend>
           <div className="space-y-2">
@@ -208,13 +208,13 @@ export function StepHealthQuestions({
           <button
             type="button"
             onClick={onBack}
-            className="flex-1 rounded-button border border-brand-border bg-white px-4 py-2 text-sm font-medium text-brand-text hover:bg-brand-surface-muted"
+            className="flex-1 rounded-button border border-champ-blue bg-white px-4 py-2 text-sm font-medium text-dusty-denim hover:bg-white"
           >
             Back
           </button>
           <button
             type="submit"
-            className="flex-1 rounded-button bg-brand-premium px-4 py-2 text-sm font-medium text-white hover:bg-brand-premium/80"
+            className="flex-1 rounded-button bg-dusty-denim px-4 py-2 text-sm font-medium text-white hover:bg-dusty-denim/80"
           >
             Continue
           </button>

@@ -59,7 +59,7 @@ export function DisclaimerModal({
       aria-modal="true"
       aria-labelledby="fda-modal-title"
       data-testid="disclaimer-modal"
-      className="fixed inset-0 z-50 flex items-center justify-center bg-brand-primary-dark/50"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-dusty-denim/50"
     >
       <div className="mx-4 max-w-md rounded-card bg-white p-6 shadow-xl">
         {/* Warning icon */}
@@ -69,19 +69,19 @@ export function DisclaimerModal({
           </span>
           <h2
             id="fda-modal-title"
-            className="text-lg font-bold text-brand-primary-dark"
+            className="text-lg font-bold text-dusty-denim"
           >
             Important Health Disclaimer
           </h2>
         </div>
 
         {/* Disclaimer label */}
-        <p className="mb-3 text-base font-semibold text-brand-primary-dark">
+        <p className="mb-3 text-base font-semibold text-dusty-denim">
           {FDA_DISCLAIMER_LABEL}
         </p>
 
         {/* Full disclaimer text */}
-        <p className="mb-6 text-sm leading-relaxed text-brand-text-secondary">
+        <p className="mb-6 text-sm leading-relaxed text-dusty-denim">
           {FDA_DISCLAIMER_FULL_TEXT}
         </p>
 
@@ -89,7 +89,7 @@ export function DisclaimerModal({
         {error && (
           <p
             data-testid="disclaimer-error"
-            className="mb-3 text-sm text-[#055A8C]"
+            className="mb-3 text-sm text-alert-red"
           >
             {error}
           </p>
@@ -100,7 +100,7 @@ export function DisclaimerModal({
           onClick={handleAcknowledge}
           disabled={loading}
           data-testid="acknowledge-button"
-          className="w-full rounded-button bg-brand-premium px-4 py-3 text-sm font-semibold text-white hover:bg-brand-premium/80 disabled:opacity-50 disabled:cursor-not-allowed"
+          className="w-full rounded-button bg-dusty-denim px-4 py-3 text-sm font-semibold text-white hover:bg-dusty-denim/80 disabled:opacity-50 disabled:cursor-not-allowed"
         >
           {loading ? "Saving..." : "I Understand"}
         </button>

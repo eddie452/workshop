@@ -235,3 +235,28 @@ body {
     animation: none !important;
   }
 }
+
+/* Bracket connector fade-in (ticket #238) — connectors fade in after
+   the node slide-in animation resolves so lines never render out of
+   sync with the nodes they connect. Delay is passed from `bracket.tsx`
+   via inline `animation-delay`. `prefers-reduced-motion` users get
+   a static, correctly-aligned bracket with connectors visible from
+   the first paint. */
+@keyframes bracket-connector-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.bracket-connector-enter {
+  animation: bracket-connector-fade-in 200ms ease-out both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bracket-connector-enter {
+    animation: none !important;
+  }
+}

@@ -122,6 +122,13 @@ export function Bracket({ nodes, ranked, showLines = true }: BracketProps) {
           // within the same column share a delay — keeps the sequence
           // readable without multiplying animation complexity.
           const roundDelayMs = roundIdx * 120;
+          // Connector fade-in delay (ticket #238): wait for the last node
+          // in this column to finish sliding in, then fade the connector
+          // so nodes and lines never render out of sync. 300ms matches
+          // `bracket-node-slide-in` duration in `app/globals.css`.
+          const lastNodeDelayMs =
+            roundDelayMs + Math.max(0, column.length - 1) * 40;
+          const connectorDelayMs = lastNodeDelayMs + 300;
           return (
             <div key={`round-group-${roundIdx}`} className="flex snap-start">
               <div
@@ -135,24 +142,36 @@ export function Bracket({ nodes, ranked, showLines = true }: BracketProps) {
                 >
                   {roundLabel(roundIdx, totalRounds)}
                 </h3>
-                <div className="flex flex-col justify-around gap-3">
-                  {column.map((vm, nodeIdx) => (
-                    <div
-                      key={`${vm.round}-${vm.matchId}`}
-                      data-testid={`bracket-node-wrap-${vm.round}-${vm.matchId}`}
-                      className="bracket-node-enter"
-                      style={{
-                        animationDelay: `${roundDelayMs + nodeIdx * 40}ms`,
-                      }}
-                    >
-                      <BracketNode node={vm} isFinal={isFinal} />
-                    </div>
-                  ))}
+                {/* Ticket #238: wrap the node stack + connector in a
+                    flex-row so the connector aligns to the node stack's
+                    vertical extent (excluding the round label) and can
+                    stretch to match variable node heights via flex-1. */}
+                <div className="flex flex-1 items-stretch">
+                  <div
+                    data-testid={`bracket-node-stack-${roundIdx}`}
+                    className="flex flex-1 flex-col gap-3"
+                  >
+                    {column.map((vm, nodeIdx) => (
+                      <div
+                        key={`${vm.round}-${vm.matchId}`}
+                        data-testid={`bracket-node-wrap-${vm.round}-${vm.matchId}`}
+                        className="bracket-node-enter flex-1"
+                        style={{
+                          animationDelay: `${roundDelayMs + nodeIdx * 40}ms`,
+                        }}
+                      >
+                        <BracketNode node={vm} isFinal={isFinal} />
+                      </div>
+                    ))}
+                  </div>
+                  {showLines && !isFinal && (
+                    <BracketConnector
+                      sourceMatchCount={column.length}
+                      animationDelayMs={connectorDelayMs}
+                    />
+                  )}
                 </div>
               </div>
-              {showLines && !isFinal && (
-                <BracketConnector sourceMatchCount={column.length} />
-              )}
             </div>
           );
         })}

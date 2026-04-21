@@ -66,10 +66,10 @@ export default async function CheckinPage() {
     <PageContainer width="sm">
       {/* Header */}
       <div className="mb-6">
-        <h1 className="m-0 mb-1 text-2xl font-bold text-brand-primary-dark">
+        <h1 className="m-0 mb-1 text-2xl font-bold text-dusty-denim">
           Daily Check-in
         </h1>
-        <p className="m-0 text-sm text-brand-text-secondary">
+        <p className="m-0 text-sm text-dusty-denim">
           How are your allergies today? Your response updates the leaderboard.
         </p>
       </div>
@@ -86,7 +86,7 @@ export default async function CheckinPage() {
       <div className="mt-6 text-center">
         <a
           href="/dashboard"
-          className="text-sm text-brand-primary no-underline hover:text-brand-primary-dark hover:underline"
+          className="text-sm text-champ-blue no-underline hover:text-dusty-denim hover:underline"
         >
           Back to Dashboard
         </a>

@@ -101,13 +101,13 @@ export function CheckinForm({ onSuccess, alreadyCheckedIn = false }: CheckinForm
   if (alreadyCheckedIn || submitted) {
     return (
       <div
-        className="rounded-card border border-brand-border bg-brand-primary-light p-6 text-center"
+        className="rounded-card border border-champ-blue bg-white p-6 text-center"
         data-testid="checkin-complete"
       >
-        <p className="text-lg font-semibold text-brand-primary-dark">
+        <p className="text-lg font-semibold text-dusty-denim">
           {submitted ? "Check-in submitted!" : "Already checked in today"}
         </p>
-        <p className="mt-2 text-sm text-brand-text-secondary">
+        <p className="mt-2 text-sm text-dusty-denim">
           {submitted
             ? "Your leaderboard is being updated."
             : "Come back tomorrow for your next check-in."}
@@ -126,7 +126,7 @@ export function CheckinForm({ onSuccess, alreadyCheckedIn = false }: CheckinForm
       {error && (
         <div
           role="alert"
-          className="rounded-card border border-[#B8E4F0] bg-[#E0F0F8] px-4 py-3 text-sm text-[#055A8C]"
+          className="rounded-card border border-alert-red bg-white px-4 py-3 text-sm text-alert-red"
           data-testid="checkin-error"
         >
           {error}
@@ -159,14 +159,14 @@ export function CheckinForm({ onSuccess, alreadyCheckedIn = false }: CheckinForm
         type="submit"
         disabled={isSubmitting}
         data-testid="checkin-submit"
-        className="w-full rounded-button bg-brand-premium px-4 py-3 text-base font-semibold text-white transition-colors hover:bg-brand-premium/80 disabled:cursor-not-allowed disabled:opacity-50"
+        className="w-full rounded-button bg-dusty-denim px-4 py-3 text-base font-semibold text-white transition-colors hover:bg-dusty-denim/80 disabled:cursor-not-allowed disabled:opacity-50"
       >
         {isSubmitting ? "Submitting..." : formData.severity === 0 ? "Log Symptom-Free Day" : "Submit Check-in"}
       </button>
 
       {/* Severity 0 hint */}
       {formData.severity === 0 && (
-        <p className="text-center text-xs text-brand-text-muted">
+        <p className="text-center text-xs text-dusty-denim">
           Logging a symptom-free day helps calibrate your Environmental Forecast.
         </p>
       )}

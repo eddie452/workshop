@@ -50,7 +50,7 @@ export function CategoryIcon({ category, size = 32 }: CategoryIconProps) {
       aria-label={config.label}
       data-testid="category-icon"
       data-category={category}
-      className="inline-flex items-center justify-center rounded-full bg-brand-primary"
+      className="inline-flex items-center justify-center rounded-full bg-champ-blue"
       style={{ width: size, height: size }}
     >
       <svg

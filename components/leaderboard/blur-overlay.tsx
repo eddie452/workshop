@@ -41,10 +41,10 @@ export function BlurOverlay({
       {/* Lock overlay — Dusty Denim scrim + strong backdrop blur */}
       <div
         data-testid="blur-lock-overlay"
-        className="absolute inset-0 flex flex-col items-center justify-center rounded-card bg-brand-primary-dark/70 backdrop-blur-lg"
+        className="absolute inset-0 flex flex-col items-center justify-center rounded-card bg-dusty-denim/70 backdrop-blur-lg"
       >
         <span
-          className="mb-2 inline-flex h-12 w-12 animate-pulse items-center justify-center rounded-full bg-brand-accent shadow-md"
+          className="mb-2 inline-flex h-12 w-12 animate-pulse items-center justify-center rounded-full bg-nature-pop shadow-md"
           aria-hidden="true"
         >
           <LockIcon size={24} stroke="#0682BB" />

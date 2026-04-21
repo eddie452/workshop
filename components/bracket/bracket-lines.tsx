@@ -12,7 +12,7 @@
  *      midpoint horizontal stub entering the next round
  *   3. Left stubs — short horizontal lines entering each match in round N+1
  *
- * All strokes use brand-primary (Champ Blue) via border color tokens.
+ * All strokes use champ-blue (Champ Blue) via border color tokens.
  * No raw hex, no black, no gray.
  */
 
@@ -46,9 +46,9 @@ export function BracketConnector({ sourceMatchCount }: BracketConnectorProps) {
           className="flex flex-col"
         >
           {/* Top half — upper feeder match elbow */}
-          <div className="h-8 w-6 border-r-2 border-t-2 border-brand-primary rounded-tr-lg" />
+          <div className="h-8 w-6 border-r-2 border-t-2 border-champ-blue rounded-tr-lg" />
           {/* Bottom half — lower feeder match elbow */}
-          <div className="h-8 w-6 border-r-2 border-b-2 border-brand-primary rounded-br-lg" />
+          <div className="h-8 w-6 border-r-2 border-b-2 border-champ-blue rounded-br-lg" />
         </div>
       ))}
     </div>

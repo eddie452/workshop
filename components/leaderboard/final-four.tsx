@@ -35,13 +35,13 @@ function FinalFourCard({ allergen }: { allergen: GatedRankedAllergen }) {
     <div
       data-testid="final-four-card"
       data-locked={locked}
-      className="rounded-card border border-brand-border bg-white p-4 shadow-sm"
+      className="rounded-card border border-champ-blue bg-white p-4 shadow-sm"
     >
       {/* Rank badge */}
       <div className="mb-2 flex items-center justify-between">
         <span
           data-testid="final-four-rank"
-          className="flex h-6 w-6 items-center justify-center rounded-full bg-brand-surface-muted text-xs font-bold text-brand-text-secondary"
+          className="flex h-6 w-6 items-center justify-center rounded-full bg-white text-xs font-bold text-dusty-denim"
         >
           #{allergen.rank}
         </span>
@@ -69,15 +69,15 @@ function FinalFourCard({ allergen }: { allergen: GatedRankedAllergen }) {
             data-testid="final-four-name"
             className={
               locked
-                ? "text-sm font-semibold tracking-widest text-brand-text-muted"
-                : "text-sm font-semibold text-brand-primary-dark"
+                ? "text-sm font-semibold tracking-widest text-dusty-denim"
+                : "text-sm font-semibold text-dusty-denim"
             }
           >
             {locked ? "???" : allergen.common_name}
           </p>
           <p
             data-testid="final-four-elo"
-            className="text-xs text-brand-text-muted"
+            className="text-xs text-dusty-denim"
           >
             {locked ? "Elo —" : `Elo ${allergen.elo_score}`}
           </p>

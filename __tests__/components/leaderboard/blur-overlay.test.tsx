@@ -61,13 +61,13 @@ describe("BlurOverlay", () => {
       </BlurOverlay>
     );
     const lockOverlay = screen.getByTestId("blur-lock-overlay");
-    expect(lockOverlay.className).toContain("bg-brand-primary-dark/70");
+    expect(lockOverlay.className).toContain("bg-dusty-denim/70");
     expect(lockOverlay.className).toContain("backdrop-blur-lg");
   });
 
   it("uses Nature Pop for the lock badge accent (sanctioned 2% use)", () => {
     // Ticket #151 — the lock badge on the overlay is one of the few
-    // sanctioned Nature Pop (`bg-brand-accent`) accents, signalling
+    // sanctioned Nature Pop (`bg-nature-pop`) accents, signalling
     // the upgrade affordance.
     render(
       <BlurOverlay>
@@ -77,6 +77,6 @@ describe("BlurOverlay", () => {
     const lockOverlay = screen.getByTestId("blur-lock-overlay");
     const lockBadge = lockOverlay.querySelector("span[aria-hidden='true']");
     expect(lockBadge).not.toBeNull();
-    expect(lockBadge?.className).toContain("bg-brand-accent");
+    expect(lockBadge?.className).toContain("bg-nature-pop");
   });
 });

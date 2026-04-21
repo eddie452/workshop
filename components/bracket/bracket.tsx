@@ -55,9 +55,9 @@ export function Bracket({ nodes, ranked, showLines = true }: BracketProps) {
       <section
         data-testid="bracket-empty"
         aria-label="Tournament bracket"
-        className="rounded-card border border-brand-border bg-brand-surface-muted p-6"
+        className="rounded-card border border-champ-blue bg-white p-6"
       >
-        <p className="text-sm text-brand-text-secondary">
+        <p className="text-sm text-dusty-denim">
           No matches yet — check in with your symptoms to run a tournament.
         </p>
       </section>
@@ -85,13 +85,13 @@ export function Bracket({ nodes, ranked, showLines = true }: BracketProps) {
     <section
       data-testid="bracket"
       aria-label="Tournament bracket"
-      className="rounded-card border border-brand-border bg-brand-surface p-4 shadow-sm"
+      className="rounded-card border border-champ-blue bg-white p-4 shadow-sm"
     >
       <header className="mb-4">
-        <h2 className="text-lg font-bold text-brand-primary-dark">
+        <h2 className="text-lg font-bold text-dusty-denim">
           Tournament Bracket
         </h2>
-        <p className="mt-1 text-xs text-brand-text-secondary">
+        <p className="mt-1 text-xs text-dusty-denim">
           Head-to-head matchups that produced your most likely trigger.
         </p>
       </header>
@@ -99,7 +99,7 @@ export function Bracket({ nodes, ranked, showLines = true }: BracketProps) {
       {isLowConfidence && (
         <p
           data-testid="bracket-low-confidence"
-          className="mb-4 rounded-card border border-brand-border bg-brand-primary-light px-3 py-2 text-xs font-medium text-brand-primary-dark"
+          className="mb-4 rounded-card border border-champ-blue bg-white px-3 py-2 text-xs font-medium text-dusty-denim"
         >
           Low confidence — keep tracking your symptoms to sharpen these
           results.
@@ -131,7 +131,7 @@ export function Bracket({ nodes, ranked, showLines = true }: BracketProps) {
               >
                 <h3
                   data-testid={`bracket-round-label-${roundIdx}`}
-                  className="text-xs font-semibold uppercase tracking-wider text-brand-text-accent"
+                  className="text-xs font-semibold uppercase tracking-wider text-dusty-denim"
                 >
                   {roundLabel(roundIdx, totalRounds)}
                 </h3>
@@ -166,16 +166,16 @@ export function Bracket({ nodes, ranked, showLines = true }: BracketProps) {
         <p
           data-testid="bracket-scroll-hint"
           aria-hidden="true"
-          className="mt-2 text-center text-[11px] font-medium text-brand-text-secondary sm:hidden"
+          className="mt-2 text-center text-[11px] font-medium text-dusty-denim sm:hidden"
         >
           Swipe to see all rounds &rarr;
         </p>
       )}
 
-      <footer className="mt-4 border-t border-brand-border-light pt-3">
+      <footer className="mt-4 border-t border-white pt-3">
         <p
           data-testid="bracket-fda-disclaimer"
-          className="text-xs font-medium text-brand-primary-dark"
+          className="text-xs font-medium text-dusty-denim"
         >
           {FDA_DISCLAIMER_LABEL}
         </p>

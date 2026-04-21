@@ -99,7 +99,7 @@ describe("BracketNode", () => {
         render(<BracketNode node={nodeWithWinnerPosterior(0.8)} isFinal />);
         const badge = screen.getByTestId("bracket-champion-badge");
         expect(badge.textContent).toContain("Most likely trigger");
-        expect(badge.className).toContain("bg-brand-accent");
+        expect(badge.className).toContain("bg-nature-pop");
       });
 
       it("does NOT show the champion badge when posterior < 0.75 even if final", () => {
@@ -116,7 +116,7 @@ describe("BracketNode", () => {
     expect(screen.queryByTestId("bracket-champion-badge")).toBeNull();
     const badge = screen.getByTestId("bracket-winner-badge");
     expect(badge).toBeDefined();
-    expect(badge.className).toContain("border-brand-primary");
+    expect(badge.className).toContain("border-champ-blue");
   });
 
   it("has an accessible name combining both sides", () => {

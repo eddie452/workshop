@@ -133,13 +133,13 @@ describe("Bracket with lines (integration)", () => {
     expect(screen.queryByTestId("bracket-connector")).toBeNull();
   });
 
-  it("connector elements use brand-primary border color", () => {
+  it("connector elements use champ-blue border color", () => {
     render(<BracketConnector sourceMatchCount={2} />);
     const pair = screen.getByTestId("bracket-connector-pair-0");
     const divs = pair.querySelectorAll("div");
-    // Each elbow div should have the border-brand-primary class
+    // Each elbow div should have the border-champ-blue class
     for (const div of divs) {
-      expect(div.className).toContain("border-brand-primary");
+      expect(div.className).toContain("border-champ-blue");
     }
   });
 });

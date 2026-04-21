@@ -31,14 +31,14 @@ export interface BracketNodeProps {
 function barColorForTier(tier: ConfidenceTier): string {
   switch (tier) {
     case "very_high":
-      return "bg-brand-primary-dark";
+      return "bg-dusty-denim";
     case "high":
-      return "bg-brand-primary";
+      return "bg-champ-blue";
     case "medium":
-      return "bg-brand-primary-light";
+      return "bg-white";
     case "low":
     default:
-      return "bg-brand-border";
+      return "bg-champ-blue";
   }
 }
 
@@ -68,8 +68,8 @@ function Side({ side, isWinner, isChampion, label }: SideProps) {
       className={[
         "flex items-center gap-3 rounded-card border px-3 py-2",
         isWinner
-          ? "border-brand-primary bg-brand-primary-light"
-          : "border-brand-border-light bg-brand-surface opacity-60",
+          ? "border-champ-blue bg-white"
+          : "border-white bg-white opacity-60",
       ].join(" ")}
     >
       {/* Thumbnail — plain <img> to avoid next/image domain config */}
@@ -79,7 +79,7 @@ function Side({ side, isWinner, isChampion, label }: SideProps) {
         alt={side.thumbnail.alt}
         width={40}
         height={40}
-        className="h-10 w-10 flex-shrink-0 rounded-pill border border-brand-border-light bg-brand-surface-muted"
+        className="h-10 w-10 flex-shrink-0 rounded-pill border border-white bg-white"
       />
 
       <div className="min-w-0 flex-1">
@@ -87,7 +87,7 @@ function Side({ side, isWinner, isChampion, label }: SideProps) {
           <span
             data-testid={`bracket-side-${label}-name`}
             className={[
-              "truncate text-sm font-semibold text-brand-primary-dark",
+              "truncate text-sm font-semibold text-dusty-denim",
               isWinner ? "" : "line-through",
             ].join(" ")}
           >
@@ -96,7 +96,7 @@ function Side({ side, isWinner, isChampion, label }: SideProps) {
           {isWinner && isChampion && (
             <span
               data-testid="bracket-champion-badge"
-              className="inline-flex items-center rounded-pill bg-brand-accent px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-brand-primary-dark"
+              className="inline-flex items-center rounded-pill bg-nature-pop px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-dusty-denim"
             >
               Most likely trigger
             </span>
@@ -104,7 +104,7 @@ function Side({ side, isWinner, isChampion, label }: SideProps) {
           {isWinner && !isChampion && (
             <span
               data-testid="bracket-winner-badge"
-              className="inline-flex items-center rounded-pill border border-brand-primary bg-brand-surface px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-brand-primary-dark"
+              className="inline-flex items-center rounded-pill border border-champ-blue bg-white px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-dusty-denim"
             >
               Advances
             </span>
@@ -116,7 +116,7 @@ function Side({ side, isWinner, isChampion, label }: SideProps) {
         <div
           data-testid={`bracket-side-${label}-bar`}
           data-tier={tier}
-          className="mt-1 h-1.5 w-full overflow-hidden rounded-pill bg-brand-surface-muted"
+          className="mt-1 h-1.5 w-full overflow-hidden rounded-pill bg-white"
           role="presentation"
         >
           <div
@@ -143,7 +143,7 @@ export function BracketNode({ node, isFinal = false }: BracketNodeProps) {
       data-round={node.round}
       data-match={node.matchId}
       aria-label={accessibleName}
-      className="flex flex-col gap-2 rounded-card border border-brand-border bg-brand-surface p-2 shadow-sm"
+      className="flex flex-col gap-2 rounded-card border border-champ-blue bg-white p-2 shadow-sm"
     >
       <Side
         side={left}

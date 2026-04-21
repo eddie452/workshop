@@ -16,19 +16,19 @@ export function TriggerChampionCard({ allergen }: TriggerChampionCardProps) {
   return (
     <div
       data-testid="trigger-champion-card"
-      className="rounded-xl border-2 border-brand-primary bg-gradient-to-br from-[#E0F5FB] to-[#D6F0F8] p-6 shadow-lg"
+      className="rounded-xl border-2 border-champ-blue bg-white p-6 shadow-lg"
     >
       {/* Champion header — white icon on blue circle per brand guide */}
       <div className="mb-3 flex items-center gap-2">
         <span
-          className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-brand-primary"
+          className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-champ-blue"
           aria-hidden="true"
         >
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
             <path d="M2 4L6 12H18L22 4M6 12L4 20H20L18 12M12 4V2M8 4L7 2M16 4L17 2" />
           </svg>
         </span>
-        <h2 className="text-sm font-bold uppercase tracking-wider text-brand-primary-dark">
+        <h2 className="text-sm font-bold uppercase tracking-wider text-dusty-denim">
           Trigger Champion
         </h2>
       </div>
@@ -47,7 +47,7 @@ export function TriggerChampionCard({ allergen }: TriggerChampionCardProps) {
         <CategoryIcon category={allergen.category} />
         <h3
           data-testid="champion-name"
-          className="text-2xl font-bold text-brand-primary-dark"
+          className="text-2xl font-bold text-dusty-denim"
         >
           {allergen.common_name}
         </h3>
@@ -57,7 +57,7 @@ export function TriggerChampionCard({ allergen }: TriggerChampionCardProps) {
       <div className="flex items-center gap-3">
         <span
           data-testid="champion-elo"
-          className="text-lg font-semibold text-brand-text-accent"
+          className="text-lg font-semibold text-dusty-denim"
         >
           Elo {allergen.elo_score}
         </span>

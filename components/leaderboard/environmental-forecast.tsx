@@ -98,8 +98,8 @@ function DataCard({
   children: React.ReactNode;
 }) {
   return (
-    <div className="rounded-card border border-brand-border bg-white p-4">
-      <h3 className="mb-3 text-sm font-semibold text-brand-text">
+    <div className="rounded-card border border-champ-blue bg-white p-4">
+      <h3 className="mb-3 text-sm font-semibold text-dusty-denim">
         {title}
       </h3>
       {children}
@@ -118,11 +118,11 @@ function DataRow({
 }) {
   return (
     <div className="flex items-center justify-between py-1">
-      <span className="text-sm text-brand-text-secondary">
+      <span className="text-sm text-dusty-denim">
         {label}
       </span>
       <span
-        className={`text-sm font-medium ${color ? "" : "text-brand-text"}`}
+        className={`text-sm font-medium ${color ? "" : "text-dusty-denim"}`}
         style={color ? { color } : undefined}
       >
         {value}
@@ -140,7 +140,7 @@ function LoadingSkeleton() {
       {[1, 2, 3].map((i) => (
         <div
           key={i}
-          className="h-24 animate-pulse rounded-card bg-brand-surface-muted"
+          className="h-24 animate-pulse rounded-card bg-white"
         />
       ))}
     </div>
@@ -151,9 +151,9 @@ function NoDataMessage() {
   return (
     <div
       data-testid="forecast-no-data"
-      className="rounded-card border border-brand-border bg-brand-surface-muted p-6 text-center"
+      className="rounded-card border border-champ-blue bg-white p-6 text-center"
     >
-      <p className="text-sm text-brand-text-secondary">
+      <p className="text-sm text-dusty-denim">
         Environmental data is not available. Please ensure your home location is
         set in your profile to receive local forecasts.
       </p>
@@ -183,9 +183,9 @@ export function EnvironmentalForecast({
       className="space-y-4"
     >
       {/* Good news banner */}
-      <div className="rounded-xl border border-brand-border bg-brand-primary-light p-5">
+      <div className="rounded-xl border border-champ-blue bg-white p-5">
         <div className="flex items-center gap-3">
-          <span className="inline-flex h-10 w-10 items-center justify-center rounded-full bg-brand-primary" aria-hidden="true">
+          <span className="inline-flex h-10 w-10 items-center justify-center rounded-full bg-champ-blue" aria-hidden="true">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
               <circle cx="12" cy="12" r="5" />
               <line x1="12" y1="1" x2="12" y2="3" />
@@ -199,10 +199,10 @@ export function EnvironmentalForecast({
             </svg>
           </span>
           <div>
-            <h2 className="text-base font-bold text-brand-primary-dark">
+            <h2 className="text-base font-bold text-dusty-denim">
               No Symptoms Today
             </h2>
-            <p className="mt-1 text-sm text-brand-text-secondary">
+            <p className="mt-1 text-sm text-dusty-denim">
               Great news! Here is what is currently in the air around you.
             </p>
           </div>
@@ -241,8 +241,8 @@ export function EnvironmentalForecast({
             {/* Species filter: show only species with UPI > 0 (active),
                 capped at 5 to avoid overwhelming the display */}
             {data.pollen.species.length > 0 && (
-              <div className="mt-2 border-t border-brand-border-light pt-2">
-                <p className="mb-1 text-xs font-medium text-brand-text-muted">
+              <div className="mt-2 border-t border-white pt-2">
+                <p className="mb-1 text-xs font-medium text-dusty-denim">
                   Active Species
                 </p>
                 {data.pollen.species
@@ -297,13 +297,13 @@ export function EnvironmentalForecast({
                   />
                 )}
                 {data.aqi.station && (
-                  <p className="mt-2 text-xs text-brand-text-faint">
+                  <p className="mt-2 text-xs text-dusty-denim">
                     Station: {data.aqi.station}
                   </p>
                 )}
               </>
             ) : (
-              <p className="text-sm text-brand-text-muted">
+              <p className="text-sm text-dusty-denim">
                 AQI data unavailable for your location.
               </p>
             )}
@@ -337,7 +337,7 @@ export function EnvironmentalForecast({
                 )}
               </>
             ) : (
-              <p className="text-sm text-brand-text-muted">
+              <p className="text-sm text-dusty-denim">
                 Weather data unavailable for your location.
               </p>
             )}
@@ -346,7 +346,7 @@ export function EnvironmentalForecast({
           {/* Region info */}
           {data.region && (
             <p
-              className="text-center text-xs text-brand-text-faint"
+              className="text-center text-xs text-dusty-denim"
               data-testid="forecast-region"
             >
               Region: {data.region}

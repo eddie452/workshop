@@ -9,9 +9,9 @@
  *   2. Secondary: upgrade to Pro (existing upgrade route)
  *
  * Design tokens:
- *   - Background: brand-accent (Nature Pop) — sanctioned Final Four use per
+ *   - Background: nature-pop (Nature Pop) — sanctioned Final Four use per
  *     Champ Health Design System 2% rule.
- *   - Text: brand-primary-dark (Dusty Denim) for AA contrast on Nature Pop.
+ *   - Text: dusty-denim for AA contrast on Nature Pop.
  *
  * Achievement framing: when the user has 1-2 referral credits, the copy
  * shifts to "Almost there — unlock N more" with a progress indicator.
@@ -65,15 +65,15 @@ export function FinalFourUnlockCta({
   return (
     <div
       data-testid="final-four-unlock-cta"
-      className="mt-6 rounded-xl bg-brand-accent p-6 text-center shadow-md"
+      className="mt-6 rounded-xl bg-nature-pop p-6 text-center shadow-md"
     >
       <h3
         data-testid="final-four-unlock-cta-headline"
-        className="mb-2 text-lg font-bold text-brand-primary-dark"
+        className="mb-2 text-lg font-bold text-dusty-denim"
       >
         {headline}
       </h3>
-      <p className="mb-4 text-sm text-brand-primary-dark/80">
+      <p className="mb-4 text-sm text-dusty-denim/80">
         See ranks #2-#4 and their confidence scores. Invite 3 friends to
         unlock free — or upgrade to Pro.
       </p>
@@ -92,8 +92,8 @@ export function FinalFourUnlockCta({
                 data-filled={idx < referralCount}
                 className={
                   idx < referralCount
-                    ? "h-2 flex-1 rounded-full bg-brand-primary-dark"
-                    : "h-2 flex-1 rounded-full bg-brand-primary-dark/20"
+                    ? "h-2 flex-1 rounded-full bg-dusty-denim"
+                    : "h-2 flex-1 rounded-full bg-dusty-denim/20"
                 }
               />
             ),
@@ -106,7 +106,7 @@ export function FinalFourUnlockCta({
         href="/referral"
         data-testid="final-four-unlock-invite"
         onClick={() => onInviteClick?.()}
-        className="mb-3 inline-block w-full rounded-button bg-brand-premium px-4 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-brand-premium/80"
+        className="mb-3 inline-block w-full rounded-button bg-dusty-denim px-4 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-dusty-denim/80"
       >
         {inviteLabel}
       </Link>
@@ -117,7 +117,7 @@ export function FinalFourUnlockCta({
         href="/referral"
         data-testid="final-four-unlock-upgrade"
         onClick={() => onUpgradeClick?.()}
-        className="inline-block text-xs font-medium text-brand-primary-dark underline underline-offset-2 hover:text-brand-primary"
+        className="inline-block text-xs font-medium text-dusty-denim underline underline-offset-2 hover:text-champ-blue"
       >
         Or upgrade to Pro
       </Link>

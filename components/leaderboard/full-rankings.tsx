@@ -50,12 +50,12 @@ export function FullRankings({
 
   return (
     <div>
-      <h2 className="mb-3 text-lg font-semibold text-brand-text-accent">
+      <h2 className="mb-3 text-lg font-semibold text-dusty-denim">
         Full Rankings
       </h2>
       <div
         data-testid="full-rankings"
-        className="divide-y divide-brand-border-light rounded-card border border-brand-border bg-white"
+        className="divide-y divide-white rounded-card border border-champ-blue bg-white"
       >
         {fullRankings.map((allergen) => {
           const thumb = getAllergenThumbnail(allergen.allergen_id);
@@ -66,7 +66,7 @@ export function FullRankings({
               className="flex items-center justify-between px-4 py-3"
             >
               <div className="flex items-center gap-3">
-                <span className="flex h-7 w-7 items-center justify-center rounded-full bg-brand-surface-muted text-xs font-bold text-brand-text-muted">
+                <span className="flex h-7 w-7 items-center justify-center rounded-full bg-white text-xs font-bold text-dusty-denim">
                   #{allergen.rank}
                 </span>
                 {/* Thumbnail — plain <img> for SVG compat, matches bracket-node pattern (#179) */}
@@ -79,7 +79,7 @@ export function FullRankings({
                   className="h-12 w-12 flex-shrink-0 rounded-xl"
                 />
                 <CategoryIcon category={allergen.category} />
-                <span className="text-sm font-medium text-brand-primary-dark">
+                <span className="text-sm font-medium text-dusty-denim">
                   {allergen.common_name}
                 </span>
               </div>
@@ -88,7 +88,7 @@ export function FullRankings({
                   data-testid="ranking-score-details"
                   className="flex items-center gap-2"
                 >
-                  <span className="text-xs text-brand-text-muted">
+                  <span className="text-xs text-dusty-denim">
                     {allergen.elo_score}
                   </span>
                   <span data-testid="row-confidence-score">
@@ -105,11 +105,11 @@ export function FullRankings({
                 >
                   <span
                     aria-hidden="true"
-                    className="inline-flex h-5 w-5 items-center justify-center rounded-full bg-brand-primary"
+                    className="inline-flex h-5 w-5 items-center justify-center rounded-full bg-champ-blue"
                   >
                     <LockIcon size={12} stroke="white" strokeWidth={2.5} />
                   </span>
-                  <span className="text-xs font-medium text-brand-primary">
+                  <span className="text-xs font-medium text-champ-blue">
                     Upgrade
                   </span>
                 </div>

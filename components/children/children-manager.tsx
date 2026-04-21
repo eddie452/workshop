@@ -135,7 +135,7 @@ export function ChildrenManager({
   if (!hasAccess) {
     return (
       <div data-testid="children-upgrade-gate" className="space-y-4">
-        <p className="text-sm text-brand-text-secondary">
+        <p className="text-sm text-dusty-denim">
           Track allergies for up to {maxChildren} children with independent
           leaderboards and check-ins.
         </p>
@@ -149,7 +149,7 @@ export function ChildrenManager({
   return (
     <div data-testid="children-manager" className="space-y-4">
       <div className="flex items-center justify-between">
-        <p className="text-sm text-brand-text-secondary">
+        <p className="text-sm text-dusty-denim">
           {childList.length} of {maxChildren} profiles used
         </p>
         {canAddMore && !showAddForm && (
@@ -160,7 +160,7 @@ export function ChildrenManager({
               setShowAddForm(true);
               setError(null);
             }}
-            className="rounded-button bg-brand-premium px-4 py-2 text-xs font-semibold text-white hover:bg-brand-premium/80"
+            className="rounded-button bg-dusty-denim px-4 py-2 text-xs font-semibold text-white hover:bg-dusty-denim/80"
           >
             + Add Child
           </button>
@@ -184,19 +184,19 @@ export function ChildrenManager({
       {childList.length === 0 && !showAddForm ? (
         <div
           data-testid="empty-children-state"
-          className="rounded-card border border-dashed border-brand-border bg-brand-surface-muted p-8 text-center"
+          className="rounded-card border border-dashed border-champ-blue bg-white p-8 text-center"
         >
-          <p className="mb-2 text-sm font-medium text-brand-text">
+          <p className="mb-2 text-sm font-medium text-dusty-denim">
             No child profiles yet
           </p>
-          <p className="mb-4 text-xs text-brand-text-muted">
+          <p className="mb-4 text-xs text-dusty-denim">
             Add a child to track their allergy triggers independently.
           </p>
           <button
             type="button"
             data-testid="empty-state-add-btn"
             onClick={() => setShowAddForm(true)}
-            className="rounded-button bg-brand-premium px-4 py-2 text-xs font-semibold text-white hover:bg-brand-premium/80"
+            className="rounded-button bg-dusty-denim px-4 py-2 text-xs font-semibold text-white hover:bg-dusty-denim/80"
           >
             + Add Your First Child
           </button>
@@ -232,7 +232,7 @@ export function ChildrenManager({
       {!canAddMore && (
         <p
           data-testid="max-children-notice"
-          className="text-center text-xs text-brand-text-muted"
+          className="text-center text-xs text-dusty-denim"
         >
           Maximum of {maxChildren} child profiles reached.
         </p>

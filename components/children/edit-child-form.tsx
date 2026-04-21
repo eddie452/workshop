@@ -37,9 +37,9 @@ export function EditChildForm({ child, onSubmit, onCancel, isLoading, error }: E
     <form
       data-testid="edit-child-form"
       onSubmit={handleSubmit}
-      className="rounded-card border border-brand-primary-light bg-white p-4 shadow-sm"
+      className="rounded-card border border-champ-blue bg-white p-4 shadow-sm"
     >
-      <h3 className="mb-3 text-sm font-semibold text-brand-primary-dark">Edit Child</h3>
+      <h3 className="mb-3 text-sm font-semibold text-dusty-denim">Edit Child</h3>
 
       <ChildFormFields
         idPrefix="edit"
@@ -56,7 +56,7 @@ export function EditChildForm({ child, onSubmit, onCancel, isLoading, error }: E
           onClick={onCancel}
           disabled={isLoading}
           data-testid="edit-child-cancel-btn"
-          className="rounded-button border border-brand-border bg-white px-4 py-2 text-xs font-medium text-brand-text hover:bg-brand-surface-muted disabled:opacity-50"
+          className="rounded-button border border-champ-blue bg-white px-4 py-2 text-xs font-medium text-dusty-denim hover:bg-white disabled:opacity-50"
         >
           Cancel
         </button>
@@ -64,7 +64,7 @@ export function EditChildForm({ child, onSubmit, onCancel, isLoading, error }: E
           type="submit"
           data-testid="edit-child-save-btn"
           disabled={isLoading || !name.trim()}
-          className="rounded-button bg-brand-premium px-4 py-2 text-xs font-semibold text-white hover:bg-brand-premium/80 disabled:opacity-50"
+          className="rounded-button bg-dusty-denim px-4 py-2 text-xs font-semibold text-white hover:bg-dusty-denim/80 disabled:opacity-50"
         >
           {isLoading ? "Saving..." : "Save"}
         </button>

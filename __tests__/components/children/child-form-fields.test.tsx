@@ -91,13 +91,13 @@ describe("ChildFormFields", () => {
     expect(screen.queryByTestId("edit-child-error")).toBeNull();
   });
 
-  it("uses brand tokens (not raw hex) for the error banner classes", () => {
+  it("uses 4-color tokens (not raw hex) for the error banner classes", () => {
     renderFields({ idPrefix: "add", error: "Oops" });
 
     const banner = screen.getByTestId("add-child-error");
     // Guard against regressing back to raw hex literals.
-    expect(banner.className).toContain("bg-brand-premium-light");
-    expect(banner.className).toContain("text-brand-premium");
+    expect(banner.className).toContain("bg-white");
+    expect(banner.className).toContain("text-alert-red");
     expect(banner.className).not.toMatch(/#E0F0F8/i);
     expect(banner.className).not.toMatch(/#055A8C/i);
   });

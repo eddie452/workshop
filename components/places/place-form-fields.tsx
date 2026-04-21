@@ -36,8 +36,8 @@ export interface PlaceFormFieldsProps {
 }
 
 const INPUT_CLASS =
-  "w-full rounded-button border border-brand-border px-3 py-2 text-sm text-brand-primary-dark placeholder-brand-text-faint focus:border-brand-primary focus:outline-none focus:ring-1 focus:ring-brand-primary";
-const LABEL_CLASS = "mb-1 block text-xs font-medium text-brand-text";
+  "w-full rounded-button border border-champ-blue px-3 py-2 text-sm text-dusty-denim placeholder-dusty-denim focus:border-champ-blue focus:outline-none focus:ring-1 focus:ring-champ-blue";
+const LABEL_CLASS = "mb-1 block text-xs font-medium text-dusty-denim";
 
 export function PlaceFormFields({
   idPrefix,
@@ -62,7 +62,7 @@ export function PlaceFormFields({
       {error && (
         <p
           data-testid={errorTestId}
-          className="mb-3 rounded-card bg-brand-premium-light p-2 text-xs text-brand-premium"
+          className="mb-3 rounded-card bg-white p-2 text-xs text-alert-red"
         >
           {error}
         </p>

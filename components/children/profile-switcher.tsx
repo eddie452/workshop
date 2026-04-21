@@ -45,14 +45,14 @@ export function ProfileSwitcher({
         type="button"
         data-testid="profile-switcher-toggle"
         onClick={() => setIsOpen(!isOpen)}
-        className="flex items-center gap-2 rounded-button border border-brand-border bg-white px-3 py-2 text-sm font-medium text-brand-text shadow-sm hover:bg-brand-surface-muted"
+        className="flex items-center gap-2 rounded-button border border-champ-blue bg-white px-3 py-2 text-sm font-medium text-dusty-denim shadow-sm hover:bg-white"
       >
-        <span className="flex h-6 w-6 items-center justify-center rounded-full bg-brand-primary-light text-xs font-bold text-brand-primary">
+        <span className="flex h-6 w-6 items-center justify-center rounded-full bg-champ-blue text-xs font-bold text-white">
           {activeLabel.charAt(0).toUpperCase()}
         </span>
         <span>{activeLabel}</span>
         <svg
-          className={`h-4 w-4 text-brand-text-faint transition-transform ${isOpen ? "rotate-180" : ""}`}
+          className={`h-4 w-4 text-dusty-denim transition-transform ${isOpen ? "rotate-180" : ""}`}
           fill="none"
           viewBox="0 0 24 24"
           stroke="currentColor"
@@ -64,7 +64,7 @@ export function ProfileSwitcher({
       {isOpen && (
         <div
           data-testid="profile-switcher-menu"
-          className="absolute left-0 z-10 mt-1 w-56 rounded-card border border-brand-border bg-white py-1 shadow-lg"
+          className="absolute left-0 z-10 mt-1 w-56 rounded-card border border-champ-blue bg-white py-1 shadow-lg"
         >
           {/* Parent/Self option */}
           <button
@@ -76,18 +76,18 @@ export function ProfileSwitcher({
             }}
             className={`flex w-full items-center gap-2 px-4 py-2 text-left text-sm ${
               activeChildId === null
-                ? "bg-brand-primary-light font-semibold text-brand-primary"
-                : "text-brand-text hover:bg-brand-surface-muted"
+                ? "bg-champ-blue font-semibold text-white"
+                : "text-dusty-denim hover:bg-white"
             }`}
           >
-            <span className="flex h-6 w-6 items-center justify-center rounded-full bg-brand-surface-muted text-xs font-bold text-brand-text-secondary">
+            <span className="flex h-6 w-6 items-center justify-center rounded-full bg-white text-xs font-bold text-dusty-denim">
               {parentLabel.charAt(0).toUpperCase()}
             </span>
             {parentLabel} (Me)
           </button>
 
           {/* Divider */}
-          <div className="my-1 border-t border-brand-border-light" />
+          <div className="my-1 border-t border-champ-blue" />
 
           {/* Child options */}
           {childProfiles.map((child) => (
@@ -101,11 +101,11 @@ export function ProfileSwitcher({
               }}
               className={`flex w-full items-center gap-2 px-4 py-2 text-left text-sm ${
                 activeChildId === child.id
-                  ? "bg-brand-primary-light font-semibold text-brand-primary"
-                  : "text-brand-text hover:bg-brand-surface-muted"
+                  ? "bg-champ-blue font-semibold text-white"
+                  : "text-dusty-denim hover:bg-white"
               }`}
             >
-              <span className="flex h-6 w-6 items-center justify-center rounded-full bg-brand-primary-light text-xs font-bold text-brand-primary">
+              <span className="flex h-6 w-6 items-center justify-center rounded-full bg-champ-blue text-xs font-bold text-white">
                 {child.name.charAt(0).toUpperCase()}
               </span>
               {child.name}

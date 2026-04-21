@@ -46,9 +46,9 @@ export function EditPlaceForm({
     <form
       data-testid="edit-place-form"
       onSubmit={handleSubmit}
-      className="rounded-card border border-brand-primary-light bg-white p-4 shadow-sm"
+      className="rounded-card border border-champ-blue bg-white p-4 shadow-sm"
     >
-      <h3 className="mb-3 text-sm font-semibold text-brand-primary-dark">
+      <h3 className="mb-3 text-sm font-semibold text-dusty-denim">
         Edit Saved Place
       </h3>
 
@@ -71,7 +71,7 @@ export function EditPlaceForm({
           onClick={onCancel}
           disabled={isLoading}
           data-testid="edit-place-cancel-btn"
-          className="rounded-button border border-brand-border bg-white px-4 py-2 text-xs font-medium text-brand-text hover:bg-brand-surface-muted disabled:opacity-50"
+          className="rounded-button border border-champ-blue bg-white px-4 py-2 text-xs font-medium text-dusty-denim hover:bg-white disabled:opacity-50"
         >
           Cancel
         </button>
@@ -79,7 +79,7 @@ export function EditPlaceForm({
           type="submit"
           data-testid="edit-place-save-btn"
           disabled={isLoading || !nickname.trim()}
-          className="rounded-button bg-brand-premium px-4 py-2 text-xs font-semibold text-white hover:bg-brand-premium/80 disabled:opacity-50"
+          className="rounded-button bg-dusty-denim px-4 py-2 text-xs font-semibold text-white hover:bg-dusty-denim/80 disabled:opacity-50"
         >
           {isLoading ? "Saving..." : "Save"}
         </button>

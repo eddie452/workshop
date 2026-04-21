@@ -143,3 +143,64 @@ describe("Bracket with lines (integration)", () => {
     }
   });
 });
+
+describe("BracketConnector alignment (ticket #238)", () => {
+  it("pair wrappers use flex-1 so heights scale with node sizes", () => {
+    render(<BracketConnector sourceMatchCount={4} />);
+    const pair0 = screen.getByTestId("bracket-connector-pair-0");
+    const pair1 = screen.getByTestId("bracket-connector-pair-1");
+    // Dynamic elbow heights (Fix 1) — pair wrappers must flex to span
+    // their feeder pair's vertical extent instead of using fixed `h-8`.
+    expect(pair0.className).toContain("flex-1");
+    expect(pair1.className).toContain("flex-1");
+  });
+
+  it("elbow halves use flex-1 (no fixed h-8 pixel height)", () => {
+    render(<BracketConnector sourceMatchCount={2} />);
+    const pair = screen.getByTestId("bracket-connector-pair-0");
+    const halves = pair.querySelectorAll("div");
+    for (const half of halves) {
+      expect(half.className).toContain("flex-1");
+      // Guard against regression to the fixed h-8 that caused #238.
+      expect(half.className).not.toContain("h-8");
+    }
+  });
+
+  it("connector column matches source gap-3 and uses self-stretch for parent-height alignment", () => {
+    render(<BracketConnector sourceMatchCount={4} />);
+    const connector = screen.getByTestId("bracket-connector");
+    // `gap-3` aligns pair boundaries with the source node stack's gap.
+    expect(connector.className).toContain("gap-3");
+    // `self-stretch` lets flex-row parent size the connector to the
+    // node stack's height (Fix 2 — explicit positioning strategy).
+    expect(connector.className).toContain("self-stretch");
+    // `justify-around` was the old alignment bug — must not return.
+    expect(connector.className).not.toContain("justify-around");
+  });
+
+  it("connector receives a fade-in animation class for reveal sync (Fix 3)", () => {
+    render(<BracketConnector sourceMatchCount={2} animationDelayMs={540} />);
+    const connector = screen.getByTestId("bracket-connector");
+    expect(connector.className).toContain("bracket-connector-enter");
+    expect(connector.getAttribute("style")).toContain("540ms");
+  });
+
+  it("bracket places connector as sibling of node stack, not of the label", () => {
+    // Alignment anchor: connector must live inside the flex-row with the
+    // node stack so `items-stretch` makes connector height == stack
+    // height. If the connector regressed to being a sibling of the
+    // round label (h3), the stack's `data-testid` wrapper would not be
+    // the connector's direct parent.
+    const trace = buildBracketTrace(makeEntries(8));
+    render(<Bracket nodes={trace} ranked={makeRanked(8)} />);
+    const connectors = screen.getAllByTestId("bracket-connector");
+    for (const connector of connectors) {
+      const row = connector.parentElement;
+      expect(row).not.toBeNull();
+      // The flex-row wrapper should contain both the node stack and
+      // the connector as siblings.
+      const stack = row?.querySelector("[data-testid^='bracket-node-stack-']");
+      expect(stack).not.toBeNull();
+    }
+  });
+});

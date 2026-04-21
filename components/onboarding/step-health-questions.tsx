@@ -142,7 +142,7 @@ export function StepHealthQuestions({
         <div>
           <label
             htmlFor="seasonal_pattern"
-            className="block text-sm font-medium text-brand-text"
+            className="block text-sm font-medium text-dusty-denim"
           >
             When are your symptoms worst?
           </label>

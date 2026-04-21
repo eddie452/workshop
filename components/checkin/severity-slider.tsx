@@ -17,7 +17,7 @@ interface SeveritySliderProps {
 export function SeveritySlider({ value, onChange }: SeveritySliderProps) {
   return (
     <fieldset className="border-none p-0 m-0">
-      <legend className="mb-3 text-base font-semibold text-brand-primary-dark">
+      <legend className="mb-3 text-base font-semibold text-dusty-denim">
         How are your allergies today?
       </legend>
 
@@ -35,8 +35,8 @@ export function SeveritySlider({ value, onChange }: SeveritySliderProps) {
               onClick={() => onChange(level.value)}
               className={`cursor-pointer rounded-card border-2 p-3 text-left transition-colors ${
                 isSelected
-                  ? "border-brand-primary bg-brand-primary-light"
-                  : "border-brand-border bg-white hover:border-brand-border"
+                  ? "border-champ-blue bg-champ-blue text-white"
+                  : "border-champ-blue bg-white text-dusty-denim hover:border-champ-blue"
               }`}
             >
               <div className="mb-1 flex items-center gap-2">
@@ -45,11 +45,11 @@ export function SeveritySlider({ value, onChange }: SeveritySliderProps) {
                   style={{ backgroundColor: level.color }}
                   aria-hidden="true"
                 />
-                <span className="text-sm font-semibold text-brand-primary-dark">
+                <span className={`text-sm font-semibold ${isSelected ? "text-white" : "text-dusty-denim"}`}>
                   {level.label}
                 </span>
               </div>
-              <p className="text-xs text-brand-text-muted">
+              <p className={`text-xs ${isSelected ? "text-white" : "text-dusty-denim"}`}>
                 {level.description}
               </p>
             </button>

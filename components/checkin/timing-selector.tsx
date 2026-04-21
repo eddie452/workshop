@@ -27,7 +27,7 @@ export function TimingSelector({
     <div className="space-y-6">
       {/* Peak time */}
       <fieldset className="border-none p-0 m-0">
-        <legend className="mb-3 text-base font-semibold text-brand-primary-dark">
+        <legend className="mb-3 text-base font-semibold text-dusty-denim">
           When are symptoms worst?
         </legend>
 
@@ -44,8 +44,8 @@ export function TimingSelector({
                 onClick={() => onPeakTimeChange(option.value)}
                 className={`cursor-pointer rounded-button border-2 px-4 py-2 text-sm font-medium transition-colors ${
                   isSelected
-                    ? "border-brand-primary bg-brand-primary-light text-brand-primary-dark"
-                    : "border-brand-border bg-white text-brand-text hover:border-brand-border"
+                    ? "border-champ-blue bg-champ-blue text-white"
+                    : "border-champ-blue bg-white text-dusty-denim hover:border-champ-blue"
                 }`}
               >
                 {option.label}
@@ -57,7 +57,7 @@ export function TimingSelector({
 
       {/* Indoor / outdoor context */}
       <fieldset className="border-none p-0 m-0">
-        <legend className="mb-3 text-base font-semibold text-brand-primary-dark">
+        <legend className="mb-3 text-base font-semibold text-dusty-denim">
           Where did you spend most of your time?
         </legend>
 
@@ -77,8 +77,8 @@ export function TimingSelector({
                 onClick={() => onIndoorsChange(option.value)}
                 className={`cursor-pointer rounded-button border-2 px-4 py-2 text-sm font-medium transition-colors ${
                   isSelected
-                    ? "border-brand-primary bg-brand-primary-light text-brand-primary-dark"
-                    : "border-brand-border bg-white text-brand-text hover:border-brand-border"
+                    ? "border-champ-blue bg-champ-blue text-white"
+                    : "border-champ-blue bg-white text-dusty-denim hover:border-champ-blue"
                 }`}
               >
                 {option.label}

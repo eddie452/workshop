@@ -34,9 +34,9 @@ export function AddChildForm({ onSubmit, onCancel, isLoading, error }: AddChildF
     <form
       data-testid="add-child-form"
       onSubmit={handleSubmit}
-      className="rounded-card border border-brand-primary-light bg-white p-4 shadow-sm"
+      className="rounded-card border border-champ-blue bg-white p-4 shadow-sm"
     >
-      <h3 className="mb-3 text-sm font-semibold text-brand-primary-dark">Add Child</h3>
+      <h3 className="mb-3 text-sm font-semibold text-dusty-denim">Add Child</h3>
 
       <ChildFormFields
         idPrefix="add"
@@ -52,7 +52,7 @@ export function AddChildForm({ onSubmit, onCancel, isLoading, error }: AddChildF
           type="button"
           onClick={onCancel}
           disabled={isLoading}
-          className="rounded-button border border-brand-border bg-white px-4 py-2 text-xs font-medium text-brand-text hover:bg-brand-surface-muted disabled:opacity-50"
+          className="rounded-button border border-champ-blue bg-white px-4 py-2 text-xs font-medium text-dusty-denim hover:bg-white disabled:opacity-50"
         >
           Cancel
         </button>
@@ -60,7 +60,7 @@ export function AddChildForm({ onSubmit, onCancel, isLoading, error }: AddChildF
           type="submit"
           data-testid="save-child-btn"
           disabled={isLoading || !name.trim()}
-          className="rounded-button bg-brand-premium px-4 py-2 text-xs font-semibold text-white hover:bg-brand-premium/80 disabled:opacity-50"
+          className="rounded-button bg-dusty-denim px-4 py-2 text-xs font-semibold text-white hover:bg-dusty-denim/80 disabled:opacity-50"
         >
           {isLoading ? "Saving..." : "Save"}
         </button>

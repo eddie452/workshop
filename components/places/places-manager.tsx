@@ -135,7 +135,7 @@ export function PlacesManager({ initialPlaces }: PlacesManagerProps) {
   return (
     <div data-testid="places-manager" className="space-y-4">
       <div className="flex items-center justify-between">
-        <p className="text-sm text-brand-text-secondary">
+        <p className="text-sm text-dusty-denim">
           {placeList.length} saved place{placeList.length === 1 ? "" : "s"}
         </p>
         {!showAddForm && (
@@ -146,7 +146,7 @@ export function PlacesManager({ initialPlaces }: PlacesManagerProps) {
               setShowAddForm(true);
               setError(null);
             }}
-            className="rounded-button bg-brand-premium px-4 py-2 text-xs font-semibold text-white hover:bg-brand-premium/80"
+            className="rounded-button bg-dusty-denim px-4 py-2 text-xs font-semibold text-white hover:bg-dusty-denim/80"
           >
             + Add Place
           </button>
@@ -168,12 +168,12 @@ export function PlacesManager({ initialPlaces }: PlacesManagerProps) {
       {placeList.length === 0 && !showAddForm ? (
         <div
           data-testid="empty-places-state"
-          className="rounded-card border border-dashed border-brand-border bg-brand-surface-muted p-8 text-center"
+          className="rounded-card border border-dashed border-champ-blue bg-white p-8 text-center"
         >
-          <p className="mb-2 text-sm font-medium text-brand-text">
+          <p className="mb-2 text-sm font-medium text-dusty-denim">
             No saved places yet
           </p>
-          <p className="mb-4 text-xs text-brand-text-muted">
+          <p className="mb-4 text-xs text-dusty-denim">
             Save recurring locations (grandma&apos;s house, vacation home) to
             track their allergen profile independently.
           </p>
@@ -181,7 +181,7 @@ export function PlacesManager({ initialPlaces }: PlacesManagerProps) {
             type="button"
             data-testid="empty-state-add-place-btn"
             onClick={() => setShowAddForm(true)}
-            className="rounded-button bg-brand-premium px-4 py-2 text-xs font-semibold text-white hover:bg-brand-premium/80"
+            className="rounded-button bg-dusty-denim px-4 py-2 text-xs font-semibold text-white hover:bg-dusty-denim/80"
           >
             + Add Your First Place
           </button>

@@ -35,23 +35,23 @@ export function PlaceCard({ place, onDelete, onEdit }: PlaceCardProps) {
   return (
     <div
       data-testid="place-card"
-      className="flex items-center justify-between rounded-card border border-brand-border bg-white p-4 shadow-sm"
+      className="flex items-center justify-between rounded-card border border-champ-blue bg-white p-4 shadow-sm"
     >
       <div className="flex min-w-0 items-center gap-3">
-        <div className="flex h-10 w-10 items-center justify-center rounded-full bg-brand-primary-light text-sm font-bold text-brand-primary">
+        <div className="flex h-10 w-10 items-center justify-center rounded-full bg-champ-blue text-sm font-bold text-white">
           {nickname.charAt(0).toUpperCase()}
         </div>
         <div className="min-w-0">
-          <p className="truncate text-sm font-semibold text-brand-primary-dark">
+          <p className="truncate text-sm font-semibold text-dusty-denim">
             {nickname}
           </p>
           {place.address && (
-            <p className="truncate text-xs text-brand-text-muted">
+            <p className="truncate text-xs text-dusty-denim">
               {place.address}
             </p>
           )}
           {lastVisit && (
-            <p className="text-xs text-brand-text-muted">
+            <p className="text-xs text-dusty-denim">
               Last visit: {lastVisit}
             </p>
           )}
@@ -62,7 +62,7 @@ export function PlaceCard({ place, onDelete, onEdit }: PlaceCardProps) {
         <button
           type="button"
           data-testid="edit-place-btn"
-          className="rounded-button border border-brand-border bg-white px-3 py-1.5 text-xs font-medium text-brand-text hover:bg-brand-surface-muted"
+          className="rounded-button border border-champ-blue bg-white px-3 py-1.5 text-xs font-medium text-dusty-denim hover:bg-white"
           onClick={() => onEdit(place.id)}
         >
           Edit
@@ -73,7 +73,7 @@ export function PlaceCard({ place, onDelete, onEdit }: PlaceCardProps) {
             <button
               type="button"
               data-testid="confirm-delete-place-btn"
-              className="rounded-button bg-brand-premium px-3 py-1.5 text-xs font-medium text-white hover:bg-brand-premium/80"
+              className="rounded-button bg-dusty-denim px-3 py-1.5 text-xs font-medium text-white hover:bg-dusty-denim/80"
               onClick={() => {
                 onDelete(place.id);
                 setConfirmDelete(false);
@@ -83,7 +83,7 @@ export function PlaceCard({ place, onDelete, onEdit }: PlaceCardProps) {
             </button>
             <button
               type="button"
-              className="rounded-button border border-brand-border bg-white px-3 py-1.5 text-xs font-medium text-brand-text hover:bg-brand-surface-muted"
+              className="rounded-button border border-champ-blue bg-white px-3 py-1.5 text-xs font-medium text-dusty-denim hover:bg-white"
               onClick={() => setConfirmDelete(false)}
             >
               Cancel
@@ -93,7 +93,7 @@ export function PlaceCard({ place, onDelete, onEdit }: PlaceCardProps) {
           <button
             type="button"
             data-testid="delete-place-btn"
-            className="rounded-button border border-brand-border bg-white px-3 py-1.5 text-xs font-medium text-brand-premium hover:bg-brand-premium-light"
+            className="rounded-button border border-champ-blue bg-white px-3 py-1.5 text-xs font-medium text-dusty-denim hover:bg-white"
             onClick={() => setConfirmDelete(true)}
           >
             Remove

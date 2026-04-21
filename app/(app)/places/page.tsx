@@ -30,10 +30,10 @@ export default async function PlacesPage() {
   return (
     <PageContainer>
       <div className="mb-6">
-        <h1 className="m-0 text-2xl font-bold text-brand-primary-dark">
+        <h1 className="m-0 text-2xl font-bold text-dusty-denim">
           Saved Places
         </h1>
-        <p className="mt-1 mb-0 text-sm text-brand-text-secondary">
+        <p className="mt-1 mb-0 text-sm text-dusty-denim">
           Track allergen exposure at recurring locations like a grandparent&apos;s
           house or a vacation home.
         </p>

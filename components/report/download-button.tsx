@@ -59,7 +59,7 @@ export function DownloadReportButton({
         onClick={handleDownload}
         disabled={isLoading}
         data-testid="download-report-button"
-        className="inline-flex items-center gap-2 rounded-button bg-brand-premium px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-brand-premium/80 disabled:cursor-not-allowed disabled:opacity-50"
+        className="inline-flex items-center gap-2 rounded-button bg-dusty-denim px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-dusty-denim/80 disabled:cursor-not-allowed disabled:opacity-50"
       >
         {/* Download icon (inline SVG to avoid dependency) */}
         <svg
@@ -86,7 +86,7 @@ export function DownloadReportButton({
         <p
           role="alert"
           data-testid="download-report-error"
-          className="mt-2 text-sm text-red-600"
+          className="mt-2 text-sm text-alert-red"
         >
           {error}
         </p>

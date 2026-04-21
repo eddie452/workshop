@@ -5,8 +5,10 @@
  * These values MUST stay in sync with the CSS custom properties
  * defined in app/globals.css.
  *
- * For UI components, use Tailwind utility classes instead:
- *   bg-brand-primary, text-brand-accent, border-brand-warning, etc.
+ * For UI components, use the canonical 4-color Tailwind utilities:
+ *   bg-champ-blue, bg-dusty-denim, bg-white, bg-nature-pop, text-alert-red
+ * (Legacy aliases bg-brand-* continue to resolve to the canonical
+ * tokens via app/globals.css — see epic #243.)
  *
  * For PDF generation (jsPDF), use the RGB tuples exported here.
  */

@@ -10,7 +10,7 @@
  *
  * Displays a numeric confidence score (0-1) as a rounded percentage
  * with a layperson label. Uses the Nature Pop accent color for the
- * percent / bar fill only; labels use brand-text-secondary for AA
+ * percent / bar fill only; labels use dusty-denim for AA
  * compliance.
  *
  * When `score` is null or undefined, the component renders nothing
@@ -18,9 +18,9 @@
  * engine, or null when no numeric confidence is available.
  *
  * Bucket intensity (no red/green — Nature Pop opacity tiers):
- *   high   : text-brand-accent
- *   medium : text-brand-accent/75
- *   low    : text-brand-accent/50
+ *   high   : text-nature-pop
+ *   medium : text-nature-pop/75
+ *   low    : text-nature-pop/50
  *
  * Variants:
  *   compact : percent + label (default, readable at 12px)
@@ -53,9 +53,9 @@ const BUCKET_SPOKEN: Record<ConfidenceBucket, string> = {
 };
 
 const PERCENT_INTENSITY: Record<ConfidenceBucket, string> = {
-  high: "text-brand-accent",
-  medium: "text-brand-accent/75",
-  low: "text-brand-accent/50",
+  high: "text-nature-pop",
+  medium: "text-nature-pop/75",
+  low: "text-nature-pop/50",
 };
 
 export function ConfidenceBadge({
@@ -79,14 +79,14 @@ export function ConfidenceBadge({
         data-bucket={info.bucket}
         aria-label={ariaLabel}
         role="img"
-        className="relative h-5 w-full overflow-hidden rounded-full bg-brand-primary-dark/20"
+        className="relative h-5 w-full overflow-hidden rounded-full bg-dusty-denim/20"
       >
         <div
           data-testid="confidence-bar-fill"
-          className="h-full bg-brand-accent transition-[width] duration-300"
+          className="h-full bg-nature-pop transition-[width] duration-300"
           style={{ width: info.percent }}
         />
-        <span className="absolute inset-0 flex items-center justify-center text-xs font-semibold text-brand-primary-dark">
+        <span className="absolute inset-0 flex items-center justify-center text-xs font-semibold text-dusty-denim">
           {info.percent}
         </span>
       </div>
@@ -110,10 +110,10 @@ export function ConfidenceBadge({
         <span className={`${percentClass} ${PERCENT_INTENSITY[info.bucket]}`}>
           {info.percent}
         </span>
-        <span className="text-xs font-medium text-brand-text-secondary">
+        <span className="text-xs font-medium text-dusty-denim">
           {info.label}
         </span>
-        <span className="text-xs text-brand-text-secondary">
+        <span className="text-xs text-dusty-denim">
           {info.tagline}
         </span>
       </div>
@@ -132,7 +132,7 @@ export function ConfidenceBadge({
       <span className={`${percentClass} ${PERCENT_INTENSITY[info.bucket]}`}>
         {info.percent}
       </span>
-      <span className="text-[10px] font-medium text-brand-text-secondary">
+      <span className="text-[10px] font-medium text-dusty-denim">
         {info.label}
       </span>
     </span>

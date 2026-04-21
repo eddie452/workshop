@@ -64,7 +64,7 @@ export function NavBar({ authState }: NavBarProps) {
 
   return (
     <header
-      className="border-b border-white/20 bg-brand-premium"
+      className="border-b border-white/20 bg-dusty-denim"
       data-testid="nav-bar"
       data-auth-state={authState}
     >
@@ -116,7 +116,7 @@ export function NavBar({ authState }: NavBarProps) {
               </Link>
               <Link
                 href="/signup"
-                className="rounded-button bg-brand-accent px-4 py-2 text-sm font-semibold text-brand-primary-dark transition-colors hover:bg-brand-accent-dark"
+                className="rounded-button bg-nature-pop px-4 py-2 text-sm font-semibold text-dusty-denim transition-colors hover:bg-nature-pop"
               >
                 Get Started
               </Link>
@@ -169,7 +169,7 @@ export function NavBar({ authState }: NavBarProps) {
       {/* Mobile menu */}
       {mobileMenuOpen && (
         <div
-          className="border-t border-white/20 bg-brand-premium px-4 pb-3 pt-2 sm:hidden"
+          className="border-t border-white/20 bg-dusty-denim px-4 pb-3 pt-2 sm:hidden"
           data-testid="nav-bar-mobile-menu"
         >
           {isAuthenticated ? (
@@ -210,7 +210,7 @@ export function NavBar({ authState }: NavBarProps) {
               <Link
                 href="/signup"
                 onClick={() => setMobileMenuOpen(false)}
-                className="mt-1 block rounded-button bg-brand-accent px-3 py-2 text-sm font-semibold text-brand-primary-dark transition-colors hover:bg-brand-accent-dark"
+                className="mt-1 block rounded-button bg-nature-pop px-3 py-2 text-sm font-semibold text-dusty-denim transition-colors hover:bg-nature-pop"
               >
                 Get Started
               </Link>

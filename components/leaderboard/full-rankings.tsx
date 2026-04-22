@@ -50,6 +50,16 @@ export function FullRankings({
 
   return (
     <div>
+      {/* "Your Allergen Leaderboard" title (#276) — co-located with the
+          list it labels when the dashboard gates Full Rankings behind
+          the "View All" reveal. Prior placement above the champion
+          orphaned the title. */}
+      <h1
+        data-testid="full-rankings-title"
+        className="mb-2 text-2xl font-bold text-dusty-denim"
+      >
+        Your Allergen Leaderboard
+      </h1>
       <h2 className="mb-3 text-lg font-semibold text-dusty-denim">
         Full Rankings
       </h2>

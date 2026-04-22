@@ -16,10 +16,10 @@ export function TriggerChampionCard({ allergen }: TriggerChampionCardProps) {
   return (
     <div
       data-testid="trigger-champion-card"
-      className="rounded-xl border-2 border-champ-blue bg-white p-6 shadow-lg"
+      className="flex flex-col items-center rounded-xl border-2 border-champ-blue bg-white p-6 text-center shadow-lg"
     >
       {/* Champion header — white icon on blue circle per brand guide */}
-      <div className="mb-3 flex items-center gap-2">
+      <div className="mb-3 flex items-center justify-center gap-2">
         <span
           className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-champ-blue"
           aria-hidden="true"
@@ -34,7 +34,7 @@ export function TriggerChampionCard({ allergen }: TriggerChampionCardProps) {
       </div>
 
       {/* Allergen name + thumbnail + category */}
-      <div className="mb-3 flex items-center gap-3">
+      <div className="mb-3 flex items-center justify-center gap-3">
         {/* Thumbnail — plain <img> for SVG compat, matches bracket-node pattern (#179) */}
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
@@ -54,7 +54,7 @@ export function TriggerChampionCard({ allergen }: TriggerChampionCardProps) {
       </div>
 
       {/* Elo score + confidence */}
-      <div className="flex items-center gap-3">
+      <div className="flex items-center justify-center gap-3">
         <span
           data-testid="champion-elo"
           className="text-lg font-semibold text-dusty-denim"

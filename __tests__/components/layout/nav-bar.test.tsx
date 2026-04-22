@@ -181,6 +181,28 @@ describe("NavBar", () => {
     });
   });
 
+  describe("desktop padding + spacing (#276)", () => {
+    it("authenticated nav items use comfortable per-item padding so text isn't cramped", () => {
+      render(<NavBar authState="authenticated" />);
+      const dashLink = screen
+        .getAllByRole("link")
+        .find((a) => a.getAttribute("href") === "/dashboard" && a.textContent === "Dashboard");
+      expect(dashLink).toBeDefined();
+      // Base padding contract — px-5 py-2.5 keeps "Dashboard" / "Check-in" etc.
+      // from touching the pill edges, and the active pill inherits the same.
+      expect(dashLink?.className).toContain("px-5");
+      expect(dashLink?.className).toContain("py-2.5");
+    });
+
+    it("desktop action row uses a ≥ gap-3 gap between nav items", () => {
+      const { container } = render(<NavBar authState="authenticated" />);
+      // The desktop action row is the first `hidden sm:flex` container.
+      const row = container.querySelector("div.hidden.sm\\:flex");
+      expect(row).not.toBeNull();
+      expect(row?.className).toContain("gap-3");
+    });
+  });
+
   describe("mobile hamburger (both states)", () => {
     it("toggles mobile menu in authenticated state", () => {
       render(<NavBar authState="authenticated" />);

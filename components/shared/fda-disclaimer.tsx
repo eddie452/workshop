@@ -66,12 +66,12 @@ export function FdaDisclaimer({
       role="status"
       aria-label="FDA disclaimer"
       data-testid="fda-disclaimer"
-      className={`rounded-card border border-champ-blue bg-white px-4 py-3 ${className}`.trim()}
+      className={`rounded-card border border-champ-blue bg-white px-6 py-4 ${className}`.trim()}
     >
-      <p className="text-sm font-semibold text-dusty-denim">
+      <p className="break-words text-sm font-semibold text-dusty-denim">
         {FDA_DISCLAIMER_LABEL}
       </p>
-      <p className="mt-1 text-xs text-dusty-denim">
+      <p className="mt-1 break-words text-xs text-dusty-denim">
         {FDA_DISCLAIMER_FULL_TEXT}
       </p>
     </div>

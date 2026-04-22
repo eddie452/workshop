@@ -38,4 +38,12 @@ describe("SeveritySlider", () => {
     expect(screen.getByText("No symptoms today")).toBeDefined();
     expect(screen.getByText("Minor, barely noticeable")).toBeDefined();
   });
+
+  it("centers content inside each severity button (regression #279)", () => {
+    render(<SeveritySlider value={0} onChange={vi.fn()} />);
+    const btn = screen.getByTestId("severity-1");
+    expect(btn.className).toContain("justify-center");
+    expect(btn.className).toContain("items-center");
+    expect(btn.className).toContain("text-center");
+  });
 });

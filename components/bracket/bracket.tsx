@@ -85,13 +85,13 @@ export function Bracket({ nodes, ranked, showLines = true }: BracketProps) {
     <section
       data-testid="bracket"
       aria-label="Tournament bracket"
-      className="rounded-card border border-champ-blue bg-white p-4 shadow-sm"
+      className="rounded-card border border-champ-blue bg-white p-6 shadow-sm"
     >
-      <header className="mb-4">
-        <h2 className="text-lg font-bold text-dusty-denim">
+      <header className="mb-4 px-1">
+        <h2 className="break-words text-lg font-bold text-dusty-denim">
           Tournament Bracket
         </h2>
-        <p className="mt-1 text-xs text-dusty-denim">
+        <p className="mt-1 break-words text-xs text-dusty-denim">
           Head-to-head matchups that produced your most likely trigger.
         </p>
       </header>
@@ -155,7 +155,7 @@ export function Bracket({ nodes, ranked, showLines = true }: BracketProps) {
                       <div
                         key={`${vm.round}-${vm.matchId}`}
                         data-testid={`bracket-node-wrap-${vm.round}-${vm.matchId}`}
-                        className="bracket-node-enter flex-1"
+                        className="bracket-node-enter flex flex-1 flex-col justify-center"
                         style={{
                           animationDelay: `${roundDelayMs + nodeIdx * 40}ms`,
                         }}

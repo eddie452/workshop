@@ -80,7 +80,7 @@ export function NavBar({ authState }: NavBarProps) {
         </Link>
 
         {/* Desktop actions */}
-        <div className="hidden items-center gap-1 sm:flex">
+        <div className="hidden items-center gap-3 sm:flex">
           {isAuthenticated ? (
             <>
               {AUTHENTICATED_LINKS.map((link) => (
@@ -88,7 +88,7 @@ export function NavBar({ authState }: NavBarProps) {
                   key={link.href}
                   href={link.href}
                   aria-current={isActive(link.href) ? "page" : undefined}
-                  className={`rounded-button px-3 py-2 text-sm font-medium transition-colors ${
+                  className={`rounded-button px-5 py-2.5 text-sm font-medium transition-colors ${
                     isActive(link.href)
                       ? "bg-white/20 text-white"
                       : "text-white/80 hover:bg-white/10 hover:text-white"
@@ -101,7 +101,7 @@ export function NavBar({ authState }: NavBarProps) {
                 type="button"
                 onClick={handleSignOut}
                 data-testid="sign-out-button"
-                className="ml-2 rounded-button px-3 py-2 text-sm font-medium text-white/80 transition-colors hover:bg-white/10 hover:text-white"
+                className="ml-3 rounded-button px-5 py-2.5 text-sm font-medium text-white/80 transition-colors hover:bg-white/10 hover:text-white"
               >
                 Sign Out
               </button>

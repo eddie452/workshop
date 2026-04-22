@@ -106,6 +106,24 @@ const defaultProps = {
 };
 
 describe("Leaderboard", () => {
+  describe("'Your Allergen Leaderboard' title placement (#276)", () => {
+    it("renders the title inline when Full Rankings are shown inline (default)", () => {
+      render(<Leaderboard {...defaultProps} />);
+      expect(
+        screen.getByRole("heading", { level: 1, name: /your allergen leaderboard/i }),
+      ).toBeDefined();
+    });
+
+    it("does NOT render the title inline when showFullRankings=false (dashboard case — title moves to FullRankings reveal block)", () => {
+      render(<Leaderboard {...defaultProps} showFullRankings={false} />);
+      expect(
+        screen.queryByRole("heading", { level: 1, name: /your allergen leaderboard/i }),
+      ).toBeNull();
+      // Champion still rendered — it's no longer orphaned below an unused title.
+      expect(screen.getByTestId("trigger-champion-card")).toBeDefined();
+    });
+  });
+
   describe("normal mode (acknowledged, has data)", () => {
     it("renders the leaderboard container", () => {
       render(<Leaderboard {...defaultProps} />);

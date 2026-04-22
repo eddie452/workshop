@@ -63,6 +63,17 @@ describe("RevealGate", () => {
     expect(document.getElementById(controlsId ?? "")).not.toBeNull();
   });
 
+  it("uses padded default button classes (#276 — px-6 py-3 minimum so View All / Hide Bracket text doesn't overflow)", () => {
+    render(
+      <RevealGate label="View All">
+        <p>hidden</p>
+      </RevealGate>,
+    );
+    const btn = screen.getByRole("button", { name: "View All" });
+    expect(btn.className).toContain("px-6");
+    expect(btn.className).toContain("py-3");
+  });
+
   it("removes the button entirely after reveal when no hideLabel is provided", () => {
     render(
       <RevealGate label="Show Secret">

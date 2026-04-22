@@ -83,33 +83,33 @@ function Side({ side, isWinner, isChampion, label }: SideProps) {
       />
 
       <div className="min-w-0 flex-1">
-        <div className="flex items-center gap-2">
+        <div className="flex min-w-0 items-center">
           <span
             data-testid={`bracket-side-${label}-name`}
             className={[
-              "truncate text-sm font-semibold text-dusty-denim",
+              "min-w-0 truncate text-sm font-semibold text-dusty-denim",
               isWinner ? "" : "line-through",
             ].join(" ")}
           >
             {side.name}
           </span>
-          {isWinner && isChampion && (
-            <span
-              data-testid="bracket-champion-badge"
-              className="inline-flex items-center rounded-pill bg-nature-pop px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-dusty-denim"
-            >
-              Most likely trigger
-            </span>
-          )}
-          {isWinner && !isChampion && (
-            <span
-              data-testid="bracket-winner-badge"
-              className="inline-flex items-center rounded-pill border border-champ-blue bg-white px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-dusty-denim"
-            >
-              Advances
-            </span>
-          )}
         </div>
+        {isWinner && isChampion && (
+          <span
+            data-testid="bracket-champion-badge"
+            className="mt-1 inline-flex items-center self-start rounded-pill bg-nature-pop px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-dusty-denim"
+          >
+            Most likely trigger
+          </span>
+        )}
+        {isWinner && !isChampion && (
+          <span
+            data-testid="bracket-winner-badge"
+            className="mt-1 inline-flex items-center self-start rounded-pill border border-champ-blue bg-white px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-dusty-denim"
+          >
+            Advances
+          </span>
+        )}
 
         {/* Confidence bar — width encodes discriminative, color encodes tier.
             Intentionally NO raw percentage label as the primary signal. */}

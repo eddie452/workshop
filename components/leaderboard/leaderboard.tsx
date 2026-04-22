@@ -210,9 +210,18 @@ export function Leaderboard({
       data-testid="leaderboard"
       className="mx-auto max-w-2xl space-y-6 px-4 py-6"
     >
-      <h1 className="text-2xl font-bold text-dusty-denim">
-        Your Allergen Leaderboard
-      </h1>
+      {/* "Your Allergen Leaderboard" title (#276): only rendered here
+          when the Full Rankings list is shown inline. When the parent
+          surface (e.g., dashboard #242) gates Full Rankings behind a
+          reveal button and suppresses them inline (`showFullRankings
+          === false`), the title moves into the FullRankings component
+          so it is co-located with the list it labels, not orphaned
+          above the champion. */}
+      {showFullRankings && (
+        <h1 className="text-2xl font-bold text-dusty-denim">
+          Your Allergen Leaderboard
+        </h1>
+      )}
 
       {/* FDA Disclaimer — always visible unless the parent surface
           has opted to render it elsewhere (see #242, where the

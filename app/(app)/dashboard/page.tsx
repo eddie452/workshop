@@ -42,14 +42,28 @@ export default async function DashboardPage() {
     redirect("/login");
   }
 
-  // Fetch profile for FDA acknowledgment status
+  // Fetch profile for FDA acknowledgment status + onboarding gate.
+  // Defense-in-depth with the middleware onboarding guard (#282):
+  // if the user has no `user_profiles` row (fresh signup that bypassed
+  // onboarding somehow) or the row is missing `home_region`, redirect
+  // to `/onboarding` before rendering anything. This also prevents
+  // downstream `symptom_checkins_user_id_fkey` FK violations because
+  // every user reaching the dashboard is guaranteed to have a profile.
   const { data: profileData } = await supabase
     .from("user_profiles")
-    .select("fda_acknowledged")
+    .select("fda_acknowledged, home_region")
     .eq("id", user.id)
-    .single();
+    .maybeSingle();
 
-  const profile = profileData as { fda_acknowledged: boolean } | null;
+  const profile = profileData as {
+    fda_acknowledged: boolean;
+    home_region: string | null;
+  } | null;
+
+  if (!profile?.home_region) {
+    redirect("/onboarding");
+  }
+
   const fdaAcknowledged = profile?.fda_acknowledged ?? false;
 
   // Resolve subscription + referral access via the canonical helper.

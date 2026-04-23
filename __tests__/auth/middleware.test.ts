@@ -115,11 +115,86 @@ describe("middleware", () => {
     mockUpdateSession.mockResolvedValue({
       user: { id: "user-123", email: "test@example.com" },
       supabaseResponse: mockResponse,
+      hasOnboardingProfile: true,
     });
 
     const request = createMockRequest("/dashboard");
     const response = await middleware(request as never);
 
+    expect(response).toBe(mockResponse);
+  });
+
+  it("redirects authenticated user without onboarding profile from /dashboard to /onboarding (#282)", async () => {
+    const mockResponse = { type: "next" };
+    mockUpdateSession.mockResolvedValue({
+      user: { id: "user-new", email: "new@example.com" },
+      supabaseResponse: mockResponse,
+      hasOnboardingProfile: false,
+    });
+
+    const request = createMockRequest("/dashboard");
+    const response = await middleware(request as never);
+
+    expect(response.type).toBe("redirect");
+    const redirectUrl = response.url as unknown as URL;
+    expect(redirectUrl.pathname).toBe("/onboarding");
+  });
+
+  it("allows authenticated user without onboarding profile to access /onboarding (no redirect loop) (#282)", async () => {
+    const mockResponse = { type: "next" };
+    mockUpdateSession.mockResolvedValue({
+      user: { id: "user-new", email: "new@example.com" },
+      supabaseResponse: mockResponse,
+      hasOnboardingProfile: false,
+    });
+
+    const request = createMockRequest("/onboarding");
+    const response = await middleware(request as never);
+
+    expect(response).toBe(mockResponse);
+  });
+
+  it("redirects authenticated user without onboarding profile from all onboarding-gated paths (#282)", async () => {
+    const gatedPaths = [
+      "/dashboard",
+      "/checkin",
+      "/travel",
+      "/children",
+      "/scout",
+      "/settings",
+    ];
+
+    for (const path of gatedPaths) {
+      vi.clearAllMocks();
+      const mockResponse = { type: "next" };
+      mockUpdateSession.mockResolvedValue({
+        user: { id: "user-new", email: "new@example.com" },
+        supabaseResponse: mockResponse,
+        hasOnboardingProfile: false,
+      });
+
+      const request = createMockRequest(path);
+      const response = await middleware(request as never);
+
+      expect(response.type).toBe("redirect");
+      const redirectUrl = response.url as unknown as URL;
+      expect(redirectUrl.pathname).toBe("/onboarding");
+    }
+  });
+
+  it("does not redirect when hasOnboardingProfile is null (lookup failed — fail-open) (#282)", async () => {
+    const mockResponse = { type: "next" };
+    mockUpdateSession.mockResolvedValue({
+      user: { id: "user-123", email: "test@example.com" },
+      supabaseResponse: mockResponse,
+      hasOnboardingProfile: null,
+    });
+
+    const request = createMockRequest("/dashboard");
+    const response = await middleware(request as never);
+
+    // Fails open to supabaseResponse — the dashboard page-level guard
+    // will catch it as defense-in-depth.
     expect(response).toBe(mockResponse);
   });
 

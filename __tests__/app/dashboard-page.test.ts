@@ -161,6 +161,16 @@ describe("dashboard page source scan (revert detection)", () => {
     // Verify the prop is wired through to the leaderboard surface.
     expect(dashboardSource).toMatch(/hasFullRankings=\{hasFullRankings\}/);
   });
+
+  it("redirects to /onboarding when user has no home_region (#282 defense-in-depth)", () => {
+    // The dashboard must guard against authenticated-but-not-onboarded
+    // users. This source-scan catches a revert that would reintroduce
+    // the P0 bug (empty dashboard + symptom_checkins FK violation).
+    expect(dashboardSource).toMatch(/home_region/);
+    expect(dashboardSource).toMatch(
+      /if\s*\(\s*!profile\?\.home_region\s*\)\s*\{?\s*redirect\(\s*["']\/onboarding["']\s*\)/,
+    );
+  });
 });
 
 /* ------------------------------------------------------------------ */

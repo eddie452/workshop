@@ -52,7 +52,7 @@ export function AddChildForm({ onSubmit, onCancel, isLoading, error }: AddChildF
           type="button"
           onClick={onCancel}
           disabled={isLoading}
-          className="rounded-button border border-champ-blue bg-white px-4 py-2 text-xs font-medium text-dusty-denim hover:bg-white disabled:opacity-50"
+          className="flex items-center justify-center rounded-button border border-champ-blue bg-white px-6 py-2.5 text-center text-sm font-medium text-dusty-denim hover:bg-white disabled:opacity-50"
         >
           Cancel
         </button>
@@ -60,7 +60,7 @@ export function AddChildForm({ onSubmit, onCancel, isLoading, error }: AddChildF
           type="submit"
           data-testid="save-child-btn"
           disabled={isLoading || !name.trim()}
-          className="rounded-button bg-dusty-denim px-4 py-2 text-xs font-semibold text-white hover:bg-dusty-denim/80 disabled:opacity-50"
+          className="flex items-center justify-center rounded-button bg-dusty-denim px-6 py-2.5 text-center text-sm font-semibold text-white hover:bg-dusty-denim/80 disabled:opacity-50"
         >
           {isLoading ? "Saving..." : "Save"}
         </button>

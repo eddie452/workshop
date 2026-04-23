@@ -33,13 +33,13 @@ export function SeveritySlider({ value, onChange }: SeveritySliderProps) {
               aria-label={`${level.label}: ${level.description}`}
               data-testid={`severity-${level.value}`}
               onClick={() => onChange(level.value)}
-              className={`cursor-pointer rounded-card border-2 p-3 text-left transition-colors ${
+              className={`flex cursor-pointer flex-col items-center justify-center rounded-card border-2 px-4 py-3 text-center transition-colors ${
                 isSelected
                   ? "border-champ-blue bg-champ-blue text-white"
                   : "border-champ-blue bg-white text-dusty-denim hover:border-champ-blue"
               }`}
             >
-              <div className="mb-1 flex items-center gap-2">
+              <div className="mb-1 flex items-center justify-center gap-2">
                 <span
                   className="inline-block h-3 w-3 rounded-full"
                   style={{ backgroundColor: level.color }}
@@ -49,7 +49,7 @@ export function SeveritySlider({ value, onChange }: SeveritySliderProps) {
                   {level.label}
                 </span>
               </div>
-              <p className={`text-xs ${isSelected ? "text-white" : "text-dusty-denim"}`}>
+              <p className={`break-words text-xs ${isSelected ? "text-white" : "text-dusty-denim"}`}>
                 {level.description}
               </p>
             </button>

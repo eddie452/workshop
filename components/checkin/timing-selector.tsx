@@ -42,7 +42,7 @@ export function TimingSelector({
                 aria-checked={isSelected}
                 data-testid={`timing-${option.value}`}
                 onClick={() => onPeakTimeChange(option.value)}
-                className={`cursor-pointer rounded-button border-2 px-4 py-2 text-sm font-medium transition-colors ${
+                className={`flex cursor-pointer items-center justify-center rounded-button border-2 px-4 py-2 text-center text-sm font-medium transition-colors ${
                   isSelected
                     ? "border-champ-blue bg-champ-blue text-white"
                     : "border-champ-blue bg-white text-dusty-denim hover:border-champ-blue"
@@ -75,7 +75,7 @@ export function TimingSelector({
                 aria-checked={isSelected}
                 data-testid={`indoors-${option.value}`}
                 onClick={() => onIndoorsChange(option.value)}
-                className={`cursor-pointer rounded-button border-2 px-4 py-2 text-sm font-medium transition-colors ${
+                className={`flex cursor-pointer items-center justify-center rounded-button border-2 px-4 py-2 text-center text-sm font-medium transition-colors ${
                   isSelected
                     ? "border-champ-blue bg-champ-blue text-white"
                     : "border-champ-blue bg-white text-dusty-denim hover:border-champ-blue"

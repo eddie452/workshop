@@ -45,7 +45,7 @@ export function ChildProfileCard({ child, onDelete, onEdit }: ChildProfileCardPr
         <button
           type="button"
           data-testid="edit-child-btn"
-          className="rounded-button border border-champ-blue bg-white px-3 py-1.5 text-xs font-medium text-dusty-denim hover:bg-white"
+          className="inline-flex items-center justify-center rounded-button border border-champ-blue bg-white px-4 py-1.5 text-center text-xs font-medium text-dusty-denim hover:bg-white"
           onClick={() => onEdit(child.id)}
         >
           Edit
@@ -56,7 +56,7 @@ export function ChildProfileCard({ child, onDelete, onEdit }: ChildProfileCardPr
             <button
               type="button"
               data-testid="confirm-delete-btn"
-              className="rounded-button bg-champ-blue px-3 py-1.5 text-xs font-medium text-white hover:bg-champ-blue/80"
+              className="inline-flex items-center justify-center rounded-button bg-champ-blue px-4 py-1.5 text-center text-xs font-medium text-white hover:bg-champ-blue/80"
               onClick={() => {
                 onDelete(child.id);
                 setConfirmDelete(false);
@@ -66,7 +66,7 @@ export function ChildProfileCard({ child, onDelete, onEdit }: ChildProfileCardPr
             </button>
             <button
               type="button"
-              className="rounded-button border border-champ-blue bg-white px-3 py-1.5 text-xs font-medium text-dusty-denim hover:bg-white"
+              className="inline-flex items-center justify-center rounded-button border border-champ-blue bg-white px-4 py-1.5 text-center text-xs font-medium text-dusty-denim hover:bg-white"
               onClick={() => setConfirmDelete(false)}
             >
               Cancel
@@ -76,7 +76,7 @@ export function ChildProfileCard({ child, onDelete, onEdit }: ChildProfileCardPr
           <button
             type="button"
             data-testid="delete-child-btn"
-            className="rounded-button border border-champ-blue bg-white px-3 py-1.5 text-xs font-medium text-champ-blue hover:bg-white"
+            className="inline-flex items-center justify-center rounded-button border border-champ-blue bg-white px-4 py-1.5 text-center text-xs font-medium text-champ-blue hover:bg-white"
             onClick={() => setConfirmDelete(true)}
           >
             Remove

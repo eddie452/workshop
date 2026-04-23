@@ -43,33 +43,33 @@ export default async function HomePage() {
 
       {/* Hero Section */}
       <section className="bg-dusty-denim px-4 py-16 sm:px-6 sm:py-24">
-        <div className="mx-auto max-w-3xl text-center">
+        <div className="mx-auto flex max-w-6xl flex-col items-center text-center">
           <h1
-            className="text-3xl font-bold tracking-tight text-white sm:text-5xl"
+            className="break-words text-3xl font-bold tracking-tight text-white sm:text-5xl"
             style={{ fontFamily: "var(--font-title)" }}
           >
             Allergy Madness
           </h1>
-          <p className="mx-auto mt-2 text-base text-white">
+          <p className="mt-2 text-base text-white">
             by Champ Allergy
           </p>
-          <p className="mx-auto mt-4 max-w-xl text-lg text-white/90 sm:mt-6 sm:text-xl">
+          <p className="mt-4 max-w-xl break-words text-lg text-white/90 sm:mt-6 sm:text-xl">
             Predict Your Allergy Triggers
           </p>
-          <p className="mx-auto mt-2 max-w-xl text-base text-white/80">
+          <p className="mt-2 max-w-xl break-words text-base text-white/80">
             Track symptoms, discover patterns, and get personalized insights
             about what may be causing your allergies — all from your phone.
           </p>
-          <div className="mt-8 flex flex-col items-center gap-3 sm:flex-row sm:justify-center sm:gap-4">
+          <div className="mt-8 flex w-full flex-col items-center gap-3 sm:flex-row sm:justify-center sm:gap-4">
             <Link
               href="/signup"
-              className="w-full rounded-button bg-nature-pop px-8 py-3 text-center text-base font-semibold text-dusty-denim shadow-sm transition-colors hover:bg-nature-pop sm:w-auto"
+              className="inline-flex w-full items-center justify-center rounded-button bg-nature-pop px-8 py-4 text-center text-base font-semibold text-dusty-denim shadow-sm transition-colors hover:bg-nature-pop sm:w-auto"
             >
               Get Started Free
             </Link>
             <Link
               href="/login"
-              className="w-full rounded-button border border-white/40 px-8 py-3 text-center text-base font-medium text-white transition-colors hover:border-white hover:bg-white/10 sm:w-auto"
+              className="inline-flex w-full items-center justify-center rounded-button border border-white/40 px-8 py-4 text-center text-base font-medium text-white transition-colors hover:border-white hover:bg-white/10 sm:w-auto"
             >
               Sign In
             </Link>
@@ -82,7 +82,7 @@ export default async function HomePage() {
 
       {/* How It Works */}
       <section className="bg-dusty-denim px-4 py-16 sm:px-6">
-        <div className="mx-auto max-w-5xl">
+        <div className="mx-auto max-w-6xl">
           <h2
             className="text-center text-2xl font-bold text-white sm:text-3xl"
             style={{ fontFamily: "var(--font-title)" }}
@@ -92,7 +92,7 @@ export default async function HomePage() {
           <p className="mx-auto mt-2 max-w-lg text-center text-white/80">
             Three simple steps to understanding your allergy triggers.
           </p>
-          <div className="mt-12 grid gap-8 sm:grid-cols-3">
+          <div className="mt-12 grid items-start gap-6 sm:grid-cols-3">
             <StepCard
               step="1"
               title="Quick Onboarding"
@@ -114,14 +114,14 @@ export default async function HomePage() {
 
       {/* Features */}
       <section className="bg-white px-4 py-16 sm:px-6">
-        <div className="mx-auto max-w-5xl">
+        <div className="mx-auto max-w-6xl">
           <h2
             className="text-center text-2xl font-bold text-dusty-denim sm:text-3xl"
             style={{ fontFamily: "var(--font-title)" }}
           >
             Features
           </h2>
-          <div className="mt-12 grid gap-6 sm:grid-cols-2">
+          <div className="mt-12 grid auto-rows-fr gap-6 sm:grid-cols-2">
             <FeatureCard
               title="Symptom Check-in"
               description="Log severity, body zones, and timing each day. Takes less than 30 seconds."
@@ -151,21 +151,21 @@ export default async function HomePage() {
       </section>
 
       {/* CTA Section */}
-      <section className="bg-dusty-denim px-4 py-16 sm:px-6">
-        <div className="mx-auto max-w-2xl text-center">
+      <section className="bg-dusty-denim px-4 py-16 text-center sm:px-6">
+        <div className="mx-auto flex max-w-6xl flex-col items-center text-center">
           <h2
-            className="text-2xl font-bold text-white sm:text-3xl"
+            className="break-words text-2xl font-bold text-white sm:text-3xl"
             style={{ fontFamily: "var(--font-title)" }}
           >
             Ready to Understand Your Allergies?
           </h2>
-          <p className="mt-3 text-white/80">
+          <p className="mt-3 max-w-xl break-words text-white/80">
             Join thousands of families using Allergy Madness to track and
             predict allergy triggers.
           </p>
           <Link
             href="/signup"
-            className="mt-8 inline-block rounded-button bg-nature-pop px-8 py-3 text-base font-semibold text-dusty-denim shadow-sm transition-colors hover:bg-nature-pop"
+            className="mt-8 inline-flex items-center justify-center rounded-button bg-nature-pop px-8 py-4 text-center text-base font-semibold text-dusty-denim shadow-sm transition-colors hover:bg-nature-pop"
           >
             Get Started Free
           </Link>
@@ -174,13 +174,13 @@ export default async function HomePage() {
 
       {/* Footer */}
       <footer className="border-t border-champ-blue bg-white px-4 py-8 sm:px-6">
-        <div className="mx-auto max-w-5xl">
+        <div className="mx-auto max-w-6xl">
           {/* FDA Disclaimer */}
           <div className="rounded-card border border-champ-blue bg-white px-4 py-3">
-            <p className="text-sm font-semibold text-dusty-denim">
+            <p className="break-words text-sm font-semibold text-dusty-denim">
               {FDA_DISCLAIMER_LABEL}
             </p>
-            <p className="mt-1 text-xs text-dusty-denim">
+            <p className="mt-1 break-words text-xs text-dusty-denim">
               {FDA_DISCLAIMER_FULL_TEXT}
             </p>
           </div>
@@ -217,8 +217,8 @@ function StepCard({
       <div className="flex h-10 w-10 items-center justify-center rounded-full bg-white text-sm font-bold text-champ-blue">
         {step}
       </div>
-      <h3 className="mt-4 text-lg font-semibold text-white">{title}</h3>
-      <p className="mt-2 text-sm text-white/80">{description}</p>
+      <h3 className="mt-4 break-words text-lg font-semibold text-white">{title}</h3>
+      <p className="mt-2 break-words text-sm text-white/80">{description}</p>
     </div>
   );
 }
@@ -231,9 +231,9 @@ function FeatureCard({
   description: string;
 }) {
   return (
-    <div className="rounded-card border border-champ-blue bg-white p-6">
-      <h3 className="text-base font-semibold text-dusty-denim">{title}</h3>
-      <p className="mt-2 text-sm text-dusty-denim">{description}</p>
+    <div className="flex h-full flex-col rounded-card border border-champ-blue bg-white p-6">
+      <h3 className="break-words text-base font-semibold text-dusty-denim">{title}</h3>
+      <p className="mt-2 break-words text-sm text-dusty-denim">{description}</p>
     </div>
   );
 }

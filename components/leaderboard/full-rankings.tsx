@@ -7,42 +7,29 @@
  * component so the dashboard (#242) can gate it behind a "View All"
  * reveal button without rendering the Champion / Final Four twice.
  *
- * Gating & redaction semantics match the inline implementation in
- * `Leaderboard`:
- *   - When `finalFourGated` is provided, we assume the server stripped
- *     ranks #2-#4 from `allergens` (defense in depth) and treat every
- *     entry with `rank >= 5` as part of the Full Rankings slice.
- *   - When not provided (legacy/tests), we slice off the first four.
- *   - `hasFullRankings` takes precedence over `isPremium` for the
- *     Elo / confidence reveal; when both are undefined or false the
- *     rows render in their locked "Upgrade" state.
+ * Strategic shift (#288): premium gating was removed. Every user
+ * sees the full rankings unconditionally. The `isPremium` /
+ * `hasFullRankings` props are retained for backwards compatibility
+ * with existing callers but no longer affect rendering.
  */
 
-import { LockIcon } from "@/components/shared";
 import { ConfidenceBadge } from "@/components/shared/confidence-badge";
-import { UpgradeCta } from "@/components/subscription/upgrade-cta";
 import { CategoryIcon } from "./category-icon";
 import { getAllergenThumbnail } from "@/lib/allergens/thumbnails";
-import type { RankedAllergen, GatedRankedAllergen } from "./types";
+import type { RankedAllergen } from "./types";
 
 export interface FullRankingsProps {
   allergens: RankedAllergen[];
-  finalFourGated?: GatedRankedAllergen[];
-  isPremium: boolean;
+  /** Retained for backwards compatibility; no longer gates rendering. */
+  isPremium?: boolean;
+  /** Retained for backwards compatibility; no longer gates rendering. */
   hasFullRankings?: boolean;
 }
 
-export function FullRankings({
-  allergens,
-  finalFourGated,
-  isPremium,
-  hasFullRankings,
-}: FullRankingsProps) {
-  const fullRankings = finalFourGated
-    ? allergens.filter((a) => a.rank >= 5)
-    : allergens.slice(4);
-
-  const fullRankingsUnlocked = hasFullRankings ?? isPremium;
+export function FullRankings({ allergens }: FullRankingsProps) {
+  // After #288 the server always passes the complete ranked list; treat
+  // anything past the champion + Final Four as the Full Rankings slice.
+  const fullRankings = allergens.filter((a) => a.rank >= 5);
 
   if (fullRankings.length === 0) {
     return null;
@@ -93,47 +80,24 @@ export function FullRankings({
                   {allergen.common_name}
                 </span>
               </div>
-              {fullRankingsUnlocked ? (
-                <div
-                  data-testid="ranking-score-details"
-                  className="flex items-center gap-2"
-                >
-                  <span className="text-xs text-dusty-denim">
-                    {allergen.elo_score}
-                  </span>
-                  <span data-testid="row-confidence-score">
-                    <ConfidenceBadge
-                      score={allergen.score}
-                      variant="compact"
-                    />
-                  </span>
-                </div>
-              ) : (
-                <div
-                  data-testid="ranking-score-locked"
-                  className="flex items-center gap-1.5"
-                >
-                  <span
-                    aria-hidden="true"
-                    className="inline-flex h-5 w-5 items-center justify-center rounded-full bg-champ-blue"
-                  >
-                    <LockIcon size={12} stroke="white" strokeWidth={2.5} />
-                  </span>
-                  <span className="text-xs font-medium text-champ-blue">
-                    Upgrade
-                  </span>
-                </div>
-              )}
+              <div
+                data-testid="ranking-score-details"
+                className="flex items-center gap-2"
+              >
+                <span className="text-xs text-dusty-denim">
+                  {allergen.elo_score}
+                </span>
+                <span data-testid="row-confidence-score">
+                  <ConfidenceBadge
+                    score={allergen.score}
+                    variant="compact"
+                  />
+                </span>
+              </div>
             </div>
           );
         })}
       </div>
-
-      {!fullRankingsUnlocked && (
-        <div data-testid="rankings-upgrade-cta" className="mt-4">
-          <UpgradeCta feature="full ranking details" />
-        </div>
-      )}
     </div>
   );
 }

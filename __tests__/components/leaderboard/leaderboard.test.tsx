@@ -1,12 +1,17 @@
 /**
  * Leaderboard Component Tests
  *
- * Validates the full leaderboard orchestration:
+ * Validates the full leaderboard orchestration after the #288
+ * strategic shift removed premium gating:
  * - Trigger Champion rendering
- * - Final Four rendering with blur/unblur
+ * - Final Four rendering (always unlocked)
+ * - Full Rankings rendering (always unlocked)
  * - FDA disclaimer visibility
  * - Environmental Forecast mode
  * - First-time FDA acknowledgment gate
+ *
+ * Regression for #288: a free-tier user (`isPremium: false`) sees the
+ * full Final Four and Full Rankings — no blur overlays or upgrade CTAs.
  */
 
 import { describe, it, expect, vi, beforeEach } from "vitest";
@@ -161,8 +166,6 @@ describe("Leaderboard", () => {
 
     it("renders allergen thumbnails in the champion card and full rankings rows", () => {
       render(<Leaderboard {...defaultProps} isPremium={true} />);
-      // Champion (1) + Full Rankings rows (2) = 3 thumbnails minimum
-      // (Final Four thumbnails are in their own sub-component)
       const thumbs = screen.getAllByAltText("Pollen allergen thumbnail");
       expect(thumbs.length).toBeGreaterThanOrEqual(3);
       thumbs.forEach((img) => {
@@ -171,29 +174,78 @@ describe("Leaderboard", () => {
     });
   });
 
-  describe("free-tier user (blurred Final Four)", () => {
-    it("blurs the Final Four for free-tier users", () => {
+  describe("ungated for free tier (#288 regression)", () => {
+    it("does NOT blur the Final Four for free-tier users", () => {
       render(<Leaderboard {...defaultProps} isPremium={false} />);
-      expect(screen.getByTestId("blur-overlay")).toBeDefined();
+      expect(screen.queryByTestId("blur-overlay")).toBeNull();
     });
 
-    it("shows Trigger Champion unblurred even for free tier", () => {
+    it("renders all Final Four cards for free-tier users", () => {
       render(<Leaderboard {...defaultProps} isPremium={false} />);
-      expect(screen.getByTestId("trigger-champion-card")).toBeDefined();
-      expect(screen.getByTestId("champion-name").textContent).toBe("Oak");
+      const cards = screen.getAllByTestId("final-four-card");
+      expect(cards.length).toBe(3);
+    });
+
+    it("renders Final Four names (no '???' redaction) for free-tier users", () => {
+      render(<Leaderboard {...defaultProps} isPremium={false} />);
+      const names = screen.getAllByTestId("final-four-name").map((n) => n.textContent);
+      expect(names).toEqual(["Birch", "Ragweed", "Bermuda Grass"]);
+    });
+
+    it("renders Full Rankings scores for free-tier users (no upgrade lock)", () => {
+      render(<Leaderboard {...defaultProps} isPremium={false} />);
+      expect(screen.getByText("1350")).toBeDefined();
+      expect(screen.getByText("1300")).toBeDefined();
+      const scoreDetails = screen.getAllByTestId("ranking-score-details");
+      expect(scoreDetails.length).toBe(2);
+    });
+
+    it("does not show lock icons for free-tier users", () => {
+      render(<Leaderboard {...defaultProps} isPremium={false} />);
+      expect(screen.queryByTestId("ranking-score-locked")).toBeNull();
+    });
+
+    it("does not show upgrade CTA under Full Rankings for any tier", () => {
+      render(<Leaderboard {...defaultProps} isPremium={false} />);
+      expect(screen.queryByTestId("rankings-upgrade-cta")).toBeNull();
+    });
+
+    it("free-tier user with referralUnlocked=false, referralCount=0 still sees the full Final Four (#288)", () => {
+      // Regression pin: assert the strictest possible non-premium state
+      // (no subscription, no referral unlock, zero invites) still sees
+      // the full reveal. Any future revert of gating would fail here.
+      render(<Leaderboard {...defaultProps} isPremium={false} />);
+      const cards = screen.getAllByTestId("final-four-card");
+      expect(cards.length).toBe(3);
+      expect(screen.queryByTestId("blur-overlay")).toBeNull();
+      expect(screen.queryByTestId("final-four-unlock-cta")).toBeNull();
+      expect(screen.queryByTestId("rankings-upgrade-cta")).toBeNull();
     });
   });
 
-  describe("premium user (unblurred)", () => {
-    it("does not blur the Final Four for premium users", () => {
+  describe("premium user (parity with free tier — same render)", () => {
+    it("shows full scores and confidence for ranks #5+", () => {
       render(<Leaderboard {...defaultProps} isPremium={true} />);
-      expect(screen.queryByTestId("blur-overlay")).toBeNull();
+      expect(screen.getByText("1350")).toBeDefined();
+      expect(screen.getByText("1300")).toBeDefined();
+      const scoreDetails = screen.getAllByTestId("ranking-score-details");
+      expect(scoreDetails.length).toBe(2);
+    });
+
+    it("does not show lock icons for premium users", () => {
+      render(<Leaderboard {...defaultProps} isPremium={true} />);
+      expect(screen.queryByTestId("ranking-score-locked")).toBeNull();
+    });
+
+    it("does not show the rankings upgrade CTA for premium users", () => {
+      render(<Leaderboard {...defaultProps} isPremium={true} />);
+      expect(screen.queryByTestId("rankings-upgrade-cta")).toBeNull();
     });
 
     it("shows all Final Four cards clearly", () => {
       render(<Leaderboard {...defaultProps} isPremium={true} />);
       const cards = screen.getAllByTestId("final-four-card");
-      expect(cards.length).toBe(3); // #2, #3, #4
+      expect(cards.length).toBe(3);
     });
   });
 
@@ -222,17 +274,6 @@ describe("Leaderboard", () => {
       );
       expect(screen.queryByTestId("trigger-champion-card")).toBeNull();
     });
-
-    it("still shows FDA disclaimer in forecast mode", () => {
-      render(
-        <Leaderboard
-          {...defaultProps}
-          isEnvironmentalForecast={true}
-          allergens={[]}
-        />
-      );
-      expect(screen.getByTestId("fda-disclaimer")).toBeDefined();
-    });
   });
 
   describe("FDA disclaimer gate", () => {
@@ -249,65 +290,10 @@ describe("Leaderboard", () => {
     });
   });
 
-  describe("free-tier user (ranks #5+ score gating)", () => {
-    it("shows allergen names for ranks #5+ but hides scores", () => {
-      render(<Leaderboard {...defaultProps} isPremium={false} />);
-      // Allergen names are visible
-      expect(screen.getByText("Dust Mites")).toBeDefined();
-      expect(screen.getByText("Cat Dander")).toBeDefined();
-      // Scores are hidden — lock icons shown instead
-      const lockedElements = screen.getAllByTestId("ranking-score-locked");
-      expect(lockedElements.length).toBe(2);
-      // Score values should NOT appear
-      expect(screen.queryByText("1350")).toBeNull();
-      expect(screen.queryByText("1300")).toBeNull();
-    });
-
-    it("shows 'Upgrade' text where scores would be for free users", () => {
-      render(<Leaderboard {...defaultProps} isPremium={false} />);
-      const upgradeTexts = screen.getAllByText("Upgrade");
-      // Each ranked row (#5, #6) shows "Upgrade"
-      expect(upgradeTexts.length).toBe(2);
-    });
-
-    it("shows upgrade CTA below full rankings for free users", () => {
-      render(<Leaderboard {...defaultProps} isPremium={false} />);
-      expect(screen.getByTestId("rankings-upgrade-cta")).toBeDefined();
-      expect(screen.getByTestId("upgrade-cta")).toBeDefined();
-    });
-
-    it("does not show score details for free users", () => {
-      render(<Leaderboard {...defaultProps} isPremium={false} />);
-      expect(screen.queryByTestId("ranking-score-details")).toBeNull();
-    });
-  });
-
-  describe("premium user (full rankings visible)", () => {
-    it("shows full scores and confidence for ranks #5+", () => {
-      render(<Leaderboard {...defaultProps} isPremium={true} />);
-      // Scores are visible
-      expect(screen.getByText("1350")).toBeDefined();
-      expect(screen.getByText("1300")).toBeDefined();
-      // Score detail elements present
-      const scoreDetails = screen.getAllByTestId("ranking-score-details");
-      expect(scoreDetails.length).toBe(2);
-    });
-
-    it("does not show lock icons for premium users", () => {
-      render(<Leaderboard {...defaultProps} isPremium={true} />);
-      expect(screen.queryByTestId("ranking-score-locked")).toBeNull();
-    });
-
-    it("does not show rankings upgrade CTA for premium users", () => {
-      render(<Leaderboard {...defaultProps} isPremium={true} />);
-      expect(screen.queryByTestId("rankings-upgrade-cta")).toBeNull();
-    });
-  });
-
-  describe("edge case — exactly 5 allergens (single gated row)", () => {
+  describe("edge case — exactly 5 allergens (single #5 row)", () => {
     const fiveAllergens: RankedAllergen[] = mockAllergens.slice(0, 5);
 
-    it("shows name but hides score for the single #5 row (free tier)", () => {
+    it("shows the single #5 row with score for any tier", () => {
       render(
         <Leaderboard
           {...defaultProps}
@@ -315,106 +301,12 @@ describe("Leaderboard", () => {
           isPremium={false}
         />
       );
-      // Name visible
       expect(screen.getByText("Dust Mites")).toBeDefined();
-      // Exactly one locked row
-      const lockedElements = screen.getAllByTestId("ranking-score-locked");
-      expect(lockedElements.length).toBe(1);
-      // Exactly one visible row (not two — confirms only rank #5 is here)
       const rows = screen.getAllByTestId("ranked-allergen-row");
       expect(rows.length).toBe(1);
-      // Score hidden
-      expect(screen.queryByText("1350")).toBeNull();
-    });
-
-    it("shows the upgrade CTA even when only a single #5 row exists (free tier)", () => {
-      render(
-        <Leaderboard
-          {...defaultProps}
-          allergens={fiveAllergens}
-          isPremium={false}
-        />
-      );
-      expect(screen.getByTestId("rankings-upgrade-cta")).toBeDefined();
-      expect(screen.getByTestId("upgrade-cta")).toBeDefined();
-    });
-
-    it("shows score details for the single #5 row when premium", () => {
-      render(
-        <Leaderboard
-          {...defaultProps}
-          allergens={fiveAllergens}
-          isPremium={true}
-        />
-      );
-      expect(screen.getByText("1350")).toBeDefined();
-      const scoreDetails = screen.getAllByTestId("ranking-score-details");
-      expect(scoreDetails.length).toBe(1);
-      expect(screen.queryByTestId("rankings-upgrade-cta")).toBeNull();
-    });
-  });
-
-  describe("granular hasFullRankings gate (overrides isPremium for ranks #5+)", () => {
-    it("unlocks ranks #5+ when hasFullRankings=true even if isPremium=false", () => {
-      render(
-        <Leaderboard
-          {...defaultProps}
-          isPremium={false}
-          hasFullRankings={true}
-        />
-      );
-      // Scores visible despite free-tier isPremium
-      expect(screen.getByText("1350")).toBeDefined();
-      expect(screen.getByText("1300")).toBeDefined();
-      // No lock icons, no upgrade CTA under Full Rankings
-      expect(screen.queryByTestId("ranking-score-locked")).toBeNull();
-      expect(screen.queryByTestId("rankings-upgrade-cta")).toBeNull();
-    });
-
-    it("locks ranks #5+ when hasFullRankings=false even if isPremium=true", () => {
-      render(
-        <Leaderboard
-          {...defaultProps}
-          isPremium={true}
-          hasFullRankings={false}
-        />
-      );
-      // Scores hidden despite premium-tier isPremium
-      expect(screen.queryByText("1350")).toBeNull();
-      const lockedElements = screen.getAllByTestId("ranking-score-locked");
-      expect(lockedElements.length).toBe(2);
-      expect(screen.getByTestId("rankings-upgrade-cta")).toBeDefined();
-    });
-
-    it("falls back to isPremium when hasFullRankings is undefined", () => {
-      render(
-        <Leaderboard
-          {...defaultProps}
-          isPremium={true}
-        />
-      );
-      // Behaves as premium since isPremium=true and no explicit override
       expect(screen.getByText("1350")).toBeDefined();
       expect(screen.queryByTestId("ranking-score-locked")).toBeNull();
-    });
-
-    it("falls back to isPremium=false when hasFullRankings is undefined (locks ranks #5+)", () => {
-      // Pins the lock-fallback direction. If a future refactor accidentally
-      // defaults `hasFullRankings` to `true` (e.g., `?? true`), this test
-      // fails — preventing a silent paywall bypass for free / expired-sub
-      // users on the dashboard surface.
-      render(
-        <Leaderboard
-          {...defaultProps}
-          isPremium={false}
-        />
-      );
-      // Scores hidden, lock icons + upgrade CTA shown
-      expect(screen.queryByText("1350")).toBeNull();
-      expect(screen.queryByText("1300")).toBeNull();
-      const lockedElements = screen.getAllByTestId("ranking-score-locked");
-      expect(lockedElements.length).toBe(2);
-      expect(screen.getByTestId("rankings-upgrade-cta")).toBeDefined();
+      expect(screen.queryByTestId("rankings-upgrade-cta")).toBeNull();
     });
   });
 

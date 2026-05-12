@@ -1,8 +1,10 @@
 /**
  * Final Four Tests
  *
- * Validates the bracket-style display of allergens ranked #2-#4,
- * including the freemium gated reveal (#157) for free-tier users.
+ * Validates the bracket-style display of allergens ranked #2-#4.
+ * After the #288 strategic shift the Final Four is no longer gated:
+ * every user sees the full reveal regardless of subscription tier or
+ * referral state.
  */
 
 import { describe, it, expect } from "vitest";
@@ -10,7 +12,7 @@ import { render, screen } from "@testing-library/react";
 import { FinalFour } from "@/components/leaderboard/final-four";
 import type { GatedRankedAllergen } from "@/components/leaderboard/types";
 
-const mockUnlockedAllergens: GatedRankedAllergen[] = [
+const mockAllergens: GatedRankedAllergen[] = [
   {
     allergen_id: "birch",
     common_name: "Birch",
@@ -43,199 +45,66 @@ const mockUnlockedAllergens: GatedRankedAllergen[] = [
   },
 ];
 
-const mockLockedAllergens: GatedRankedAllergen[] = mockUnlockedAllergens.map(
-  (a) => ({
-    allergen_id: a.allergen_id,
-    rank: a.rank,
-    category: a.category,
-    common_name: null,
-    elo_score: null,
-    confidence_tier: null,
-    score: null,
-    locked: true,
-  }),
-);
-
-describe("FinalFour", () => {
-  describe("unlocked (Pro or referral-unlocked)", () => {
-    it("renders all three allergen cards", () => {
-      render(
-        <FinalFour allergens={mockUnlockedAllergens} isUnlocked={true} />,
-      );
-      const cards = screen.getAllByTestId("final-four-card");
-      expect(cards.length).toBe(3);
-    });
-
-    it("shows allergen names", () => {
-      render(
-        <FinalFour allergens={mockUnlockedAllergens} isUnlocked={true} />,
-      );
-      const names = screen.getAllByTestId("final-four-name");
-      expect(names[0].textContent).toBe("Birch");
-      expect(names[1].textContent).toBe("Ragweed");
-      expect(names[2].textContent).toBe("Bermuda Grass");
-    });
-
-    it("shows rank badges", () => {
-      render(
-        <FinalFour allergens={mockUnlockedAllergens} isUnlocked={true} />,
-      );
-      const ranks = screen.getAllByTestId("final-four-rank");
-      expect(ranks[0].textContent).toBe("#2");
-      expect(ranks[1].textContent).toBe("#3");
-      expect(ranks[2].textContent).toBe("#4");
-    });
-
-    it("shows Elo scores", () => {
-      render(
-        <FinalFour allergens={mockUnlockedAllergens} isUnlocked={true} />,
-      );
-      const scores = screen.getAllByTestId("final-four-elo");
-      expect(scores[0].textContent).toBe("Elo 1500");
-      expect(scores[1].textContent).toBe("Elo 1450");
-      expect(scores[2].textContent).toBe("Elo 1400");
-    });
-
-    it("does not show blur overlay", () => {
-      render(
-        <FinalFour allergens={mockUnlockedAllergens} isUnlocked={true} />,
-      );
-      expect(screen.queryByTestId("blur-overlay")).toBeNull();
-    });
-
-    it("does not show unlock CTA", () => {
-      render(
-        <FinalFour allergens={mockUnlockedAllergens} isUnlocked={true} />,
-      );
-      expect(screen.queryByTestId("final-four-unlock-cta")).toBeNull();
-    });
-
-    it("renders allergen thumbnails for unlocked cards", () => {
-      render(
-        <FinalFour allergens={mockUnlockedAllergens} isUnlocked={true} />,
-      );
-      const thumbs = screen.getAllByAltText("Pollen allergen thumbnail");
-      expect(thumbs.length).toBe(3);
-      thumbs.forEach((img) => {
-        expect(img.getAttribute("src")).toBe("/allergens/generic-plant.svg");
-        expect(img.getAttribute("width")).toBe("48");
-        expect(img.getAttribute("height")).toBe("48");
-      });
-    });
+describe("FinalFour (#288: ungated for all users)", () => {
+  it("renders all three allergen cards", () => {
+    render(<FinalFour allergens={mockAllergens} />);
+    const cards = screen.getAllByTestId("final-four-card");
+    expect(cards.length).toBe(3);
   });
 
-  describe("locked (free tier, < 3 referral credits)", () => {
-    it("renders the blur overlay", () => {
-      render(
-        <FinalFour allergens={mockLockedAllergens} isUnlocked={false} />,
-      );
-      expect(screen.getByTestId("blur-overlay")).toBeDefined();
-    });
+  it("shows allergen names", () => {
+    render(<FinalFour allergens={mockAllergens} />);
+    const names = screen.getAllByTestId("final-four-name");
+    expect(names[0].textContent).toBe("Birch");
+    expect(names[1].textContent).toBe("Ragweed");
+    expect(names[2].textContent).toBe("Bermuda Grass");
+  });
 
-    it("renders the unlock CTA card", () => {
-      render(
-        <FinalFour allergens={mockLockedAllergens} isUnlocked={false} />,
-      );
-      expect(screen.getByTestId("final-four-unlock-cta")).toBeDefined();
-    });
+  it("shows rank badges", () => {
+    render(<FinalFour allergens={mockAllergens} />);
+    const ranks = screen.getAllByTestId("final-four-rank");
+    expect(ranks[0].textContent).toBe("#2");
+    expect(ranks[1].textContent).toBe("#3");
+    expect(ranks[2].textContent).toBe("#4");
+  });
 
-    it("renders locked cards with '???' placeholder instead of names", () => {
-      render(
-        <FinalFour allergens={mockLockedAllergens} isUnlocked={false} />,
-      );
-      const names = screen.getAllByTestId("final-four-name");
-      names.forEach((n) => expect(n.textContent).toBe("???"));
-    });
+  it("shows Elo scores", () => {
+    render(<FinalFour allergens={mockAllergens} />);
+    const scores = screen.getAllByTestId("final-four-elo");
+    expect(scores[0].textContent).toBe("Elo 1500");
+    expect(scores[1].textContent).toBe("Elo 1450");
+    expect(scores[2].textContent).toBe("Elo 1400");
+  });
 
-    it("renders 'Elo —' placeholder instead of scores", () => {
-      render(
-        <FinalFour allergens={mockLockedAllergens} isUnlocked={false} />,
-      );
-      const elos = screen.getAllByTestId("final-four-elo");
-      elos.forEach((e) => expect(e.textContent).toBe("Elo —"));
-    });
+  it("does not render the blur overlay (gating removed)", () => {
+    render(<FinalFour allergens={mockAllergens} />);
+    expect(screen.queryByTestId("blur-overlay")).toBeNull();
+  });
 
-    it("does not render confidence badges for locked cards", () => {
-      render(
-        <FinalFour allergens={mockLockedAllergens} isUnlocked={false} />,
-      );
-      // ConfidenceBadge uses role="img" or specific label — easier
-      // proxy: locked cards carry data-locked="true" and we verify
-      // no confidence tier text is leaked.
-      expect(screen.queryByText(/medium|high|low/i)).toBeNull();
-    });
+  it("does not render the unlock CTA (component removed in #288)", () => {
+    render(<FinalFour allergens={mockAllergens} />);
+    expect(screen.queryByTestId("final-four-unlock-cta")).toBeNull();
+  });
 
-    it("shows default headline when user has 0 referral credits", () => {
-      render(
-        <FinalFour
-          allergens={mockLockedAllergens}
-          isUnlocked={false}
-          referralCount={0}
-        />,
-      );
-      const headline = screen.getByTestId("final-four-unlock-cta-headline");
-      expect(headline.textContent).toContain("Unlock");
-    });
-
-    it("shows 'Almost there' framing when user has 1 or 2 credits", () => {
-      render(
-        <FinalFour
-          allergens={mockLockedAllergens}
-          isUnlocked={false}
-          referralCount={2}
-        />,
-      );
-      const headline = screen.getByTestId("final-four-unlock-cta-headline");
-      expect(headline.textContent).toContain("Almost there");
-      expect(headline.textContent).toContain("1 more");
-    });
-
-    it("renders a progress indicator when user has credits", () => {
-      render(
-        <FinalFour
-          allergens={mockLockedAllergens}
-          isUnlocked={false}
-          referralCount={1}
-        />,
-      );
-      expect(screen.getByTestId("final-four-unlock-progress")).toBeDefined();
-      const pips = screen.getAllByTestId("final-four-unlock-progress-pip");
-      expect(pips.length).toBe(3);
-      expect(pips[0].getAttribute("data-filled")).toBe("true");
-      expect(pips[1].getAttribute("data-filled")).toBe("false");
-    });
-
-    it("includes invite and upgrade links", () => {
-      render(
-        <FinalFour allergens={mockLockedAllergens} isUnlocked={false} />,
-      );
-      expect(screen.getByTestId("final-four-unlock-invite")).toBeDefined();
-      expect(screen.getByTestId("final-four-unlock-upgrade")).toBeDefined();
-    });
-
-    it("does NOT render thumbnails for locked/redacted cards", () => {
-      render(
-        <FinalFour allergens={mockLockedAllergens} isUnlocked={false} />,
-      );
-      expect(screen.queryByAltText("Pollen allergen thumbnail")).toBeNull();
+  it("renders allergen thumbnails on every card", () => {
+    render(<FinalFour allergens={mockAllergens} />);
+    const thumbs = screen.getAllByAltText("Pollen allergen thumbnail");
+    expect(thumbs.length).toBe(3);
+    thumbs.forEach((img) => {
+      expect(img.getAttribute("src")).toBe("/allergens/generic-plant.svg");
+      expect(img.getAttribute("width")).toBe("48");
+      expect(img.getAttribute("height")).toBe("48");
     });
   });
 
   describe("edge cases", () => {
     it("returns null for empty allergens array", () => {
-      const { container } = render(
-        <FinalFour allergens={[]} isUnlocked={true} />,
-      );
+      const { container } = render(<FinalFour allergens={[]} />);
       expect(container.innerHTML).toBe("");
     });
 
     it("renders correctly with fewer than 3 allergens", () => {
-      render(
-        <FinalFour
-          allergens={mockUnlockedAllergens.slice(0, 1)}
-          isUnlocked={true}
-        />,
-      );
+      render(<FinalFour allergens={mockAllergens.slice(0, 1)} />);
       const cards = screen.getAllByTestId("final-four-card");
       expect(cards.length).toBe(1);
     });

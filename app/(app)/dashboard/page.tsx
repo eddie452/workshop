@@ -5,7 +5,6 @@ import { hashStringToInt32 } from "@/lib/engine/hash";
 import { buildBracketTrace } from "@/lib/engine/tournament";
 import type { BracketMatch } from "@/lib/engine/types";
 import type { CheckinSeverityQuery } from "@/components/leaderboard/types";
-import { gateFinalFour } from "@/lib/leaderboard/gate-final-four";
 import {
   getCachedAccessStatus,
   hasFeatureAccess,
@@ -164,15 +163,17 @@ export default async function DashboardPage() {
     isEnvironmentalForecast = true;
   }
 
-  // Compute the client-facing payload. The Final Four (ranks #2-#4) is
-  // redacted for free users without the required referral credits. The
-  // champion (#1) and rows beyond #4 are passed through unchanged.
-  const finalFourView = gateFinalFour({
-    allergens,
-    isPremium,
-    referralCount,
-    referralUnlocked,
-  });
+  // Strategic shift (#288): the Final Four is no longer gated. Every
+  // user receives the full ranked list and the leaderboard renders
+  // ranks #2-#4 unconditionally. `referralCount` / `referralUnlocked`
+  // remain available for any non-gating consumers (referral progress
+  // UI lives on its own page) but are not used to redact the payload.
+  void referralUnlocked;
+  const finalFourView = {
+    allergensForClient: allergens,
+    gated: false,
+    isUnlocked: true,
+  };
 
   return (
     <PageContainer>
@@ -190,8 +191,6 @@ export default async function DashboardPage() {
           page per #242 — the Leaderboard emits neither here. */}
       <DashboardLeaderboard
         allergens={finalFourView.allergensForClient}
-        finalFourGated={finalFourView.gated}
-        isFinalFourUnlocked={finalFourView.isUnlocked}
         referralCount={referralCount}
         isPremium={isPremium}
         hasFullRankings={hasFullRankings}
@@ -227,7 +226,6 @@ export default async function DashboardPage() {
               <div className="mt-4">
                 <FullRankings
                   allergens={finalFourView.allergensForClient}
-                  finalFourGated={finalFourView.gated}
                   isPremium={isPremium}
                   hasFullRankings={hasFullRankings}
                 />

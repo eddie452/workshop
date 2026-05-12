@@ -100,28 +100,12 @@ export interface TriggerChampionCardProps {
 /** Props for the Final Four bracket display */
 export interface FinalFourProps {
   /**
-   * Allergens ranked #2-#4. May be fully revealed (common_name, elo_score,
-   * confidence_tier all present) or server-redacted for free users with
-   * fewer than 3 referral credits (values set to null, `locked: true`).
+   * Allergens ranked #2-#4. After the strategic shift in #288 these
+   * are always fully revealed; the `GatedRankedAllergen` shape is
+   * preserved so legacy callers passing pre-shaped client payloads
+   * continue to compile, but `locked` is always treated as `false`.
    */
   allergens: GatedRankedAllergen[];
-  /**
-   * Whether the Final Four reveal is unlocked. When false, the entire
-   * bracket renders behind a BlurOverlay plus the unlock CTA card.
-   * This is independent of `locked` on individual entries: `isUnlocked`
-   * controls chrome (blur, CTA); `locked` controls whether the card's
-   * data is redacted.
-   */
-  isUnlocked: boolean;
-  /** Number of successful referral invites the user has. 0-3+. */
-  referralCount?: number;
-  /**
-   * Optional tracking callbacks fired from the unlock CTA. Callers can
-   * wire these to analytics; default is a no-op.
-   */
-  onUnlockCtaImpression?: () => void;
-  onInviteClick?: () => void;
-  onUpgradeClick?: () => void;
 }
 
 /** Props for a single allergen row in the ranked list */

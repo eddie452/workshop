@@ -1,11 +1,10 @@
 /**
  * PFAS Panel Component Tests
  *
- * Validates the food cross-reactivity panel:
- * - Renders for premium users with cross-reactive data
- * - Blurs food lists for free-tier users
+ * Validates the food cross-reactivity panel after the #288 ungating:
+ * - Renders cross-reactive food list for every user
  * - Shows FDA disclaimer
- * - Shows upgrade CTA for free users
+ * - No blur overlay / upgrade CTA on any tier
  * - Hidden when no cross-reactive data exists
  */
 
@@ -13,10 +12,6 @@ import { describe, it, expect } from "vitest";
 import { render, screen } from "@testing-library/react";
 import { PfasPanel } from "@/components/pfas/pfas-panel";
 import type { PfasCrossReactivity } from "@/lib/pfas/types";
-
-/* ------------------------------------------------------------------ */
-/* Test data                                                           */
-/* ------------------------------------------------------------------ */
 
 const mockEntries: PfasCrossReactivity[] = [
   {
@@ -36,9 +31,14 @@ const mockEntries: PfasCrossReactivity[] = [
 ];
 
 describe("PfasPanel", () => {
-  describe("premium user", () => {
-    it("renders the PFAS panel section", () => {
+  describe("rendering (ungated — #288)", () => {
+    it("renders the PFAS panel section for premium users", () => {
       render(<PfasPanel entries={mockEntries} isPremium={true} />);
+      expect(screen.getByTestId("pfas-panel")).toBeDefined();
+    });
+
+    it("renders the PFAS panel section for free-tier users", () => {
+      render(<PfasPanel entries={mockEntries} isPremium={false} />);
       expect(screen.getByTestId("pfas-panel")).toBeDefined();
     });
 
@@ -50,19 +50,19 @@ describe("PfasPanel", () => {
     });
 
     it("renders allergen cards for each entry", () => {
-      render(<PfasPanel entries={mockEntries} isPremium={true} />);
+      render(<PfasPanel entries={mockEntries} isPremium={false} />);
       const cards = screen.getAllByTestId("pfas-allergen-card");
       expect(cards).toHaveLength(2);
     });
 
-    it("shows allergen names on cards", () => {
-      render(<PfasPanel entries={mockEntries} isPremium={true} />);
+    it("shows allergen names on cards regardless of tier", () => {
+      render(<PfasPanel entries={mockEntries} isPremium={false} />);
       expect(screen.getByText("Birch")).toBeDefined();
       expect(screen.getByText("Ragweed")).toBeDefined();
     });
 
-    it("shows cross-reactive food tags for premium users", () => {
-      render(<PfasPanel entries={mockEntries} isPremium={true} />);
+    it("shows cross-reactive food tags for free-tier users (#288)", () => {
+      render(<PfasPanel entries={mockEntries} isPremium={false} />);
       const foodTags = screen.getAllByTestId("pfas-food-tag");
       // birch: 4 foods + ragweed: 3 foods = 7 total
       expect(foodTags).toHaveLength(7);
@@ -82,43 +82,14 @@ describe("PfasPanel", () => {
       expect(screen.getByTestId("fda-disclaimer")).toBeDefined();
     });
 
-    it("does not show upgrade CTA for premium users", () => {
-      render(<PfasPanel entries={mockEntries} isPremium={true} />);
+    it("does not show upgrade CTA for any tier (#288)", () => {
+      render(<PfasPanel entries={mockEntries} isPremium={false} />);
       expect(screen.queryByTestId("pfas-upgrade-cta")).toBeNull();
     });
 
-    it("does not show blur overlay for premium users", () => {
-      render(<PfasPanel entries={mockEntries} isPremium={true} />);
+    it("does not render a blur overlay for any tier (#288)", () => {
+      render(<PfasPanel entries={mockEntries} isPremium={false} />);
       expect(screen.queryByTestId("blur-overlay")).toBeNull();
-    });
-  });
-
-  describe("free-tier user", () => {
-    it("renders the PFAS panel section", () => {
-      render(<PfasPanel entries={mockEntries} isPremium={false} />);
-      expect(screen.getByTestId("pfas-panel")).toBeDefined();
-    });
-
-    it("shows allergen names (visible even for free tier)", () => {
-      render(<PfasPanel entries={mockEntries} isPremium={false} />);
-      expect(screen.getByText("Birch")).toBeDefined();
-      expect(screen.getByText("Ragweed")).toBeDefined();
-    });
-
-    it("blurs food lists for free-tier users", () => {
-      render(<PfasPanel entries={mockEntries} isPremium={false} />);
-      const blurOverlays = screen.getAllByTestId("blur-overlay");
-      expect(blurOverlays.length).toBeGreaterThan(0);
-    });
-
-    it("shows upgrade CTA for free users", () => {
-      render(<PfasPanel entries={mockEntries} isPremium={false} />);
-      expect(screen.getByTestId("pfas-upgrade-cta")).toBeDefined();
-    });
-
-    it("shows FDA disclaimer for free users too", () => {
-      render(<PfasPanel entries={mockEntries} isPremium={false} />);
-      expect(screen.getByTestId("fda-disclaimer")).toBeDefined();
     });
   });
 

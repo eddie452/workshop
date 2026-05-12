@@ -11,7 +11,6 @@ import { useState, useCallback } from "react";
 import { ChildProfileCard } from "./child-profile-card";
 import { AddChildForm } from "./add-child-form";
 import { EditChildForm } from "./edit-child-form";
-import { UpgradeCta } from "@/components/subscription/upgrade-cta";
 import type { ChildProfileSummary } from "@/lib/child-profiles/types";
 import { MAX_CHILDREN } from "@/lib/child-profiles/types";
 
@@ -131,18 +130,11 @@ export function ChildrenManager({
     [],
   );
 
-  // Gate: show upgrade CTA if no family tier access
-  if (!hasAccess) {
-    return (
-      <div data-testid="children-upgrade-gate" className="space-y-4">
-        <p className="text-sm text-dusty-denim">
-          Track allergies for up to {maxChildren} children with independent
-          leaderboards and check-ins.
-        </p>
-        <UpgradeCta feature="child profiles" tierName="Madness Family" />
-      </div>
-    );
-  }
+  // Strategic shift (#288): the Family-tier gate was removed. Every
+  // user can manage child profiles. `hasAccess` is retained on the
+  // props for backwards compatibility with the server caller but no
+  // longer suppresses the manager UI.
+  void hasAccess;
 
   const canAddMore = childList.length < maxChildren;
 

@@ -34,7 +34,7 @@ const mockChildren: ChildProfileSummary[] = [
 ];
 
 describe("ChildrenManager", () => {
-  it("shows upgrade CTA when user lacks family tier access", () => {
+  it("renders the manager UI even when hasAccess=false (#288: gating removed)", () => {
     render(
       <ChildrenManager
         initialChildren={[]}
@@ -42,8 +42,11 @@ describe("ChildrenManager", () => {
       />,
     );
 
-    expect(screen.getByTestId("children-upgrade-gate")).toBeTruthy();
-    expect(screen.getByTestId("upgrade-cta")).toBeTruthy();
+    // The Family-tier upgrade gate was removed in #288. Every user
+    // sees the manager surface regardless of subscription status.
+    expect(screen.queryByTestId("children-upgrade-gate")).toBeNull();
+    expect(screen.queryByTestId("upgrade-cta")).toBeNull();
+    expect(screen.getByTestId("empty-children-state")).toBeTruthy();
   });
 
   it("shows empty state when no children and has access", () => {

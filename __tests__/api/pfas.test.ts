@@ -2,7 +2,7 @@
  * PFAS API Route Tests
  *
  * Tests the GET /api/pfas endpoint logic.
- * Covers: authentication, premium vs free response, error handling, no data.
+ * Covers: authentication, ungated response (#288), error handling, no data.
  */
 
 import { describe, it, expect, vi, beforeEach } from "vitest";
@@ -10,10 +10,6 @@ import { describe, it, expect, vi, beforeEach } from "vitest";
 // Mock modules before importing the route
 vi.mock("@/lib/supabase/server", () => ({
   createClient: vi.fn(),
-}));
-
-vi.mock("@/lib/subscription/check", () => ({
-  isFeatureAvailable: vi.fn(),
 }));
 
 vi.mock("@/lib/pfas/get-pfas-data", () => ({
@@ -29,7 +25,6 @@ vi.mock("next/headers", () => ({
 }));
 
 import { createClient } from "@/lib/supabase/server";
-import { isFeatureAvailable } from "@/lib/subscription/check";
 import { getPfasData } from "@/lib/pfas/get-pfas-data";
 
 // Import after mocks
@@ -104,7 +99,6 @@ describe("GET /api/pfas", () => {
       eloError: { message: "Database connection failed" },
     });
     vi.mocked(createClient).mockResolvedValue(mockSupabase as never);
-    vi.mocked(isFeatureAvailable).mockResolvedValue(true);
 
     const response = await GET();
     expect(response.status).toBe(500);
@@ -116,7 +110,6 @@ describe("GET /api/pfas", () => {
   it("returns empty entries when user has no allergens", async () => {
     const mockSupabase = createMockSupabase({ eloRows: [] });
     vi.mocked(createClient).mockResolvedValue(mockSupabase as never);
-    vi.mocked(isFeatureAvailable).mockResolvedValue(true);
 
     const response = await GET();
     const body = await response.json();
@@ -127,12 +120,11 @@ describe("GET /api/pfas", () => {
     expect(body.isPremium).toBe(true);
   });
 
-  it("returns full food lists for premium users", async () => {
+  it("returns full food lists for authenticated users", async () => {
     const mockSupabase = createMockSupabase({
       eloRows: [{ allergen_id: "birch" }, { allergen_id: "ragweed" }],
     });
     vi.mocked(createClient).mockResolvedValue(mockSupabase as never);
-    vi.mocked(isFeatureAvailable).mockResolvedValue(true);
     vi.mocked(getPfasData).mockReturnValue({
       entries: [
         {
@@ -159,12 +151,11 @@ describe("GET /api/pfas", () => {
     ]);
   });
 
-  it("strips food lists for free-tier users", async () => {
+  it("returns full food lists for free-tier users (no premium gate, #288)", async () => {
     const mockSupabase = createMockSupabase({
       eloRows: [{ allergen_id: "birch" }],
     });
     vi.mocked(createClient).mockResolvedValue(mockSupabase as never);
-    vi.mocked(isFeatureAvailable).mockResolvedValue(false);
     vi.mocked(getPfasData).mockReturnValue({
       entries: [
         {
@@ -182,11 +173,13 @@ describe("GET /api/pfas", () => {
     const body = await response.json();
 
     expect(response.status).toBe(200);
-    expect(body.isPremium).toBe(false);
     expect(body.hasData).toBe(true);
-    // Free users get empty food lists
-    expect(body.entries[0].cross_reactive_foods).toEqual([]);
-    // But allergen name and severity are still present
+    // Free-tier users now receive the full cross-reactive foods array.
+    expect(body.entries[0].cross_reactive_foods).toEqual([
+      "apple",
+      "pear",
+      "cherry",
+    ]);
     expect(body.entries[0].common_name).toBe("Birch");
     expect(body.entries[0].pfas_severity).toBe("moderate");
   });
@@ -201,7 +194,6 @@ describe("GET /api/pfas", () => {
     ];
     const mockSupabase = createMockSupabase({ eloRows });
     vi.mocked(createClient).mockResolvedValue(mockSupabase as never);
-    vi.mocked(isFeatureAvailable).mockResolvedValue(true);
     vi.mocked(getPfasData).mockReturnValue({ entries: [], hasData: false });
 
     await GET();
@@ -220,7 +212,6 @@ describe("GET /api/pfas", () => {
       eloRows: [{ allergen_id: "birch" }],
     });
     vi.mocked(createClient).mockResolvedValue(mockSupabase as never);
-    vi.mocked(isFeatureAvailable).mockResolvedValue(true);
     vi.mocked(getPfasData).mockReturnValue({
       entries: [
         {

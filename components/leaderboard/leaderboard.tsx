@@ -8,8 +8,8 @@
  *
  * Features:
  * - Trigger Champion (#1) always visible
- * - Final Four (#2-4) blurred for free tier; unlocked for Pro users or
- *   free users who earn >= 3 referral credits via the referral-unlock path
+ * - Final Four (#2-4) always visible (premium gating removed in #288)
+ * - Full Rankings (#5+) always visible (premium gating removed in #288)
  * - FDA disclaimer always visible
  * - Environmental Forecast mode when severity = 0
  * - First-time FDA acknowledgment gate
@@ -23,14 +23,12 @@
 import { useState, useEffect } from "react";
 import { FdaDisclaimer } from "@/components/shared/fda-disclaimer";
 import { DisclaimerModal } from "@/components/shared/disclaimer-modal";
-import { LockIcon } from "@/components/shared";
 import { TriggerChampionCard } from "./trigger-champion-card";
 import { FinalFour } from "./final-four";
 import { EnvironmentalForecast } from "./environmental-forecast";
 import type { ForecastData } from "./environmental-forecast";
 import { ConfidenceBadge } from "@/components/shared/confidence-badge";
 import { CategoryIcon } from "./category-icon";
-import { UpgradeCta } from "@/components/subscription/upgrade-cta";
 import { PfasPanel } from "@/components/pfas/pfas-panel";
 import type { PfasCrossReactivity } from "@/lib/pfas/types";
 import { getAllergenThumbnail } from "@/lib/allergens/thumbnails";
@@ -39,35 +37,12 @@ import type { RankedAllergen, GatedRankedAllergen } from "./types";
 export interface LeaderboardClientProps {
   /** Ranked allergens sorted by Elo descending. */
   allergens: RankedAllergen[];
-  /**
-   * Optional server-redacted Final Four payload (ranks #2-#4). When
-   * provided, these entries are used in place of `allergens[1..4]` for
-   * the Final Four section — any `locked: true` entries render as
-   * silhouettes because the server stripped their common_name, elo_score,
-   * and confidence_tier before serialization. Defense in depth: free
-   * users with < 3 referral credits never receive the raw values over
-   * the wire. When omitted, the component falls back to deriving the
-   * Final Four from `allergens` (backward compatible, used in tests).
-   */
-  finalFourGated?: GatedRankedAllergen[];
-  /**
-   * Whether the Final Four reveal is unlocked. True for Pro users or
-   * free users with >= 3 referral credits. When undefined, falls back
-   * to `isPremium` (backward compatible).
-   */
-  isFinalFourUnlocked?: boolean;
-  /** Current successful referral invite count (0, 1, 2, or 3+). */
-  referralCount?: number;
-  /** Whether the user has premium access */
+  /** Whether the user has premium access (retained for downstream surfaces; no longer gates Final Four / Full Rankings). */
   isPremium: boolean;
   /**
-   * Granular gate for the Full Rankings section (ranks #5+). When
-   * provided, it overrides `isPremium` for the ranks #5+ score reveal
-   * and the "Upgrade" CTA below that section. This allows the
-   * `full_rankings` feature to be gated independently of other
-   * premium features in the future. When omitted, falls back to
-   * `isPremium` for backward compatibility with tests and legacy
-   * callers.
+   * Retained for backwards compatibility with existing call sites; the
+   * Full Rankings section is no longer gated in #288 so this prop has
+   * no effect on rendering and is treated as always-true.
    */
   hasFullRankings?: boolean;
   /** Whether severity is 0 (Environmental Forecast mode) */
@@ -97,11 +72,7 @@ export interface LeaderboardClientProps {
 
 export function Leaderboard({
   allergens,
-  finalFourGated,
-  isFinalFourUnlocked,
-  referralCount = 0,
   isPremium,
-  hasFullRankings,
   isEnvironmentalForecast,
   fdaAcknowledged,
   userId,
@@ -171,39 +142,24 @@ export function Leaderboard({
 
   const champion = allergens[0] ?? null;
 
-  // If the server provided a gated payload, use it — it may contain
-  // redacted entries. Otherwise derive from the full `allergens` list and
-  // mark every entry as unlocked (backward-compatible path for tests and
-  // legacy callers).
-  const finalFour: GatedRankedAllergen[] =
-    finalFourGated ??
-    allergens.slice(1, 4).map((a) => ({
-      allergen_id: a.allergen_id,
-      rank: a.rank,
-      category: a.category,
-      common_name: a.common_name,
-      elo_score: a.elo_score,
-      confidence_tier: a.confidence_tier,
-      score: a.score,
-      locked: false,
-    }));
+  // Strategic shift (#288): the Final Four (ranks #2-#4) is no longer
+  // gated. Always render every entry as unlocked.
+  const finalFour: GatedRankedAllergen[] = allergens.slice(1, 4).map((a) => ({
+    allergen_id: a.allergen_id,
+    rank: a.rank,
+    category: a.category,
+    common_name: a.common_name,
+    elo_score: a.elo_score,
+    confidence_tier: a.confidence_tier,
+    score: a.score,
+    locked: false,
+  }));
 
-  // Full Rankings (ranks #5+). When a gated payload is supplied, the
-  // server stripped ranks #2-#4 from `allergens` to prevent raw values
-  // from crossing the wire — in that case, anything past rank 1 is
-  // already "#5+". When no gated payload is supplied (legacy/tests), we
-  // slice off the first 4 entries (champion + Final Four).
-  const fullRankings = finalFourGated
-    ? allergens.filter((a) => a.rank >= 5)
-    : allergens.slice(4);
-
-  // Unlock gate: explicit server value wins; fall back to premium.
-  const finalFourUnlocked = isFinalFourUnlocked ?? isPremium;
-
-  // Full Rankings gate (ranks #5+). Explicit granular check wins; fall
-  // back to the blanket `isPremium` flag so existing callers (and the
-  // test suite) continue to behave identically until they migrate.
-  const fullRankingsUnlocked = hasFullRankings ?? isPremium;
+  // Full Rankings (ranks #5+). Server callers historically stripped the
+  // Final Four slice from `allergens` before passing it down; the new
+  // ungated dashboard passes the full list so we slice off the top 4.
+  // Detect either shape by filtering on rank.
+  const fullRankings = allergens.filter((a) => a.rank >= 5);
 
   return (
     <div
@@ -241,11 +197,7 @@ export function Leaderboard({
           <h2 className="mb-3 text-lg font-semibold text-dusty-denim">
             Final Four
           </h2>
-          <FinalFour
-            allergens={finalFour}
-            isUnlocked={finalFourUnlocked}
-            referralCount={referralCount}
-          />
+          <FinalFour allergens={finalFour} />
         </div>
       )}
 
@@ -287,52 +239,25 @@ export function Leaderboard({
                     {allergen.common_name}
                   </span>
                 </div>
-                {fullRankingsUnlocked ? (
-                  <div
-                    data-testid="ranking-score-details"
-                    className="flex items-center gap-2"
-                  >
-                    <span className="text-xs text-dusty-denim">
-                      {allergen.elo_score}
-                    </span>
-                    {/* Numeric confidence badge — emitted by the engine per #160. */}
-                    <span data-testid="row-confidence-score">
-                      <ConfidenceBadge
-                        score={allergen.score}
-                        variant="compact"
-                      />
-                    </span>
-                  </div>
-                ) : (
-                  <div
-                    data-testid="ranking-score-locked"
-                    className="flex items-center gap-1.5"
-                  >
-                    <span
-                      aria-hidden="true"
-                      className="inline-flex h-5 w-5 items-center justify-center rounded-full bg-champ-blue"
-                    >
-                      <LockIcon size={12} stroke="white" strokeWidth={2.5} />
-                    </span>
-                    <span className="text-xs font-medium text-champ-blue">
-                      Upgrade
-                    </span>
-                  </div>
-                )}
+                <div
+                  data-testid="ranking-score-details"
+                  className="flex items-center gap-2"
+                >
+                  <span className="text-xs text-dusty-denim">
+                    {allergen.elo_score}
+                  </span>
+                  {/* Numeric confidence badge — emitted by the engine per #160. */}
+                  <span data-testid="row-confidence-score">
+                    <ConfidenceBadge
+                      score={allergen.score}
+                      variant="compact"
+                    />
+                  </span>
+                </div>
               </div>
               );
             })}
           </div>
-
-          {/* Upgrade CTA for free users */}
-          {!fullRankingsUnlocked && (
-            <div
-              data-testid="rankings-upgrade-cta"
-              className="mt-4"
-            >
-              <UpgradeCta feature="full ranking details" />
-            </div>
-          )}
         </div>
       )}
 

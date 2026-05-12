@@ -7,22 +7,22 @@
  * user's top 5. Shows which foods may trigger oral allergy symptoms
  * based on pollen-food allergy syndrome (PFAS) data.
  *
- * Premium feature — gated behind Madness+ subscription.
- * Free-tier users see allergen names but food lists are blurred.
+ * Strategic shift (#288): premium gating removed. Every user sees
+ * the full cross-reactive food list. The `isPremium` prop is kept
+ * for backwards compatibility with the call sites but no longer
+ * blurs the food list or renders an upgrade CTA.
  */
 
 import { FdaDisclaimer } from "@/components/shared/fda-disclaimer";
-import { BlurOverlay } from "@/components/leaderboard/blur-overlay";
 import { CategoryIcon } from "@/components/leaderboard/category-icon";
-import { UpgradeCta } from "@/components/subscription/upgrade-cta";
 import type { PfasCrossReactivity } from "@/lib/pfas/types";
 import type { PfasSeverity } from "@/lib/supabase/types";
 
 export interface PfasPanelProps {
   /** Cross-reactivity entries for top allergens */
   entries: PfasCrossReactivity[];
-  /** Whether the user has premium access */
-  isPremium: boolean;
+  /** Retained for backwards compatibility; no longer gates rendering. */
+  isPremium?: boolean;
 }
 
 const SEVERITY_LABELS: Record<PfasSeverity, string> = {
@@ -88,25 +88,15 @@ function FoodTag({ food }: { food: string }) {
 
 function AllergenCrossReactivityCard({
   entry,
-  isPremium,
 }: {
   entry: PfasCrossReactivity;
-  isPremium: boolean;
 }) {
-  const foodContent = (
-    <div className="flex flex-wrap gap-2">
-      {entry.cross_reactive_foods.map((food) => (
-        <FoodTag key={food} food={food} />
-      ))}
-    </div>
-  );
-
   return (
     <div
       data-testid="pfas-allergen-card"
       className="rounded-card border border-champ-blue bg-white p-4"
     >
-      {/* Allergen header — always visible */}
+      {/* Allergen header */}
       <div className="mb-3 flex items-center justify-between">
         <div className="flex items-center gap-2">
           <CategoryIcon category={entry.category} />
@@ -117,24 +107,22 @@ function AllergenCrossReactivityCard({
         <SeverityBadge severity={entry.pfas_severity} />
       </div>
 
-      {/* Food list — blurred for free tier */}
+      {/* Food list — visible to all users (#288) */}
       <div>
         <p className="mb-2 text-xs font-medium text-dusty-denim">
           Cross-reactive foods
         </p>
-        {isPremium ? (
-          foodContent
-        ) : (
-          <BlurOverlay featureLabel="food cross-reactivity details">
-            {foodContent}
-          </BlurOverlay>
-        )}
+        <div className="flex flex-wrap gap-2">
+          {entry.cross_reactive_foods.map((food) => (
+            <FoodTag key={food} food={food} />
+          ))}
+        </div>
       </div>
     </div>
   );
 }
 
-export function PfasPanel({ entries, isPremium }: PfasPanelProps) {
+export function PfasPanel({ entries }: PfasPanelProps) {
   if (entries.length === 0) {
     return null;
   }
@@ -164,19 +152,8 @@ export function PfasPanel({ entries, isPremium }: PfasPanelProps) {
         <AllergenCrossReactivityCard
           key={entry.allergen_id}
           entry={entry}
-          isPremium={isPremium}
         />
       ))}
-
-      {/* Upgrade CTA for free users */}
-      {!isPremium && (
-        <div
-          data-testid="pfas-upgrade-cta"
-          className="mt-2"
-        >
-          <UpgradeCta feature="food cross-reactivity details" />
-        </div>
-      )}
     </section>
   );
 }

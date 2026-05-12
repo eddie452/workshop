@@ -6,13 +6,14 @@
  * PATCH  — Update an existing child profile (requires ?id=<child_id>)
  * DELETE — Delete a child profile (requires ?id=<child_id>)
  *
- * Gate: madness_family subscription tier.
+ * Strategic shift (#288): Family-tier gate removed. Any authenticated
+ * user can manage their own child profiles. Ownership is enforced by
+ * passing `user.id` through to the data-layer helpers (RLS-aligned).
  * IMPORTANT: income_tier is NEVER included in any API response.
  */
 
 import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
-import { isFeatureAvailable } from "@/lib/subscription";
 import {
   listChildren,
   createChild,
@@ -34,23 +35,17 @@ interface ErrorResponse {
 /* Helpers                                                             */
 /* ------------------------------------------------------------------ */
 
-async function authenticateAndGate() {
+async function authenticate() {
   const supabase = await createClient();
   const {
     data: { user },
   } = await supabase.auth.getUser();
 
   if (!user) {
-    return { supabase, user: null, error: "Unauthorized" as const };
+    return { supabase, user: null as null };
   }
 
-  // Check family tier access
-  const hasAccess = await isFeatureAvailable(supabase, user.id, "child_profiles");
-  if (!hasAccess) {
-    return { supabase, user, error: "family_tier_required" as const };
-  }
-
-  return { supabase, user, error: null };
+  return { supabase, user };
 }
 
 /* ------------------------------------------------------------------ */
@@ -59,19 +54,12 @@ async function authenticateAndGate() {
 
 export async function GET(): Promise<NextResponse> {
   try {
-    const { supabase, user, error } = await authenticateAndGate();
+    const { supabase, user } = await authenticate();
 
     if (!user) {
       return NextResponse.json(
         { success: false, error: "Unauthorized" } satisfies ErrorResponse,
         { status: 401 },
-      );
-    }
-
-    if (error === "family_tier_required") {
-      return NextResponse.json(
-        { success: false, error: "Family tier subscription required" } satisfies ErrorResponse,
-        { status: 403 },
       );
     }
 
@@ -98,19 +86,12 @@ export async function POST(
   request: Request,
 ): Promise<NextResponse> {
   try {
-    const { supabase, user, error } = await authenticateAndGate();
+    const { supabase, user } = await authenticate();
 
     if (!user) {
       return NextResponse.json(
         { success: false, error: "Unauthorized" } satisfies ErrorResponse,
         { status: 401 },
-      );
-    }
-
-    if (error === "family_tier_required") {
-      return NextResponse.json(
-        { success: false, error: "Family tier subscription required" } satisfies ErrorResponse,
-        { status: 403 },
       );
     }
 
@@ -146,19 +127,12 @@ export async function PATCH(
   request: Request,
 ): Promise<NextResponse> {
   try {
-    const { supabase, user, error } = await authenticateAndGate();
+    const { supabase, user } = await authenticate();
 
     if (!user) {
       return NextResponse.json(
         { success: false, error: "Unauthorized" } satisfies ErrorResponse,
         { status: 401 },
-      );
-    }
-
-    if (error === "family_tier_required") {
-      return NextResponse.json(
-        { success: false, error: "Family tier subscription required" } satisfies ErrorResponse,
-        { status: 403 },
       );
     }
 
@@ -201,19 +175,12 @@ export async function DELETE(
   request: Request,
 ): Promise<NextResponse> {
   try {
-    const { supabase, user, error } = await authenticateAndGate();
+    const { supabase, user } = await authenticate();
 
     if (!user) {
       return NextResponse.json(
         { success: false, error: "Unauthorized" } satisfies ErrorResponse,
         { status: 401 },
-      );
-    }
-
-    if (error === "family_tier_required") {
-      return NextResponse.json(
-        { success: false, error: "Family tier subscription required" } satisfies ErrorResponse,
-        { status: 403 },
       );
     }
 

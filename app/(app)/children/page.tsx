@@ -1,6 +1,5 @@
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
-import { isFeatureAvailable } from "@/lib/subscription";
 import { listChildren } from "@/lib/child-profiles";
 import { ChildrenManager } from "@/components/children";
 import { PageContainer } from "@/components/layout";
@@ -8,10 +7,11 @@ import { PageContainer } from "@/components/layout";
 /**
  * /children — Child Profiles Management Page
  *
- * Allows Family-tier parents to manage up to 5 child profiles.
+ * Allows parents to manage up to 5 child profiles.
  * Each child gets independent Elo ratings, check-ins, and leaderboard.
  *
- * Gate: madness_family subscription tier.
+ * Strategic shift (#288): Family-tier gate removed. Every authenticated
+ * user can manage child profiles.
  */
 export default async function ChildrenPage() {
   const supabase = await createClient();
@@ -23,17 +23,12 @@ export default async function ChildrenPage() {
     redirect("/login");
   }
 
-  // Check family tier access
-  const hasAccess = await isFeatureAvailable(supabase, user.id, "child_profiles");
-
-  // Fetch children if the user has access
+  // Always fetch children — no tier gate.
   let children: Awaited<ReturnType<typeof listChildren>> = [];
-  if (hasAccess) {
-    try {
-      children = await listChildren(supabase, user.id);
-    } catch {
-      // Graceful — empty list shown
-    }
+  try {
+    children = await listChildren(supabase, user.id);
+  } catch {
+    // Graceful — empty list shown
   }
 
   return (
@@ -49,7 +44,7 @@ export default async function ChildrenPage() {
 
       <ChildrenManager
         initialChildren={children}
-        hasAccess={hasAccess}
+        hasAccess={true}
       />
     </PageContainer>
   );
